@@ -1,0 +1,47 @@
+﻿<RibbonWindow x:Class="CryptographicCreator.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CryptographicCreator.Views"
+        mc:Ignorable="d"
+        Title="Cryptographic Creator" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Ribbon Grid.Row="0">
+            <RibbonTab Header="RSA">
+                <RibbonGroup Header="Keys">
+                    <RibbonButton Label="Generate new Keys"/>
+                    <RibbonButton Label="Save keys"/>
+                </RibbonGroup>
+                <RibbonGroup>
+                    <RibbonButton Label="Encrypt"/>
+                    <RibbonButton Label="Decrypt"/>
+                </RibbonGroup>
+            </RibbonTab>
+        </Ribbon>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <GroupBox Grid.Row="0" Header="Public Key">
+                <TextBlock Text="{Binding PublicKey}"/>
+            </GroupBox>
+            <GroupBox Grid.Row="1" Header="Private Key">
+                <TextBlock Text="{Binding PrivateKey}"/>
+            </GroupBox>
+            <GroupBox Grid.Row="2" Header="Text to Encrypt">
+                <TextBox/>
+            </GroupBox>
+            <GroupBox Grid.Row="3" Header="Decrypted text">
+                <TextBox/>
+            </GroupBox>
+        </Grid>
+    </Grid>
+</RibbonWindow>
