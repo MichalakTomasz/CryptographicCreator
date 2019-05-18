@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.329
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptographicCreator", "CryptographicCreator\CryptographicCreator.csproj", "{FE472051-E78E-46C3-8358-E26B7B7AB0CC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RSARegion", "RSARegion\RSARegion.csproj", "{0E387B4C-4A31-4257-A5CC-BE139BB9A96C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{FE472051-E78E-46C3-8358-E26B7B7AB0CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE472051-E78E-46C3-8358-E26B7B7AB0CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE472051-E78E-46C3-8358-E26B7B7AB0CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E387B4C-4A31-4257-A5CC-BE139BB9A96C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E387B4C-4A31-4257-A5CC-BE139BB9A96C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E387B4C-4A31-4257-A5CC-BE139BB9A96C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E387B4C-4A31-4257-A5CC-BE139BB9A96C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

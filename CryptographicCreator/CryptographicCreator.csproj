@@ -121,6 +121,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\RSARegion\RSARegion.csproj">
+      <Project>{0e387b4c-4a31-4257-a5cc-be139bb9a96c}</Project>
+      <Name>RSARegion</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

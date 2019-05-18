@@ -4,11 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CryptographicCreator.Views"
+        xmlns:prism="http://prismlibrary.com/"
+        prism:ViewModelLocator.AutoWireViewModel="True"
         mc:Ignorable="d"
         Title="Cryptographic Creator" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition/>
+            <RowDefinition Height="auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Ribbon Grid.Row="0">
@@ -23,25 +25,6 @@
                 </RibbonGroup>
             </RibbonTab>
         </Ribbon>
-        <Grid Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <GroupBox Grid.Row="0" Header="Public Key">
-                <TextBlock Text="{Binding PublicKey}"/>
-            </GroupBox>
-            <GroupBox Grid.Row="1" Header="Private Key">
-                <TextBlock Text="{Binding PrivateKey}"/>
-            </GroupBox>
-            <GroupBox Grid.Row="2" Header="Text to Encrypt">
-                <TextBox/>
-            </GroupBox>
-            <GroupBox Grid.Row="3" Header="Decrypted text">
-                <TextBox/>
-            </GroupBox>
-        </Grid>
+        <ContentControl Grid.Row="1" prism:RegionManager.RegionName="RSARegion"/>
     </Grid>
 </RibbonWindow>

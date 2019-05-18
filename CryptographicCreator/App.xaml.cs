@@ -9,7 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using CryptographicCreator.Views;
-
+using ModuleREARegion;
 
 namespace CryptographicCreator
 {
@@ -21,6 +21,12 @@ namespace CryptographicCreator
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             
+        }
+
+        protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
+        {
+            base.ConfigureModuleCatalog(moduleCatalog);
+            moduleCatalog.AddModule<RSARegionModule>();
         }
     }
 
