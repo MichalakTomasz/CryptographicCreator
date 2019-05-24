@@ -5,26 +5,50 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CryptographicCreator.Views"
         xmlns:prism="http://prismlibrary.com/"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:behavior="clr-namespace:CryptographicCreator.Behaviors"
         prism:ViewModelLocator.AutoWireViewModel="True"
         mc:Ignorable="d"
-        Title="Cryptographic Creator" Height="450" Width="800">
+        Title="Cryptographic Creator" 
+        Height="450" 
+        Width="800"
+        WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Ribbon Grid.Row="0">
+        <Ribbon x:Name="ribbonMenu" Grid.Row="0">
             <RibbonTab Header="RSA">
                 <RibbonGroup Header="Keys">
-                    <RibbonButton Label="Generate new Keys"/>
-                    <RibbonButton Label="Save keys"/>
-                </RibbonGroup>
-                <RibbonGroup>
-                    <RibbonButton Label="Encrypt"/>
-                    <RibbonButton Label="Decrypt"/>
+                    <RibbonButton Label="Generate"
+                                  Command="{Binding GenerateCommand, Mode=OneWay}"/>
+                    <RibbonButton Label="Load"
+                                  Command="{Binding LoadCommand, Mode=OneWay}">
+                        <i:Interaction.Behaviors>
+                            <behavior:RibbonButtonOpenSaveRSAKeysBehavior FileAction="Open" 
+                                                                          SelectedFilePath="{Binding SelectedPath, Mode=OneWayToSource}"/>
+                        </i:Interaction.Behaviors>
+                    </RibbonButton>
+                    <RibbonButton Label="Save Public Key"
+                                  IsEnabled="{Binding HasPublicParameters, Mode=OneWay}"
+                                  Command="{Binding SavePublicKeyCommand, Mode=OneWay}">
+                        <i:Interaction.Behaviors>
+                            <behavior:RibbonButtonOpenSaveRSAKeysBehavior FileAction="Save" 
+                                                                          SelectedFilePath="{Binding SelectedPath, Mode=OneWayToSource}"/>
+                        </i:Interaction.Behaviors>
+                    </RibbonButton>
+                    <RibbonButton Label="Save Private and Public Key"
+                                  IsEnabled="{Binding HasPrivateAndPublicParameters, Mode=OneWay}"
+                                  Command="{Binding SavePrivateAndPublicKeyCommand, Mode=OneWay}">
+                        <i:Interaction.Behaviors>
+                            <behavior:RibbonButtonOpenSaveRSAKeysBehavior FileAction="Save" 
+                                                                          SelectedFilePath="{Binding SelectedPath, Mode=OneWayToSource}"/>
+                        </i:Interaction.Behaviors>
+                    </RibbonButton>
                 </RibbonGroup>
             </RibbonTab>
         </Ribbon>
-        <ContentControl Grid.Row="1" prism:RegionManager.RegionName="RSARegion"/>
+        <ContentControl Grid.Row="1" prism:RegionManager.RegionName="RSARegion" />
     </Grid>
 </RibbonWindow>

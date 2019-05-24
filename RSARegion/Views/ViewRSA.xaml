@@ -1,0 +1,52 @@
+﻿<UserControl x:Class="ModuleREARegion.Views.ViewRSA"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:ModuleREARegion.Views"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300"
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="True" 
+             Padding="15">
+    <DockPanel Grid.Row="1">
+        <GroupBox DockPanel.Dock="Top" 
+                  Header="Text " 
+                  Height="50">
+            <TextBox Text="{Binding Text, NotifyOnTargetUpdated=True}"/>
+        </GroupBox>
+        <StackPanel DockPanel.Dock="Top" 
+                    Orientation="Horizontal"
+                    Height="50"
+                    MinWidth="200">
+            <GroupBox Margin="0 0 20 0" Header="Key size in bits">
+                <TextBox Text="{ Binding BitsKeySize }"/>
+            </GroupBox>
+            <StackPanel Orientation="Horizontal"
+                        Margin="10"
+                        HorizontalAlignment="Right">
+                <Button Margin="4" Content="Encrypt"
+                        Command="{ Binding EncryptCommand }"/>
+                <Button Margin="4" Content="Decrypt"/>
+            </StackPanel>
+        </StackPanel>
+        <GridSplitter DockPanel.Dock="Top"
+                      Height="2"
+                      HorizontalAlignment="Stretch"
+                      Margin="0 10 0 0"/>
+        <GroupBox DockPanel.Dock="Top" 
+                  Header="Private and public Key"
+                  MinHeight="100">
+            <TextBlock Text="{Binding PrivateAndPublicKey}"/>
+        </GroupBox>
+        <GroupBox DockPanel.Dock="Top" 
+                  Header="Public Key"
+                  MinHeight="100">
+            <TextBlock Text="{Binding PublicKey}"/>
+        </GroupBox>
+        <GroupBox DockPanel.Dock="Top" 
+                  Header="Encrypted text">
+            <TextBlock Text="{Binding EncryptedText}"/>
+        </GroupBox>
+    </DockPanel>
+</UserControl>

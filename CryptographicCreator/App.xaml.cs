@@ -10,17 +10,19 @@ using System.Threading.Tasks;
 using System.Windows;
 using CryptographicCreator.Views;
 using ModuleREARegion;
+using Commons;
 
 namespace CryptographicCreator
 {
     public partial class App : PrismApplication
     {
         protected override Window CreateShell() 
-            => Container.Resolve<MainWindow>();
+            =>  Container.Resolve<MainWindow>();
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            
+            containerRegistry.Register<ICompressionService, GZipCompressionService>();
+            containerRegistry.Register<ISerializationService, SerializationService>();
         }
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)

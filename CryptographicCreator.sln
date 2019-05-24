@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptographicCreator", "Cry
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RSARegion", "RSARegion\RSARegion.csproj", "{0E387B4C-4A31-4257-A5CC-BE139BB9A96C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventAggregator", "EventAggregator\EventAggregator.csproj", "{028C4630-1634-4F39-9E6D-323F440AFCD6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commons", "Commons\Commons.csproj", "{09A2D4A3-ED80-4344-8FD2-09F8A14A8F28}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{0E387B4C-4A31-4257-A5CC-BE139BB9A96C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E387B4C-4A31-4257-A5CC-BE139BB9A96C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E387B4C-4A31-4257-A5CC-BE139BB9A96C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{028C4630-1634-4F39-9E6D-323F440AFCD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{028C4630-1634-4F39-9E6D-323F440AFCD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{028C4630-1634-4F39-9E6D-323F440AFCD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{028C4630-1634-4F39-9E6D-323F440AFCD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09A2D4A3-ED80-4344-8FD2-09F8A14A8F28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09A2D4A3-ED80-4344-8FD2-09F8A14A8F28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09A2D4A3-ED80-4344-8FD2-09F8A14A8F28}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09A2D4A3-ED80-4344-8FD2-09F8A14A8F28}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

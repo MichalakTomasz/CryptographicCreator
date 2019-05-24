@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace CryptographicCreator
+namespace Commons
 {
-    class RSAPairKeyParameters
+    [Serializable]
+    public class RSAPairKeyParameters : CryptographicBase
     {
         public RSAPairKeyParameters(RSAParameters publicKeyParameters, RSAParameters privateKeyParameters)
         {
