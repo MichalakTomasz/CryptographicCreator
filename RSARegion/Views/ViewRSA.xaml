@@ -14,28 +14,26 @@
     <UserControl.Resources>
         <converter:BoolToBruschConverter x:Key="BoolToBruschConverter"/>
     </UserControl.Resources>
-    <i:Interaction.Triggers>
-        <i:EventTrigger EventName="Loaded">
-            <prism:InvokeCommandAction Command="{Binding LoadedCommand, Mode=OneWay}"/>
-        </i:EventTrigger>
-    </i:Interaction.Triggers>
     <DockPanel Grid.Row="1">
         <StackPanel DockPanel.Dock="Top"
                     Orientation="Horizontal">
             <GroupBox Header="Privete Key">
-                <Rectangle Width="30"
-                           Height="30"
-                           Fill="{Binding IsActivePrivateKey, Converter={StaticResource BoolToBruschConverter}, Mode=OneWay}"/>
+                <Ellipse Width="30"
+                         Height="30"
+                         Fill="{Binding IsActivePrivateKey, 
+                    Converter={StaticResource BoolToBruschConverter}, Mode=OneWay}"/>
             </GroupBox>
             <GroupBox Header="Public Key">
-                <Rectangle Width="30"
+                <Ellipse Width="30"
                            Height="30"
-                           Fill="{Binding IsActivePublicKey, Converter={StaticResource BoolToBruschConverter}, Mode=OneWay}"/>
+                           Fill="{Binding IsActivePublicKey, 
+                    Converter={StaticResource BoolToBruschConverter}, Mode=OneWay}"/>
             </GroupBox>
             <GroupBox Header="EncryptedData">
-                <Rectangle Width="30"
+                <Ellipse Width="30"
                            Height="30"
-                           Fill="{Binding AreActiveEncryptedData, Converter={StaticResource BoolToBruschConverter}, Mode=OneWay}"/>
+                           Fill="{Binding AreActiveEncryptedData, 
+                    Converter={StaticResource BoolToBruschConverter}, Mode=OneWay}"/>
             </GroupBox>
         </StackPanel>
         <GroupBox DockPanel.Dock="Top" 

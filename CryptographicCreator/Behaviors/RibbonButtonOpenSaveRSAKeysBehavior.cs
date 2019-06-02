@@ -10,7 +10,8 @@ namespace CryptographicCreator.Behaviors
 {
     public class RibbonButtonOpenSaveRSAKeysBehavior : Behavior<RibbonButton>
     {
-        private const string filterExtension = "Private Key (*.prk)|*.prk|Public Key (*.pbk)|*.pbk|Encrypred data (*.enc)|*.enc";
+        private const string filterExtension = 
+            "Private Key (*.prk)|*.prk|Public Key (*.pbk)|*.pbk|Encrypred data (*.enc)|*.enc";
 
         public string SelectedPath
         {
@@ -48,7 +49,20 @@ namespace CryptographicCreator.Behaviors
                 typeof(bool), 
                 typeof(RibbonButtonOpenSaveRSAKeysBehavior), 
                 new PropertyMetadata(false));
-
+        
+        public bool IsSavedPrivateKey
+        {
+            get { return (bool)GetValue(IsSavedPrivateKeyProperty); }
+            set { SetValue(IsSavedPrivateKeyProperty, value); }
+        }
+        
+        public static readonly DependencyProperty IsSavedPrivateKeyProperty =
+            DependencyProperty.Register(
+                "IsSavedPrivateKey", 
+                typeof(bool), 
+                typeof(RibbonButtonOpenSaveRSAKeysBehavior), 
+                new PropertyMetadata(false));
+        
         public bool IsActivePublicKey
         {
             get { return (bool)GetValue(IsActivePublicKeyProperty); }
@@ -61,7 +75,20 @@ namespace CryptographicCreator.Behaviors
                 typeof(bool), 
                 typeof(RibbonButtonOpenSaveRSAKeysBehavior), 
                 new PropertyMetadata(false));
-
+        
+        public bool IsSavedPublicKey
+        {
+            get { return (bool)GetValue(IsSavedPublicKeyProperty); }
+            set { SetValue(IsSavedPublicKeyProperty, value); }
+        }
+        
+        public static readonly DependencyProperty IsSavedPublicKeyProperty =
+            DependencyProperty.Register(
+                "IsSavedPublicKey", 
+                typeof(bool), 
+                typeof(RibbonButtonOpenSaveRSAKeysBehavior), 
+                new PropertyMetadata(false));
+        
         public bool AreActiveEncryptedData
         {
             get { return (bool)GetValue(AreActiveEncryptedDataProperty); }
@@ -88,7 +115,6 @@ namespace CryptographicCreator.Behaviors
                 typeof(RibbonButtonOpenSaveRSAKeysBehavior), 
                 new PropertyMetadata(false));
 
-
         public RSAAction RSAAction
         {
             get { return (RSAAction)GetValue(RSAActionProperty); }
@@ -97,7 +123,7 @@ namespace CryptographicCreator.Behaviors
         
         public static readonly DependencyProperty RSAActionProperty =
             DependencyProperty.Register(
-                "RSAAction", 
+                "RSAAction",
                 typeof(RSAAction), 
                 typeof(RibbonButtonOpenSaveRSAKeysBehavior),
                 new PropertyMetadata(RSAAction.None));
@@ -138,7 +164,9 @@ namespace CryptographicCreator.Behaviors
                     }
                     break;
                 case FileAction.Save:
-                    if (IsActivePrivateKey || IsActivePublicKey || AreActiveEncryptedData)
+                    if (IsActivePrivateKey || 
+                        IsActivePublicKey || 
+                        AreActiveEncryptedData)
                     {
                         var saveFileDialog = new SaveFileDialog();
                         saveFileDialog.Filter = filterExtension;
@@ -164,6 +192,10 @@ namespace CryptographicCreator.Behaviors
                             SelectedPath = saveFileDialog.FileName;
                         }    
                     }
+                    else
+                    {
+                        AcceptEvent = false;
+                    }
                     break;
             }
         }
@@ -173,7 +205,7 @@ namespace CryptographicCreator.Behaviors
             if (IsActivePrivateKey)
             {
                 if (MessageBox.Show(
-                    "Private Key is active now, override this key?",
+                    "Private key is opened now, override this key?",
                     "Attention",
                     MessageBoxButton.YesNo,
                     MessageBoxImage.Question) == MessageBoxResult.No)
@@ -198,7 +230,7 @@ namespace CryptographicCreator.Behaviors
             if (IsActivePublicKey)
             {
                 if (MessageBox.Show(
-                    "Public Key is active now, override this key?",
+                    "Public key is opened now, override this key?",
                     "Attention",
                     MessageBoxButton.YesNo,
                     MessageBoxImage.Question) == MessageBoxResult.No)
@@ -223,7 +255,7 @@ namespace CryptographicCreator.Behaviors
             if (AreActiveEncryptedData)
             {
                 if (MessageBox.Show(
-                    "Encrypted data are active now, override these data?",
+                    "Encrypted data are opened now, override these data?",
                     "Attention",
                     MessageBoxButton.YesNo,
                     MessageBoxImage.Question) == MessageBoxResult.No)

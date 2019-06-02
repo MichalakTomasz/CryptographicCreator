@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Commons
 {
@@ -95,6 +92,21 @@ namespace Commons
                 Debug.WriteLine($"RSAEncryption exception: {e.Message}");
                 return default(RSAPairKeyParameters);
             }
+        }
+
+        public bool CompareKeyBases(RSAParameters parameters1, RSAParameters parameters2)
+        {
+            if (parameters1.Exponent.Length == parameters2.Exponent.Length &&
+                parameters1.Modulus.Length == parameters2.Modulus.Length)
+            {
+                for (var i = 0; i < parameters1.Exponent.Length; i++)
+                    if (!(parameters1.Exponent[i] == parameters2.Exponent[i])) return false;
+                for (var i = 0; i < parameters1.Modulus.Length; i++)
+                    if (!(parameters1.Modulus[i] == parameters2.Modulus[i])) return false;
+            }
+            else return false;
+            
+            return true;
         }
 
         #endregion//Public Metchods

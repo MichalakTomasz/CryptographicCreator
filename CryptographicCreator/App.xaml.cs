@@ -11,6 +11,8 @@ using System.Windows;
 using CryptographicCreator.Views;
 using ModuleREARegion;
 using Commons;
+using CryptographicCreator.Models;
+using System.Security.Cryptography;
 
 namespace CryptographicCreator
 {
@@ -24,6 +26,7 @@ namespace CryptographicCreator
             containerRegistry.Register<ICompressionService, RSAGZipCompressionService>();
             containerRegistry.Register<ISerializationService, SerializationService>();
             containerRegistry.Register<IRSASerializationService, RSASerializationService>();
+            containerRegistry.Register<IStatusBarMessages, StatusBarMessages>();
         }
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)

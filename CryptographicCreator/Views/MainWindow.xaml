@@ -17,39 +17,55 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition/>
+            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Ribbon x:Name="ribbonMenu" Grid.Row="0">
             <RibbonTab Header="RSA">
                 <RibbonGroup Header="Keys">
                     <RibbonButton Label="Generate"
-                                  Command="{Binding GenerateCommand, Mode=OneWay}"/>
+                                  Command="{Binding GenerateCommand, Mode=OneWay}">
+                        <i:Interaction.Behaviors>
+                            <behavior:RibbonButtonGenerateRSAKeysBehavior
+                                IsActivePrivateKey="{Binding IsActiveRSAPrivateKey, Mode=OneWay}"
+                                IsSavedPrivateKey="{Binding IsSavedRSAPrivateKey, Mode=OneWay}"
+                                IsActivePublicKey="{Binding IsActiveRSAPublicKey, Mode=OneWay}"
+                                IsSavedPublicKey="{Binding IsSavedRSAPrivateKey, Mode=OneWay}"
+                                AcceptEvent="{Binding AcceptEvent, Mode=OneWayToSource}"/>
+                        </i:Interaction.Behaviors>
+                    </RibbonButton>
                     <RibbonButton Label="Open"
                                   Command="{Binding OpenCommand, Mode=OneWay}">
                         <i:Interaction.Behaviors>
-                            <behavior:RibbonButtonOpenSaveRSAKeysBehavior FileAction="Open" 
-                                                                          SelectedPath="{Binding SelectedPath, Mode=OneWayToSource}"
-                                                                          IsActivePrivateKey="{Binding IsActivePrivateKey, Mode=OneWay}"
-                                                                          IsActivePublicKey="{Binding IsActivePublicKey, Mode=OneWay}"
-                                                                          AreActiveEncryptedData="{Binding AreActiveEncryptedData, Mode=OneWay}"
-                                                                          RSAAction="{Binding RSAAction, Mode=OneWayToSource}"
-                                                                          AcceptEvent="{Binding AcceptEvent, Mode=OneWayToSource}"/>
-                                                                          
+                            <behavior:RibbonButtonOpenSaveRSAKeysBehavior 
+                                FileAction="Open"                        
+                                SelectedPath="{Binding SelectedPath, Mode=OneWayToSource}"
+                                IsActivePrivateKey="{Binding IsActiveRSAPrivateKey, Mode=OneWay}"
+                                IsActivePublicKey="{Binding IsActiveRSAPublicKey, Mode=OneWay}"
+                                AreActiveEncryptedData="{Binding AreActiveRSAEncryptedData, Mode=OneWay}"
+                                RSAAction="{Binding RSAAction, Mode=OneWayToSource}"
+                                AcceptEvent="{Binding AcceptEvent, Mode=OneWayToSource}"/>
                         </i:Interaction.Behaviors>
                     </RibbonButton>
                     <RibbonButton Label="Save"
                                   Command="{Binding SaveCommand, Mode=OneWay}">
                         <i:Interaction.Behaviors>
-                            <behavior:RibbonButtonOpenSaveRSAKeysBehavior FileAction="Save" 
-                                                                          SelectedPath="{Binding SelectedPath, Mode=OneWayToSource}"
-                                                                          IsActivePrivateKey="{Binding IsActivePrivateKey, Mode=OneWay}"
-                                                                          IsActivePublicKey="{Binding IsActivePublicKey, Mode=OneWay}"
-                                                                          AreActiveEncryptedData="{Binding AreActiveEncryptedData, Mode=OneWay}"
-                                                                          RSAAction="{Binding RSAAction, Mode=OneWayToSource}"/>
+                            <behavior:RibbonButtonOpenSaveRSAKeysBehavior 
+                                FileAction="Save"                   
+                                SelectedPath="{Binding SelectedPath, Mode=OneWayToSource}"
+                                IsActivePrivateKey="{Binding IsActiveRSAPrivateKey, Mode=OneWay}"
+                                IsActivePublicKey="{Binding IsActiveRSAPublicKey, Mode=OneWay}"
+                                AreActiveEncryptedData="{Binding AreActiveRSAEncryptedData, Mode=OneWay}"
+                                RSAAction="{Binding RSAAction, Mode=OneWayToSource}"/>
                         </i:Interaction.Behaviors>
                     </RibbonButton>
                 </RibbonGroup>
             </RibbonTab>
         </Ribbon>
         <ContentControl Grid.Row="1" prism:RegionManager.RegionName="RSARegion" />
+        <StatusBar Grid.Row="2">
+            <StackPanel>
+                <TextBlock Text="{Binding StatusBarLog, Mode=OneWay}"/>
+            </StackPanel>
+        </StatusBar>
     </Grid>
 </RibbonWindow>

@@ -86,8 +86,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Behaviors\RibbonButtonGenerateRSAKeysBehavior.cs" />
     <Compile Include="Behaviors\RibbonButtonOpenSaveRSAKeysBehavior.cs" />
     <Compile Include="Models\FileAction.cs" />
+    <Compile Include="Models\IStatusBarMessages.cs" />
+    <Compile Include="Models\StatusBarMessage.cs" />
+    <Compile Include="Models\StatusBarMessages.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

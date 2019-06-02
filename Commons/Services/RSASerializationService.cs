@@ -4,19 +4,26 @@ namespace Commons
 {
     public class RSASerializationService : IRSASerializationService
     {
-        private readonly IRSACryptographicService rsaCryptographicService;
+        #region Fields
+
         private readonly ICompressionService compressionService;
         private readonly ISerializationService serializationService;
 
+        #endregion//Fields
+
+        #region Constructor
+
         public RSASerializationService(
-            IRSACryptographicService rsaCryptographicService,
             ICompressionService compressionService,
             ISerializationService serializationService)
         {
-            this.rsaCryptographicService = rsaCryptographicService;
             this.compressionService = compressionService;
             this.serializationService = serializationService;
         }
+
+        #endregion//Constructor
+
+        #region Methods
 
         public void SerializeKey(RSAParameters rsaParameters, string path)
         {
@@ -32,20 +39,22 @@ namespace Commons
 
         public byte[] DeserializeEncryptedData(string path)
         {
-            ArchiveFrame deserializedBuffer = 
+            ArchiveFrame deserializedBuffer =
                 serializationService.DeserializeCompressedData(path);
-            byte[] decompressedData = 
+            byte[] decompressedData =
                 compressionService.DecompressByteBuffer(deserializedBuffer);
             return decompressedData;
         }
 
         public RSAParameters DeserializeKey(string path)
         {
-            ArchiveFrame deserializedBuffer = 
+            ArchiveFrame deserializedBuffer =
                 serializationService.DeserializeCompressedData(path);
-            RSAParameters rsaParameters = 
+            RSAParameters rsaParameters =
                 compressionService.DecompressRSAParameters(deserializedBuffer);
             return rsaParameters;
         }
+
+        #endregion//Methods
     }
 }

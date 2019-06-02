@@ -1,17 +1,42 @@
 ﻿using Commons;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace CommonsTest.Services
 {
     [TestClass]
     public class RSACryptographicServeceTest
     {
+        [TestMethod]
+        public void CompareKeyModulesTest()
+        {
+            //Arrange
+
+            var rsaCryptographicService = new RSACryptographicService();
+            var rsaPairKeyParameters1 = rsaCryptographicService.GenerateKeyParameters();
+            var rsaPairKeyParameters2 = rsaCryptographicService.GenerateKeyParameters();
+
+            //Act
+
+            var isFromTheSameBase1 = rsaCryptographicService.CompareKeyBases(
+                rsaPairKeyParameters1.PrivateKeyParameters, 
+                rsaPairKeyParameters1.PrivateKeyParameters);
+
+            var isFromTheSameBase2 = rsaCryptographicService.CompareKeyBases(
+                rsaPairKeyParameters1.PublicKeyParameters,
+                rsaPairKeyParameters2.PublicKeyParameters);
+
+            var isFromTheSameBase3 = rsaCryptographicService.CompareKeyBases(
+                rsaPairKeyParameters2.PrivateKeyParameters,
+                rsaPairKeyParameters2.PublicKeyParameters);
+
+            //Assert
+
+            Assert.IsTrue(isFromTheSameBase1);
+            Assert.IsFalse(isFromTheSameBase2);
+            Assert.IsTrue(isFromTheSameBase3);
+        }
+
         [TestMethod]
         public void GenerateKeys()
         {

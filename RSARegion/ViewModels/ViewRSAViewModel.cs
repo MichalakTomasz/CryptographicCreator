@@ -82,18 +82,7 @@ namespace ModuleREARegion.ViewModels
         #endregion//Properties
 
         #region Commands
-
-        private ICommand loadedCommand;
-        public ICommand LoadedCommand
-        {
-            get
-            {
-                if (loadedCommand == null)
-                    loadedCommand = new DelegateCommand(LoadedCommandExecute);
-                return loadedCommand;
-            }
-        }
-
+       
         private ICommand encryptCommand;
         public ICommand EncryptCommand
         {
@@ -148,11 +137,6 @@ namespace ModuleREARegion.ViewModels
                     message.RSAAction = RSAAction.None;
                     break;
             }
-        }
-
-        private void LoadedCommandExecute()
-        {
-
         }
 
         private void EncryptCommandExecute()
