@@ -3,13 +3,41 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:ModuleREARegion.Views"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              xmlns:prism="http://prismlibrary.com/"
-             prism:ViewModelLocator.AutoWireViewModel="True" 
+             xmlns:converter="clr-namespace:CryptographicCreator.Converters"
+             prism:ViewModelLocator.AutoWireViewModel="True"
              Padding="15">
+    <UserControl.Resources>
+        <converter:BoolToBruschConverter x:Key="BoolToBruschConverter"/>
+    </UserControl.Resources>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <prism:InvokeCommandAction Command="{Binding LoadedCommand, Mode=OneWay}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <DockPanel Grid.Row="1">
+        <StackPanel DockPanel.Dock="Top"
+                    Orientation="Horizontal">
+            <GroupBox Header="Privete Key">
+                <Rectangle Width="30"
+                           Height="30"
+                           Fill="{Binding IsActivePrivateKey, Converter={StaticResource BoolToBruschConverter}, Mode=OneWay}"/>
+            </GroupBox>
+            <GroupBox Header="Public Key">
+                <Rectangle Width="30"
+                           Height="30"
+                           Fill="{Binding IsActivePublicKey, Converter={StaticResource BoolToBruschConverter}, Mode=OneWay}"/>
+            </GroupBox>
+            <GroupBox Header="EncryptedData">
+                <Rectangle Width="30"
+                           Height="30"
+                           Fill="{Binding AreActiveEncryptedData, Converter={StaticResource BoolToBruschConverter}, Mode=OneWay}"/>
+            </GroupBox>
+        </StackPanel>
         <GroupBox DockPanel.Dock="Top" 
                   Header="Text " 
                   Height="50">
@@ -19,9 +47,6 @@
                     Orientation="Horizontal"
                     Height="50"
                     MinWidth="200">
-            <GroupBox Margin="0 0 20 0" Header="Key size in bits">
-                <TextBox Text="{ Binding BitsKeySize }"/>
-            </GroupBox>
             <StackPanel Orientation="Horizontal"
                         Margin="10"
                         HorizontalAlignment="Right">
@@ -30,20 +55,6 @@
                 <Button Margin="4" Content="Decrypt"/>
             </StackPanel>
         </StackPanel>
-        <GridSplitter DockPanel.Dock="Top"
-                      Height="2"
-                      HorizontalAlignment="Stretch"
-                      Margin="0 10 0 0"/>
-        <GroupBox DockPanel.Dock="Top" 
-                  Header="Private and public Key"
-                  MinHeight="100">
-            <TextBlock Text="{Binding PrivateAndPublicKey}"/>
-        </GroupBox>
-        <GroupBox DockPanel.Dock="Top" 
-                  Header="Public Key"
-                  MinHeight="100">
-            <TextBlock Text="{Binding PublicKey}"/>
-        </GroupBox>
         <GroupBox DockPanel.Dock="Top" 
                   Header="Encrypted text">
             <TextBlock Text="{Binding EncryptedText}"/>

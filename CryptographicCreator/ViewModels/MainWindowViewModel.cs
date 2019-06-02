@@ -3,34 +3,60 @@ using EventAggregator;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace CryptographicCreator.ViewModels
 {
     public class MainWindowViewModel : BindableBase
     {
-        private IEventAggregator eventAggregator;
+        #region Fields
+
+        private readonly IEventAggregator eventAggregator;
+
+        #endregion//Fiels
+
+        #region Constructor
 
         public MainWindowViewModel(IEventAggregator eventAggregator)
             => this.eventAggregator = eventAggregator;
 
-        private bool hasPublicParameters = true;
-        public bool HasPublicParameters
+        #endregion
+
+        #region Properties
+
+        private bool isActivePublicKey;
+        public bool IsActivePublicKey
         {
-            get { return hasPublicParameters; }
-            set { SetProperty(ref hasPublicParameters, value); }
+            get { return isActivePublicKey; }
+            set { SetProperty(ref isActivePublicKey, value); }
         }
 
-        private bool hasPrivateAndPublicParameters = true;
-        public bool HasPrivateAndPublicParameters
+        private bool isActivePrivateKey;
+        public bool IsActivePrivateKey
         {
-            get { return hasPrivateAndPublicParameters; }
-            set { SetProperty(ref hasPrivateAndPublicParameters, value); }
+            get { return isActivePrivateKey; }
+            set { SetProperty(ref isActivePrivateKey, value); }
+        }
+
+        private bool areActiveEncrypryptedData;
+        public bool AreActiveEncryptedData
+        {
+            get { return areActiveEncrypryptedData; }
+            set { SetProperty(ref areActiveEncrypryptedData, value); }
+        }
+
+        private bool acceptEvent;
+        public bool AcceptEvent
+        {
+            get { return acceptEvent; }
+            set { SetProperty(ref acceptEvent, value); }
+        }
+
+        private RSAAction rsaAction;
+        public RSAAction RSAAction
+        {
+            get { return rsaAction; }
+            set { SetProperty(ref rsaAction, value); }
         }
 
         private string selectedPath;
@@ -40,65 +66,87 @@ namespace CryptographicCreator.ViewModels
             set { SetProperty(ref selectedPath, value); }
         }
 
+        #endregion//Properties
+
+        #region Commands
+
         private ICommand generateCommand;
         public ICommand GenerateCommand
         {
             get
             {
                 if (generateCommand == null)
-                {
                     generateCommand = new DelegateCommand(GenerateCommandExecute);
-                }
                 return generateCommand;
             }
         }
 
-        private ICommand loadCommand;
-        public ICommand LoadCommand
+        private ICommand openCommand;
+        public ICommand OpenCommand
         {
             get
             {
-                if (loadCommand == null)
-                {
-                    loadCommand = new DelegateCommand(LoadCommandExecute);
-                }
-                return loadCommand;
+                if (openCommand == null)
+                    openCommand = new DelegateCommand(OpenCommandExecute);
+                return openCommand;
             }
         }
 
-        private ICommand savePublicKeyCommnad;
-        public ICommand SavePublicKeyCommand
+        private ICommand saveCommnad;
+        public ICommand SaveCommand
         {
             get
             {
-                if (savePublicKeyCommnad == null)
-                    savePublicKeyCommnad = new DelegateCommand(SavePublicKeyCommandExecute);
-                return savePublicKeyCommnad;
+                if (saveCommnad == null)
+                    saveCommnad = new DelegateCommand(SaveCommandExecute);
+                return saveCommnad;
             }
         }
 
-        private ICommand savePrivatAndPulblicKeyCommand;
-        public ICommand SavePrivateAndPublicKeyCommand
-        {
-            get
-            {
-                if (savePrivatAndPulblicKeyCommand == null)
-                    savePrivatAndPulblicKeyCommand = new DelegateCommand(SavePrivateAndPublicCommandExecute);
-                return savePrivatAndPulblicKeyCommand;
-            }
-        }
+        #endregion//Commands
+
+        #region Methods
 
         private void GenerateCommandExecute()
-            => eventAggregator.GetEvent<RSAMessageSentEvnt>().Publish(new RsaMessage { RSAAction = RSAAction.Generate});
+        {  
+            eventAggregator.GetEvent<RSAMessageSentEvnt>()
+                .Publish(new RsaMessage { RSAAction = RSAAction.Generate });
+            SetRSADataAcrivity(RSAAction.Generate);
+        }
 
-        private void SavePublicKeyCommandExecute()
-             => eventAggregator.GetEvent<RSAMessageSentEvnt>().Publish(new RsaMessage { RSAAction = RSAAction.SavePublicKey, Path = SelectedPath });
+        private void OpenCommandExecute()
+        {
+            if (AcceptEvent) eventAggregator.GetEvent<RSAMessageSentEvnt>()
+                .Publish(new RsaMessage{ RSAAction = RSAAction, Path = SelectedPath });
+            SetRSADataAcrivity(RSAAction);
+        }
 
-        private void SavePrivateAndPublicCommandExecute()
-            => eventAggregator.GetEvent<RSAMessageSentEvnt>().Publish(new RsaMessage { RSAAction = RSAAction.SavePrivateAndPublicKey, Path = SelectedPath });
+        private void SaveCommandExecute()
+        {
+            eventAggregator.GetEvent<RSAMessageSentEvnt>()
+                  .Publish(new RsaMessage { RSAAction = RSAAction, Path = SelectedPath });
+            
+        }
 
-        private void LoadCommandExecute()
-            => eventAggregator.GetEvent<RSAMessageSentEvnt>().Publish(new RsaMessage { RSAAction = RSAAction.Open, Path = SelectedPath });
+        private void SetRSADataAcrivity(RSAAction rsaAction)
+        {
+            switch (rsaAction)
+            {
+                case RSAAction.Generate:
+                    IsActivePublicKey = true;
+                    IsActivePrivateKey = true;
+                    break;
+                case RSAAction.OpenPublicKey:
+                    IsActivePublicKey = true;
+                    break;
+                case RSAAction.OpenPrivateKey:
+                    IsActivePrivateKey = true;
+                    break;
+                case RSAAction.OpenEncryptedData:
+                    AreActiveEncryptedData = true;
+                    break;
+            }
+        }
+        #endregion//Methods
     }
-    
 }

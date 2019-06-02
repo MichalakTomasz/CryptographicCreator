@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace Commons
@@ -10,77 +10,128 @@ namespace Commons
     {
         #region Public Methods
 
-        public async Task<bool> SerializeAsync(byte[] source, string path)
+        public async Task SerializeAsync(ArchiveFrame data, string path)
         {
             try
             {
-                if (source != null && Directory.Exists(Path.GetDirectoryName(path)))
+                if (data != null && Directory.Exists(Path.GetDirectoryName(path)))
                 {
-                    using (var binaryWriter = new BinaryWriter(File.Open(path, FileMode.OpenOrCreate)))
+                    using (var binaryWriter = 
+                        new BinaryWriter(File.Open(path, FileMode.OpenOrCreate)))
                     {
-                        await Task.Run(() => binaryWriter.Write(source));
+                        await Task.Run(() => 
+                        binaryWriter.Write(data.Buffer, 0, data.Buffer.Length));
                     }
                 }
-                return true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return false;
+                Debug.WriteLine($"Serialization exception: {e.Message}");
             }
         }
 
-        public bool Serialize(RSAParameters rsaParameters, string path)
+        public void Serialize(ArchiveFrame serializedData, string path)
         {
             try
             {
-                if (Directory.Exists(Path.GetDirectoryName(path)))
+                if (!string.IsNullOrWhiteSpace(path) &&
+                    Directory.Exists(Path.GetDirectoryName(path)) &&
+                    !serializedData.Equals(default(ArchiveFrame)))
                 {
                     using (var fileStream = File.Open(path, FileMode.OpenOrCreate))
                     {
                         var binaryFormater = new BinaryFormatter();
-                        binaryFormater.Serialize(fileStream, rsaParameters);
+                        binaryFormater.Serialize(fileStream, serializedData);
                     }
                 }
-                return true;
             }
-            catch (Exception)
+
+            catch (Exception e)
             {
-                return false;
+                Debug.WriteLine($"Serialization exception: {e.Message}");
             }
         }
 
-        public async Task<byte[]> DeserializeAsync(string path)
+        public async Task<byte[]> DeserializeArrayBufferAsync(string path)
         {
             try
             {
-                if (Directory.Exists(Path.GetDirectoryName(path)))
+                if (!string.IsNullOrWhiteSpace(path) && 
+                    Directory.Exists(Path.GetDirectoryName(path)))
                 {
-                    var fileStream = File.Open(path, FileMode.Open);
-                    return await Task.Run(() =>File.ReadAllBytes(path));
+                    using (var fileStream = File.Open(path, FileMode.Open))
+                        return await Task.Run(() => File.ReadAllBytes(path));
                 }
                 return default(byte[]);
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Debug.WriteLine($"Deserialization exception: {e.Message}");
                 return default(byte[]);
             }
         }
 
-        public TData Deserialize<TData>(string path) where TData : CryptographicBase
+        public byte[] DeserializeArrayBuffer(string path)
         {
             try
             {
-                if (Directory.Exists(Path.GetDirectoryName(path)))
+                if (!string.IsNullOrWhiteSpace(path) && 
+                    Directory.Exists(Path.GetDirectoryName(path)))
                 {
-                    var fileStream = File.Open(path, FileMode.Open);
-                    var binaryFormater = new BinaryFormatter();
-                    return (TData)binaryFormater.Deserialize(fileStream);
+                    using (var fileStream = File.Open(path, FileMode.Open))
+                        return File.ReadAllBytes(path);
                 }
-                return default(TData);
+                return default(byte[]);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return default(TData);
+                Debug.WriteLine($"Deserialization exception: {e.Message}");
+                return default(byte[]);
+            }
+        }
+
+        public Task<ArchiveFrame> DeserializeCompressedDataAsync(string path)
+        {
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(path) && 
+                    Directory.Exists(Path.GetDirectoryName(path)))
+                {
+                    using (var fileStream = File.Open(path, FileMode.Open))
+                    {
+                        var binaryFormater = new BinaryFormatter();
+                        return Task.Run(() => 
+                        (ArchiveFrame)binaryFormater.Deserialize(fileStream));
+                    }    
+                }
+                return Task.Run(() => default(ArchiveFrame));
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine($"Deserialization exception: {e.Message}");
+                return Task.Run(() => default(ArchiveFrame));
+            }
+        }
+
+        public ArchiveFrame DeserializeCompressedData(string path)
+        {
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(path) && 
+                    Directory.Exists(Path.GetDirectoryName(path)))
+                {
+                    using (var fileStream = File.Open(path, FileMode.Open))
+                    {
+                        var binaryFormater = new BinaryFormatter();
+                        return (ArchiveFrame)binaryFormater.Deserialize(fileStream);
+                    } 
+                }
+                return default(ArchiveFrame);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine($"Deserialization exception: {e.Message}");
+                return default(ArchiveFrame);
             }
         }
 

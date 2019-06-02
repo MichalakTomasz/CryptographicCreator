@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 namespace Commons
 {
     [Serializable]
-    public class RSAPairKeyParameters : CryptographicBase
+    public class RSAPairKeyParameters
     {
         public RSAPairKeyParameters(RSAParameters publicKeyParameters, RSAParameters privateKeyParameters)
         {

@@ -5,9 +5,11 @@ namespace Commons
 {
     public interface ISerializationService
     {
-        Task<bool> SerializeAsync(byte[] source, string path);
-        bool Serialize(RSAParameters rsaParameters, string path);
-        Task<byte[]> DeserializeAsync(string path);
-        TData Deserialize<TData>(string path) where TData : CryptographicBase;
+        Task SerializeAsync(ArchiveFrame data, string path);
+        void Serialize(ArchiveFrame data, string path);
+        Task<byte[]> DeserializeArrayBufferAsync(string path);
+        byte[] DeserializeArrayBuffer(string path);
+        Task<ArchiveFrame> DeserializeCompressedDataAsync(string path);
+        ArchiveFrame DeserializeCompressedData(string path);
     }
 }

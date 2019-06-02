@@ -1,8 +1,12 @@
-﻿namespace Commons
+﻿using System.Security.Cryptography;
+
+namespace Commons
 {
     public interface ICompressionService
     {
-        bool Compress(byte[] source, string path);
-        byte[] Decompress(string path);
-    }
+        ArchiveFrame Compress(byte[] source);
+        ArchiveFrame Compress(RSAParameters rsaParameters);
+        byte[] DecompressByteBuffer(ArchiveFrame archiveFrame);
+        RSAParameters DecompressRSAParameters(ArchiveFrame archiveFrame);
+            }
 }

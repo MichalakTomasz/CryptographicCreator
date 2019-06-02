@@ -21,8 +21,9 @@ namespace CryptographicCreator
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.Register<ICompressionService, GZipCompressionService>();
+            containerRegistry.Register<ICompressionService, RSAGZipCompressionService>();
             containerRegistry.Register<ISerializationService, SerializationService>();
+            containerRegistry.Register<IRSASerializationService, RSASerializationService>();
         }
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)

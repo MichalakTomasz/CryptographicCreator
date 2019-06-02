@@ -15,57 +15,34 @@ namespace ModuleREARegion.ViewModels
 {
     public class ViewRSAViewModel : BindableBase
     {
+        #region Fields
+
         private readonly IEventAggregator eventAggregator;
         private readonly IRSACryptographicService cryptographicService;
-        private readonly ISerializationService serializationService;
+        private readonly IRSASerializationService rsaSerializationService;
         private readonly RSAPairKeyParameters rsaPairKeyParameters;
-        private RSAParameters privateAndPublicKeyParameeters;
+        private RSAParameters privateAndPublicKeyParameters;
         private RSAParameters publicKeyParameters;
-        
-        public ViewRSAViewModel(IEventAggregator eventAggregator, 
+
+        #endregion Fields
+
+        #region Constructor
+
+        public ViewRSAViewModel(
+            IEventAggregator eventAggregator,
             IRSACryptographicService cryptographicService,
-            ISerializationService serializationService)
+            IRSASerializationService rsaSerializationService)
         {
             this.eventAggregator = eventAggregator;
             this.cryptographicService = cryptographicService;
-            this.serializationService = serializationService;
+            this.rsaSerializationService = rsaSerializationService;
             rsaPairKeyParameters = this.cryptographicService.GenerateKeyParameters();
             eventAggregator.GetEvent<RSAMessageSentEvnt>().Subscribe(ExecuteMessage);
         }
 
-        private void ExecuteMessage(RsaMessage message)
-        {
-            switch (message.RSAAction)
-            {
-                case RSAAction.Generate:
-                    var bothKeyParameters = cryptographicService.GenerateKeyParameters();
-                    privateAndPublicKeyParameeters = bothKeyParameters.PrivateKeyParameters;
-                    publicKeyParameters = bothKeyParameters.PublicKeyParameters;
-                    break;
-                case RSAAction.Open:
-                    break;
-                case RSAAction.SavePublicKey:
-                    serializationService.Serialize(publicKeyParameters, message.Path);
-                    break;
-                case RSAAction.SavePrivateAndPublicKey:
-                    serializationService.Serialize(privateAndPublicKeyParameeters, message.Path);
-                    break;
-            }
-        }
+        #endregion//Constructor
 
-        private string publicKey;
-        public string PublicKey
-        {
-            get { return publicKey; }
-            set { SetProperty(ref publicKey, value); }
-        }
-
-        private string privatAndPublicKey;
-        public string PrivateAndPublicKey
-        {
-            get { return privatAndPublicKey; }
-            set { SetProperty(ref privatAndPublicKey, value); }
-        }
+        #region Properties
 
         private string text;
         public string Text
@@ -81,11 +58,40 @@ namespace ModuleREARegion.ViewModels
             set { SetProperty(ref encryptedText, value); }
         }
 
-        private int? bitsKeySize;
-        public int? BitsKeySize
+        private bool isActivePublicKey;
+        public bool IsActivePublicKey
         {
-            get { return bitsKeySize; }
-            set { SetProperty(ref bitsKeySize, value); }
+            get { return isActivePublicKey; }
+            set { SetProperty(ref isActivePublicKey, value); }
+        }
+
+        private bool isActivePrivateKey;
+        public bool IsActivePrivateKey
+        {
+            get { return isActivePrivateKey; }
+            set { SetProperty(ref isActivePrivateKey, value); }
+        }
+
+        private bool areActiveEncrypryptedData;
+        public bool AreActiveEncryptedData
+        {
+            get { return areActiveEncrypryptedData; }
+            set { SetProperty(ref areActiveEncrypryptedData, value); }
+        }
+
+        #endregion//Properties
+
+        #region Commands
+
+        private ICommand loadedCommand;
+        public ICommand LoadedCommand
+        {
+            get
+            {
+                if (loadedCommand == null)
+                    loadedCommand = new DelegateCommand(LoadedCommandExecute);
+                return loadedCommand;
+            }
         }
 
         private ICommand encryptCommand;
@@ -99,15 +105,67 @@ namespace ModuleREARegion.ViewModels
             }
         }
 
+        #endregion//Commands
+
+        #region Private Methods
+
+        private void ExecuteMessage(RsaMessage message)
+        {
+            switch (message.RSAAction)
+            {
+                case RSAAction.Generate:
+                    var bothKeyParameters = cryptographicService.GenerateKeyParameters();
+                    privateAndPublicKeyParameters = bothKeyParameters.PrivateKeyParameters;
+                    publicKeyParameters = bothKeyParameters.PublicKeyParameters;
+                    IsActivePrivateKey = true;
+                    IsActivePublicKey = true;
+                    message.RSAAction = RSAAction.None;
+                    break;
+                case RSAAction.OpenPrivateKey:
+                    privateAndPublicKeyParameters = rsaSerializationService.DeserializeKey(message.Path);
+                    IsActivePrivateKey = true;
+                    message.RSAAction = RSAAction.None;
+                    break;
+                case RSAAction.OpenPublicKey:
+                    publicKeyParameters = rsaSerializationService.DeserializeKey(message.Path);
+                    IsActivePublicKey = true;
+                    message.RSAAction = RSAAction.None;
+                    break;
+                case RSAAction.OpenEncryptedData:
+                    rsaSerializationService.DeserializeEncryptedData(message.Path);
+                    IsActivePublicKey = true;
+                    message.RSAAction = RSAAction.None;
+                    break;
+                case RSAAction.SavePublicKey:
+                    rsaSerializationService.SerializeKey(publicKeyParameters, message.Path);
+                    message.RSAAction = RSAAction.None;
+                    break;
+                case RSAAction.SavePrivateAndPublicKey:
+                    rsaSerializationService.SerializeKey(privateAndPublicKeyParameters, message.Path);
+                    message.RSAAction = RSAAction.None;
+                    break;
+                case RSAAction.SaveEncryptedData:
+                    message.RSAAction = RSAAction.None;
+                    break;
+            }
+        }
+
+        private void LoadedCommandExecute()
+        {
+
+        }
+
         private void EncryptCommandExecute()
         {
-            privateAndPublicKeyParameeters = rsaPairKeyParameters.PrivateKeyParameters;
+            privateAndPublicKeyParameters = rsaPairKeyParameters.PrivateKeyParameters;
+            IsActivePrivateKey = !privateAndPublicKeyParameters.Equals(default(RSAParameters));
             publicKeyParameters = rsaPairKeyParameters.PublicKeyParameters;
-            PrivateAndPublicKey = rsaPairKeyParameters.PrivateKeyParameters.ToString();
-            PublicKey = rsaPairKeyParameters.PublicKeyParameters.ToString();
+            IsActivePublicKey = !publicKeyParameters.Equals(default(RSAParameters));
             var byteArrayText = Encoding.UTF8.GetBytes(Text);
             var encrypredByteArray = cryptographicService.Encrypt(byteArrayText, rsaPairKeyParameters.PrivateKeyParameters);
             EncryptedText = Encoding.Unicode.GetString(encrypredByteArray);
         }
+
+        #endregion//Private Methods
     }
 }

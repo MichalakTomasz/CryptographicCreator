@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -13,53 +14,69 @@ namespace Commons
 
         public byte[] Encrypt(byte[] data, RSAParameters rsaParameters)
         {
-            try
+            if (data.Length > 0 && 
+                !rsaParameters.Equals(default(RSAParameters)))
             {
-                using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider())
+                try
                 {
-                    rsa.ImportParameters(rsaParameters);
-                    return rsa.Encrypt(data, true);
+                    using (var rsa = new RSACryptoServiceProvider())
+                    {
+                        rsa.ImportParameters(rsaParameters);
+                        return rsa.Encrypt(data, true);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine($"RSAEncryption exception: {e.Message}");
+                    return default(byte[]);
                 }
             }
-            catch (Exception)
-            {
-                return default(byte[]);
-            }
+            else return default(byte[]);
         }
 
         public byte[] Encrypt(string text, Encoding encoding, RSAParameters rsaParameters)
         {
-            try
+            if (!string.IsNullOrWhiteSpace(text) && 
+                !rsaParameters.Equals(default(RSAParameters)))
             {
-                var rsa = new RSACryptoServiceProvider();
-                if (!string.IsNullOrWhiteSpace(text))
+                try
                 {
-                    var encryptedByteArray = encoding.GetBytes(text);
-                    rsa.ImportParameters(rsaParameters);
-                    return rsa.Encrypt(encryptedByteArray, true);
+                    using (var rsa = new RSACryptoServiceProvider())
+                    {
+                        var encryptedByteArray = encoding.GetBytes(text);
+                        rsa.ImportParameters(rsaParameters);
+                        return rsa.Encrypt(encryptedByteArray, true);
+                    }
                 }
-                else return default(byte[]);
+                catch (Exception e)
+                {
+                    Debug.WriteLine($"RSAEncryption exception: {e.Message}");
+                    return default(byte[]);
+                }
             }
-            catch (Exception)
-            {
-                return default(byte[]);
-            }
+            else return default(byte[]);
         }
 
         public byte[] Decrypt(byte[] data, RSAParameters rsaParameters)
         {
-            try
+            if (data.Length > 0 &&
+                !rsaParameters.Equals(default(RSAParameters)))
             {
-                using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider())
+                try
                 {
-                    rsa.ImportParameters(rsaParameters);
-                    return rsa.Decrypt(data, true);
+                    using (var rsa = new RSACryptoServiceProvider())
+                    {
+                        rsa.ImportParameters(rsaParameters);
+                        return rsa.Decrypt(data, true);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine($"RSADecryption exception: {e.Message}");
+                    return default(byte[]);
                 }
             }
-            catch (Exception)
-            {
-                return default(byte[]);
-            }
+            return default(byte[]);
         }
 
         public RSAPairKeyParameters GenerateKeyParameters()
@@ -75,6 +92,7 @@ namespace Commons
             }
             catch (Exception e)
             {
+                Debug.WriteLine($"RSAEncryption exception: {e.Message}");
                 return default(RSAPairKeyParameters);
             }
         }
