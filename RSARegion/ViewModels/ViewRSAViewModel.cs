@@ -21,8 +21,10 @@ namespace ModuleREARegion.ViewModels
         private readonly IRSACryptographicService cryptographicService;
         private readonly IRSASerializationService rsaSerializationService;
         private readonly RSAPairKeyParameters rsaPairKeyParameters;
+
         private RSAParameters privateAndPublicKeyParameters;
         private RSAParameters publicKeyParameters;
+        private byte[] encryptedData;
 
         #endregion Fields
 
@@ -37,7 +39,8 @@ namespace ModuleREARegion.ViewModels
             this.cryptographicService = cryptographicService;
             this.rsaSerializationService = rsaSerializationService;
             rsaPairKeyParameters = this.cryptographicService.GenerateKeyParameters();
-            eventAggregator.GetEvent<RSAMessageSentEvnt>().Subscribe(ExecuteMessage);
+            eventAggregator.GetEvent<RSAMessageSentEvent>().Subscribe(ExecuteMessage);
+            PrivateKeyForEncryptionDecryption = true;
         }
 
         #endregion//Constructor
@@ -58,6 +61,13 @@ namespace ModuleREARegion.ViewModels
             set { SetProperty(ref encryptedText, value); }
         }
 
+        private string decryptedText;
+        public string DecryptedText
+        {
+            get { return decryptedText; }
+            set { SetProperty(ref decryptedText, value); }
+        }
+
         private bool isActivePublicKey;
         public bool IsActivePublicKey
         {
@@ -72,28 +82,73 @@ namespace ModuleREARegion.ViewModels
             set { SetProperty(ref isActivePrivateKey, value); }
         }
 
-        private bool areActiveEncrypryptedData;
+        private bool areActiveEncrypreptedData;
         public bool AreActiveEncryptedData
         {
-            get { return areActiveEncrypryptedData; }
-            set { SetProperty(ref areActiveEncrypryptedData, value); }
+            get { return areActiveEncrypreptedData; }
+            set { SetProperty(ref areActiveEncrypreptedData, value); }
+        }
+
+        private bool areKeysFromTheSameBase;
+        public bool AreKeysFromTheSameBase
+        {
+            get { return areKeysFromTheSameBase; }
+            set { SetProperty(ref areKeysFromTheSameBase, value); }
+        }
+
+        private bool privateKeyForEncryptionDecryption;
+        public bool PrivateKeyForEncryptionDecryption
+        {
+            get { return privateKeyForEncryptionDecryption; }
+            set { SetProperty(ref privateKeyForEncryptionDecryption, value); }
         }
 
         #endregion//Properties
 
         #region Commands
-       
+
         private ICommand encryptCommand;
         public ICommand EncryptCommand
         {
             get
             {
                 if (encryptCommand == null)
-                    encryptCommand = new DelegateCommand(EncryptCommandExecute);
+                    encryptCommand = new DelegateCommand(EncryptCommandExecute, EncryptCommandCanExecute)
+                        .ObservesProperty(() => PrivateKeyForEncryptionDecryption)
+                        .ObservesProperty(() => IsActivePublicKey)
+                        .ObservesProperty(() => IsActivePrivateKey)
+                        .ObservesProperty(() => AreActiveEncryptedData)
+                        .ObservesProperty(() => Text);
                 return encryptCommand;
             }
         }
 
+        private ICommand decryptCommand;
+        public ICommand DecryptCommand
+        {
+            get
+            {
+                if (decryptCommand == null)
+                    decryptCommand = new DelegateCommand(DecryptCommandExecute, DecryptCommandCanExecute)
+                        .ObservesProperty(() => IsActivePrivateKey)
+                        .ObservesProperty(() => AreActiveEncryptedData)
+                        .ObservesProperty(() => DecryptedText);
+                return decryptCommand;
+            }
+        }
+
+        private ICommand clearTextCommnad;
+        public ICommand ClearTextCommand
+        {
+            get
+            {
+                if (clearTextCommnad == null)
+                    clearTextCommnad = new DelegateCommand(ClearTextCommandExecute, ClearTextCanCommandExecute)
+                        .ObservesProperty(() => Text);
+                return clearTextCommnad;
+            }
+        }
+        
         #endregion//Commands
 
         #region Private Methods
@@ -108,25 +163,30 @@ namespace ModuleREARegion.ViewModels
                     publicKeyParameters = bothKeyParameters.PublicKeyParameters;
                     IsActivePrivateKey = true;
                     IsActivePublicKey = true;
+                    SetKeyParametersBase();
                     message.RSAAction = RSAAction.None;
                     break;
                 case RSAAction.OpenPrivateKey:
                     privateAndPublicKeyParameters = rsaSerializationService.DeserializeKey(message.Path);
                     IsActivePrivateKey = true;
+                    SetKeyParametersBase();
                     message.RSAAction = RSAAction.None;
                     break;
                 case RSAAction.OpenPublicKey:
                     publicKeyParameters = rsaSerializationService.DeserializeKey(message.Path);
                     IsActivePublicKey = true;
+                    SetKeyParametersBase();
                     message.RSAAction = RSAAction.None;
                     break;
                 case RSAAction.OpenEncryptedData:
-                    rsaSerializationService.DeserializeEncryptedData(message.Path);
-                    IsActivePublicKey = true;
+                    encryptedData = rsaSerializationService.DeserializeEncryptedData(message.Path);
+                    AreActiveEncryptedData = true;
+                    SetKeyParametersBase();
                     message.RSAAction = RSAAction.None;
                     break;
                 case RSAAction.SavePublicKey:
                     rsaSerializationService.SerializeKey(publicKeyParameters, message.Path);
+
                     message.RSAAction = RSAAction.None;
                     break;
                 case RSAAction.SavePrivateAndPublicKey:
@@ -134,21 +194,61 @@ namespace ModuleREARegion.ViewModels
                     message.RSAAction = RSAAction.None;
                     break;
                 case RSAAction.SaveEncryptedData:
+                    rsaSerializationService.SerializeEncryptedData(encryptedData, message.Path);
                     message.RSAAction = RSAAction.None;
                     break;
             }
         }
 
+        private void SetKeyParametersBase()
+        {
+            if (IsActivePrivateKey && IsActivePublicKey) AreKeysFromTheSameBase = 
+                    cryptographicService.CompareKeyBases(privateAndPublicKeyParameters, publicKeyParameters);
+            else AreKeysFromTheSameBase = false;
+        }
+
         private void EncryptCommandExecute()
         {
-            privateAndPublicKeyParameters = rsaPairKeyParameters.PrivateKeyParameters;
-            IsActivePrivateKey = !privateAndPublicKeyParameters.Equals(default(RSAParameters));
-            publicKeyParameters = rsaPairKeyParameters.PublicKeyParameters;
-            IsActivePublicKey = !publicKeyParameters.Equals(default(RSAParameters));
-            var byteArrayText = Encoding.UTF8.GetBytes(Text);
-            var encrypredByteArray = cryptographicService.Encrypt(byteArrayText, rsaPairKeyParameters.PrivateKeyParameters);
-            EncryptedText = Encoding.Unicode.GetString(encrypredByteArray);
+            var byteArrayText = Encoding.Unicode.GetBytes(Text);
+            var keyToEncrypt = PrivateKeyForEncryptionDecryption ? 
+                privateAndPublicKeyParameters : publicKeyParameters; 
+            encryptedData = cryptographicService.Encrypt(byteArrayText, keyToEncrypt);
+            EncryptedText = Encoding.Unicode.GetString(encryptedData);
+            AreActiveEncryptedData = true;
+            eventAggregator.GetEvent<RSAMessageSentEvent>().Publish(new RsaMessage { RSAAction = RSAAction.Encrypt });
         }
+
+        private void DecryptCommandExecute()
+        {
+            var decryptedData = cryptographicService.Decrypt(encryptedData, privateAndPublicKeyParameters);
+            DecryptedText = Encoding.Unicode.GetString(decryptedData);
+            eventAggregator.GetEvent<RSAMessageSentEvent>().Publish(new RsaMessage { RSAAction = RSAAction.Decrypt });
+        }
+
+        private bool EncryptCommandCanExecute()
+        {
+            if (PrivateKeyForEncryptionDecryption)
+            {
+                return IsActivePrivateKey &&
+                    Text?.Length > 0 &&
+                    !AreActiveEncryptedData;
+            }
+            else return IsActivePublicKey &&
+                    Text?.Length > 0 &&
+                    !AreActiveEncryptedData;
+        }
+        
+        private bool DecryptCommandCanExecute()
+            => AreActiveEncryptedData && IsActivePrivateKey;
+
+
+        private void ClearTextCommandExecute()
+        {
+            Text = "";
+        }
+
+        private bool ClearTextCanCommandExecute()
+            => Text?.Length > 0;
 
         #endregion//Private Methods
     }

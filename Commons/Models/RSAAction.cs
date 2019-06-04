@@ -9,6 +9,8 @@
         OpenEncryptedData,
         SavePublicKey,
         SavePrivateAndPublicKey,
-        SaveEncryptedData
+        SaveEncryptedData,
+        Encrypt,
+        Decrypt
     }
 }

@@ -6,13 +6,14 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300"
+             d:DesignHeight="350" d:DesignWidth="300"
              xmlns:prism="http://prismlibrary.com/"
-             xmlns:converter="clr-namespace:CryptographicCreator.Converters"
+             xmlns:converter="clr-namespace:RSARegion.Converters"
              prism:ViewModelLocator.AutoWireViewModel="True"
              Padding="15">
     <UserControl.Resources>
-        <converter:BoolToBruschConverter x:Key="BoolToBruschConverter"/>
+        <converter:BoolToBrushConverter x:Key="BoolToBrushConverter"/>
+        <converter:KeysActivityiBoolToBoolConverter x:Key="KeysActivityiBoolToBoolConverter"/>
     </UserControl.Resources>
     <DockPanel Grid.Row="1">
         <StackPanel DockPanel.Dock="Top"
@@ -21,41 +22,84 @@
                 <Ellipse Width="30"
                          Height="30"
                          Fill="{Binding IsActivePrivateKey, 
-                    Converter={StaticResource BoolToBruschConverter}, Mode=OneWay}"/>
+                    Converter={StaticResource BoolToBrushConverter}, Mode=OneWay}"/>
             </GroupBox>
             <GroupBox Header="Public Key">
                 <Ellipse Width="30"
-                           Height="30"
-                           Fill="{Binding IsActivePublicKey, 
-                    Converter={StaticResource BoolToBruschConverter}, Mode=OneWay}"/>
+                         Height="30"
+                         Fill="{Binding IsActivePublicKey, 
+                    Converter={StaticResource BoolToBrushConverter}, Mode=OneWay}"/>
             </GroupBox>
             <GroupBox Header="EncryptedData">
                 <Ellipse Width="30"
-                           Height="30"
-                           Fill="{Binding AreActiveEncryptedData, 
-                    Converter={StaticResource BoolToBruschConverter}, Mode=OneWay}"/>
+                         Height="30"
+                         Fill="{Binding AreActiveEncryptedData, 
+                    Converter={StaticResource BoolToBrushConverter}, Mode=OneWay}"/>
+            </GroupBox>
+            <GroupBox Header="Key parameter base">
+                <StackPanel Orientation="Horizontal"
+                            Margin="10 2">
+                    <Ellipse Height="15"
+                             Width="15"
+                             Margin="10 4"
+                             Fill="{Binding AreKeysFromTheSameBase,
+                        Converter={StaticResource BoolToBrushConverter}, Mode=OneWay}"/>
+                    <TextBlock Text="Keys from the same base"/>
+                </StackPanel>
             </GroupBox>
         </StackPanel>
-        <GroupBox DockPanel.Dock="Top" 
+        <Expander Header="Cryptohraphic functions">
+            <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                          VerticalScrollBarVisibility="Auto">
+                <DockPanel>
+                    <DockPanel.IsEnabled>
+                        <MultiBinding Converter="{StaticResource KeysActivityiBoolToBoolConverter}">
+                            <Binding Path="IsActivePublicKey"/>
+                            <Binding Path="IsActivePrivateKey"/>
+                        </MultiBinding>
+                    </DockPanel.IsEnabled>
+                    <GroupBox DockPanel.Dock="Top" 
                   Header="Text " 
                   Height="50">
-            <TextBox Text="{Binding Text, NotifyOnTargetUpdated=True}"/>
-        </GroupBox>
-        <StackPanel DockPanel.Dock="Top" 
+                        <StackPanel Orientation="Horizontal">
+                            <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                          VerticalScrollBarVisibility="Auto">
+                                <TextBox Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"
+                                         MinWidth="500"/>
+                            </ScrollViewer>
+                            <Button Content="Clear" 
+                                    Command="{Binding ClearTextCommand}"/>
+                        </StackPanel>
+                        
+                    </GroupBox>
+                    <StackPanel DockPanel.Dock="Top" 
                     Orientation="Horizontal"
-                    Height="50"
-                    MinWidth="200">
-            <StackPanel Orientation="Horizontal"
-                        Margin="10"
-                        HorizontalAlignment="Right">
-                <Button Margin="4" Content="Encrypt"
-                        Command="{ Binding EncryptCommand }"/>
-                <Button Margin="4" Content="Decrypt"/>
-            </StackPanel>
-        </StackPanel>
-        <GroupBox DockPanel.Dock="Top" 
+                                Height="50">
+                        <Button Margin="4 10" 
+                                    Content="Encrypt"
+                        Command="{Binding EncryptCommand}"/>
+                        <Button Margin="4 10" 
+                                    Content="Decrypt"
+                                    Command="{Binding DecryptCommand}"/>
+                        <CheckBox Content="Private key for encryption/decryption" 
+                                 IsChecked="{Binding PrivateKeyForEncryptionDecryption, Mode=TwoWay}"
+                                     Margin="10"/>
+                        </StackPanel>
+                    <GroupBox DockPanel.Dock="Top" 
                   Header="Encrypted text">
-            <TextBlock Text="{Binding EncryptedText}"/>
-        </GroupBox>
+                        <TextBlock Text="{Binding EncryptedText}"
+                                   Height="70"/>
+                    </GroupBox>
+                    <GroupBox DockPanel.Dock="Top"
+                  Header="Decrypted text">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Auto">
+                            <TextBlock Text="{Binding DecryptedText}" 
+                                       Height="70"/>
+                        </ScrollViewer>
+                    </GroupBox>
+                </DockPanel>
+            </ScrollViewer>
+        </Expander>
     </DockPanel>
 </UserControl>

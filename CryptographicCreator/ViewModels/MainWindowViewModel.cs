@@ -4,6 +4,7 @@ using EventAggregator;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
+using System;
 using System.Windows.Input;
 
 namespace CryptographicCreator.ViewModels
@@ -25,6 +26,7 @@ namespace CryptographicCreator.ViewModels
         {
             this.eventAggregator = eventAggregator;
             this.statusBarMessages = statusBarMessages;
+            this.eventAggregator.GetEvent<RSAMessageSentEvent>().Subscribe(ExecuteMessage);
         }
 
         #endregion//Constructor
@@ -64,6 +66,13 @@ namespace CryptographicCreator.ViewModels
         {
             get { return areActiveRSAEncrypryptedData; }
             set { SetProperty(ref areActiveRSAEncrypryptedData, value); }
+        }
+
+        private bool areSavedEncryptedData;
+        public bool AreSavedEncryptedData
+        {
+            get { return areSavedEncryptedData; }
+            set { SetProperty(ref areSavedEncryptedData, value); }
         }
 
         private bool acceptEvent;
@@ -139,7 +148,7 @@ namespace CryptographicCreator.ViewModels
         {
             if (AcceptEvent)
             {
-                eventAggregator.GetEvent<RSAMessageSentEvnt>()
+                eventAggregator.GetEvent<RSAMessageSentEvent>()
                     .Publish(new RsaMessage { RSAAction = RSAAction.Generate });
                 SetRSADataAcrivity(RSAAction.Generate);
                 IsSavedRSAPrivateKey = false;
@@ -153,17 +162,15 @@ namespace CryptographicCreator.ViewModels
         {
             if (AcceptEvent)
             {
-                eventAggregator.GetEvent<RSAMessageSentEvnt>()
+                eventAggregator.GetEvent<RSAMessageSentEvent>()
                     .Publish(new RsaMessage { RSAAction = RSAAction, Path = SelectedPath });
                 SetRSADataAcrivity(RSAAction);
                 switch (RSAAction)
                 {
                     case RSAAction.OpenPublicKey:
-                        IsSavedRSAPublicKey = false;
                         StatusBarLog = statusBarMessages[StatusBarMessage.RSAPublicKeyOpened];
                         break;
                     case RSAAction.OpenPrivateKey:
-                        IsSavedRSAPrivateKey = false;
                         StatusBarLog = statusBarMessages[StatusBarMessage.RSAPrivateKeyOpened];
                         break;
                     case RSAAction.OpenEncryptedData:
@@ -176,7 +183,7 @@ namespace CryptographicCreator.ViewModels
         {
             if (AcceptEvent)
             {
-                eventAggregator.GetEvent<RSAMessageSentEvnt>()
+                eventAggregator.GetEvent<RSAMessageSentEvent>()
                   .Publish(new RsaMessage { RSAAction = RSAAction, Path = SelectedPath });
                 switch (RSAAction)
                 {
@@ -189,6 +196,8 @@ namespace CryptographicCreator.ViewModels
                         StatusBarLog = statusBarMessages[StatusBarMessage.RSAPrivateKeySaved];
                         break;
                     case RSAAction.SaveEncryptedData:
+                        AreSavedEncryptedData = true;
+                        StatusBarLog = statusBarMessages[StatusBarMessage.RSAEncryptedDataSaved];
                         break;
                 }
             }
@@ -213,6 +222,21 @@ namespace CryptographicCreator.ViewModels
                     break;
             }
         }
+
+        private void ExecuteMessage(RsaMessage message)
+        {
+            switch (message.RSAAction)
+            {
+                case RSAAction.Encrypt:
+                    AreActiveRSAEncryptedData = true;
+                    statusBarLog = statusBarMessages[StatusBarMessage.RSADataEncrypted];
+                    break;
+                case RSAAction.Decrypt:
+                    StatusBarLog = statusBarMessages[StatusBarMessage.RSADataDecrypted];
+                    break;
+            }
+        }
+
         #endregion//Methods
     }
 }

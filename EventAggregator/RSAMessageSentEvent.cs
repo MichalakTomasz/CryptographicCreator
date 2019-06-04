@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EventAggregator
 {
-    public class RSAMessageSentEvnt : PubSubEvent<RsaMessage>
+    public class RSAMessageSentEvent : PubSubEvent<RsaMessage>
     {
     }
 }

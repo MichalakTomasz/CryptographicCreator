@@ -12,6 +12,8 @@
         Title="Cryptographic Creator" 
         Height="450" 
         Width="800"
+        MinHeight="200"
+        MinWidth="200"
         WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
@@ -20,6 +22,11 @@
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Ribbon x:Name="ribbonMenu" Grid.Row="0">
+            <Ribbon.ApplicationMenu>
+                <RibbonApplicationMenu>
+                    <RibbonApplicationMenuItem Header="Exit"/>
+                </RibbonApplicationMenu>
+            </Ribbon.ApplicationMenu>
             <RibbonTab Header="RSA">
                 <RibbonGroup Header="Keys">
                     <RibbonButton Label="Generate"

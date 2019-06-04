@@ -12,14 +12,18 @@ namespace CryptographicCreator.Models
             new Dictionary<StatusBarMessage, string>
             {
                 [StatusBarMessage.None] = string.Empty,
-                [StatusBarMessage.RSAKeysGenerated] = "RSA keys was generated",
+                [StatusBarMessage.RSAKeysGenerated] = "RSA keys generated successful",
                 [StatusBarMessage.Canceled] = "Action canceled",
-                [StatusBarMessage.RSAPrivateKeyGenerated] = "RSA private key was created",
-                [StatusBarMessage.RSAPrivateKeyOpened] = "RSA private key was opened",
-                [StatusBarMessage.RSAPrivateKeySaved] = "RSA pivate key was saved",
-                [StatusBarMessage.RSAPublicKeyGenerated] = "RSA public key was generated",
-                [StatusBarMessage.RSAPublicKeyOpened] = "RSA public key was opened",
-                [StatusBarMessage.RSAPublicKeySaved] = "RSA public key was saved"
+                [StatusBarMessage.RSAPrivateKeyGenerated] = "RSA private key created successful",
+                [StatusBarMessage.RSAPrivateKeyOpened] = "RSA private opened successful",
+                [StatusBarMessage.RSAPrivateKeySaved] = "RSA pivate key saved successful",
+                [StatusBarMessage.RSAPublicKeyGenerated] = "RSA public key generated successful",
+                [StatusBarMessage.RSAPublicKeyOpened] = "RSA public key opened successful",
+                [StatusBarMessage.RSAPublicKeySaved] = "RSA public key saved successful",
+                [StatusBarMessage.RSAEncryptedDataOpened] = "RSA encrypted data loaded successful",
+                [StatusBarMessage.RSAEncryptedDataSaved] = "RSA encrypted data saved successful",
+                [StatusBarMessage.RSADataEncrypted] = "RSA data encrypted successful",
+                [StatusBarMessage.RSADataDecrypted] = "RSA data decrypted successful"
             };
 
         public string this[StatusBarMessage message]

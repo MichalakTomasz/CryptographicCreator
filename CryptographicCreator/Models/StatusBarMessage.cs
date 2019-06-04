@@ -16,6 +16,10 @@ namespace CryptographicCreator.Models
         RSAPrivateKeySaved,
         RSAPublicKeyGenerated,
         RSAPublicKeyOpened,
-        RSAPublicKeySaved
+        RSAPublicKeySaved,
+        RSAEncryptedDataOpened,
+        RSAEncryptedDataSaved,
+        RSADataEncrypted,
+        RSADataDecrypted
     }
 }
