@@ -6,6 +6,8 @@ namespace CryptographicCreator.Behaviors
 {
     public class RibbonButtonGenerateRSAKeysBehavior : Behavior<RibbonButton>
     {
+        #region Dependency properties
+
         public bool IsActivePrivateKey
         {
             get { return (bool)GetValue(IsActivePrivateKeyProperty); }
@@ -71,6 +73,10 @@ namespace CryptographicCreator.Behaviors
                 typeof(RibbonButtonGenerateRSAKeysBehavior),
                 new PropertyMetadata(false));
 
+        #endregion//Dependency properties
+
+        #region Methods
+
         protected override void OnAttached()
         {
             base.OnAttached();
@@ -82,7 +88,7 @@ namespace CryptographicCreator.Behaviors
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             if ((IsActivePrivateKey && !IsSavedPrivateKey) ||
-                        (IsActivePublicKey && !IsSavedPublicKey))
+                (IsActivePublicKey && !IsSavedPublicKey))
             {
                 if (MessageBox.Show(
                     "One or both keys are not saved and will be lost. Do you still generate keys?",
@@ -95,5 +101,7 @@ namespace CryptographicCreator.Behaviors
             }
             else AcceptEvent = true;
         }
+
+        #endregion//Methods
     }
 }

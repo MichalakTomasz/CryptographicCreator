@@ -10,7 +10,7 @@ namespace CryptographicCreator.Behaviors
 {
     public class RibbonButtonOpenSaveRSAKeysBehavior : Behavior<RibbonButton>
     {
-        private const string filterExtension = 
+        private const string fileFilterExtension = 
             "Private Key (*.prk)|*.prk|Public Key (*.pbk)|*.pbk|Encrypred data (*.enc)|*.enc";
 
         public string SelectedPath
@@ -50,19 +50,6 @@ namespace CryptographicCreator.Behaviors
                 typeof(RibbonButtonOpenSaveRSAKeysBehavior), 
                 new PropertyMetadata(false));
         
-        public bool IsSavedPrivateKey
-        {
-            get { return (bool)GetValue(IsSavedPrivateKeyProperty); }
-            set { SetValue(IsSavedPrivateKeyProperty, value); }
-        }
-        
-        public static readonly DependencyProperty IsSavedPrivateKeyProperty =
-            DependencyProperty.Register(
-                "IsSavedPrivateKey", 
-                typeof(bool), 
-                typeof(RibbonButtonOpenSaveRSAKeysBehavior), 
-                new PropertyMetadata(false));
-        
         public bool IsActivePublicKey
         {
             get { return (bool)GetValue(IsActivePublicKeyProperty); }
@@ -72,19 +59,6 @@ namespace CryptographicCreator.Behaviors
         public static readonly DependencyProperty IsActivePublicKeyProperty =
             DependencyProperty.Register(
                 "IsActivePublicKey", 
-                typeof(bool), 
-                typeof(RibbonButtonOpenSaveRSAKeysBehavior), 
-                new PropertyMetadata(false));
-        
-        public bool IsSavedPublicKey
-        {
-            get { return (bool)GetValue(IsSavedPublicKeyProperty); }
-            set { SetValue(IsSavedPublicKeyProperty, value); }
-        }
-        
-        public static readonly DependencyProperty IsSavedPublicKeyProperty =
-            DependencyProperty.Register(
-                "IsSavedPublicKey", 
                 typeof(bool), 
                 typeof(RibbonButtonOpenSaveRSAKeysBehavior), 
                 new PropertyMetadata(false));
@@ -144,7 +118,7 @@ namespace CryptographicCreator.Behaviors
             {
                 case FileAction.Open:
                     var openFileDialog = new OpenFileDialog();
-                    openFileDialog.Filter = filterExtension;
+                    openFileDialog.Filter = fileFilterExtension;
                     if (openFileDialog.ShowDialog().Value)
                     {
                         var selectedPath = openFileDialog.FileName;
@@ -155,7 +129,7 @@ namespace CryptographicCreator.Behaviors
                                 OpenPrivateKey(selectedPath);
                                 break;
                             case ".pbk":
-                                OpentPublicKey(selectedPath);
+                                OpenPublicKey(selectedPath);
                                 break;
                             case ".enc":
                                 OpenEncryptedData(selectedPath);
@@ -169,7 +143,7 @@ namespace CryptographicCreator.Behaviors
                         AreActiveEncryptedData)
                     {
                         var saveFileDialog = new SaveFileDialog();
-                        saveFileDialog.Filter = filterExtension;
+                        saveFileDialog.Filter = fileFilterExtension;
                         if (saveFileDialog.ShowDialog().Value)
                         {
                             var selectedPath = saveFileDialog.FileName;
@@ -225,7 +199,7 @@ namespace CryptographicCreator.Behaviors
             AcceptEvent = true;
         }
 
-        private void OpentPublicKey(string selectedPath)
+        private void OpenPublicKey(string selectedPath)
         {
             if (IsActivePublicKey)
             {

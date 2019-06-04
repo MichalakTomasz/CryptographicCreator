@@ -3,12 +3,8 @@ using EventAggregator;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace ModuleREARegion.ViewModels
@@ -240,8 +236,7 @@ namespace ModuleREARegion.ViewModels
         
         private bool DecryptCommandCanExecute()
             => AreActiveEncryptedData && IsActivePrivateKey;
-
-
+        
         private void ClearTextCommandExecute()
         {
             Text = "";

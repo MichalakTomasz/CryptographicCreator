@@ -70,7 +70,6 @@
                             <Button Content="Clear" 
                                     Command="{Binding ClearTextCommand}"/>
                         </StackPanel>
-                        
                     </GroupBox>
                     <StackPanel DockPanel.Dock="Top" 
                     Orientation="Horizontal"

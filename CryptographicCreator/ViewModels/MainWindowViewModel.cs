@@ -4,7 +4,6 @@ using EventAggregator;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using System;
 using System.Windows.Input;
 
 namespace CryptographicCreator.ViewModels
@@ -140,6 +139,17 @@ namespace CryptographicCreator.ViewModels
             }
         }
 
+        private ICommand exitCommnad;
+        public ICommand ExitCommand
+        {
+            get
+            {
+                if (exitCommnad == null)
+                    exitCommnad = new DelegateCommand(ExitCommandExecute);
+                return exitCommnad;
+            }
+        }
+
         #endregion//Commands
 
         #region Methods
@@ -235,6 +245,11 @@ namespace CryptographicCreator.ViewModels
                     StatusBarLog = statusBarMessages[StatusBarMessage.RSADataDecrypted];
                     break;
             }
+        }
+
+        private void ExitCommandExecute()
+        {
+            App.Current.MainWindow.Close();
         }
 
         #endregion//Methods
