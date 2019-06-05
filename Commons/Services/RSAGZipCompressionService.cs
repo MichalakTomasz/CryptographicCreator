@@ -21,7 +21,7 @@ namespace Commons
 
                     return new ArchiveFrame
                     {
-                        decompressedBufferLength = source.Length,
+                        DecompressedBufferLength = source.Length,
                         Buffer = compressedStresm.ToArray()
                     };
                 }
@@ -62,7 +62,7 @@ namespace Commons
                     }
                     return new ArchiveFrame
                     {
-                        decompressedBufferLength = entryBuferLength,
+                        DecompressedBufferLength = entryBuferLength,
                         Buffer = compressedStream.ToArray()
                     };
                 }
@@ -81,8 +81,8 @@ namespace Commons
                 using (var memoryStream = new MemoryStream(compressedData.Buffer))
                 using (var gZipStream = new GZipStream(memoryStream, CompressionMode.Decompress))
                 {
-                    var decompressedArray = new byte[compressedData.decompressedBufferLength];
-                    gZipStream.Read(decompressedArray, 0, compressedData.decompressedBufferLength);
+                    var decompressedArray = new byte[compressedData.DecompressedBufferLength];
+                    gZipStream.Read(decompressedArray, 0, compressedData.DecompressedBufferLength);
                     using (var decompressedStream = new MemoryStream(decompressedArray))
                     {
                         var binaryFormatter = new BinaryFormatter();

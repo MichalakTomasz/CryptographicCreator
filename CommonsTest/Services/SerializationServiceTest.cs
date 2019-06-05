@@ -23,7 +23,7 @@ namespace CommonsTest.Services
             var serializationData = new ArchiveFrame
             {
                 Buffer = buffer,
-                decompressedBufferLength = buffer.Length
+                DecompressedBufferLength = buffer.Length
             };
 
             //Act
