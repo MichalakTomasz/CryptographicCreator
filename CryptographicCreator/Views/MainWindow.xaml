@@ -19,7 +19,7 @@
         <behavior:ClosingMainWindowBehavior 
             IsActivePrivateKey="{Binding IsActiveRSAPrivateKey, Mode=OneWay}"
             IsActivePublicKey="{Binding IsActiveRSAPublicKey, Mode=OneWay}"
-            AreActiveEncryptedData="{Binding AreActiveEncryptedData, Mode=OneWay}"
+            AreActiveEncryptedData="{Binding AreActiveRSAEncryptedData, Mode=OneWay}"
             AreSavedEncryptedData="{Binding AreSavedRSAEncryptedData, Mode=OneWay}"
             IsSavedPrivateKey="{Binding IsSavedRSAPrivateKey, Mode=OneWay}"
             IsSavedPublicKey="{Binding IsSavedRSAPublicKey, Mode=OneWay}"/>

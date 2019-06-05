@@ -67,11 +67,11 @@ namespace CryptographicCreator.ViewModels
             set { SetProperty(ref areActiveRSAEncrypryptedData, value); }
         }
 
-        private bool areSavedEncryptedData;
-        public bool AreSavedEncryptedData
+        private bool areSavedRSAEncryptedData;
+        public bool AreSavedRSAEncryptedData
         {
-            get { return areSavedEncryptedData; }
-            set { SetProperty(ref areSavedEncryptedData, value); }
+            get { return areSavedRSAEncryptedData; }
+            set { SetProperty(ref areSavedRSAEncryptedData, value); }
         }
 
         private bool acceptEvent;
@@ -206,7 +206,7 @@ namespace CryptographicCreator.ViewModels
                         StatusBarLog = statusBarMessages[StatusBarMessage.RSAPrivateKeySaved];
                         break;
                     case RSAAction.SaveEncryptedData:
-                        AreSavedEncryptedData = true;
+                        AreSavedRSAEncryptedData = true;
                         StatusBarLog = statusBarMessages[StatusBarMessage.RSAEncryptedDataSaved];
                         break;
                 }
