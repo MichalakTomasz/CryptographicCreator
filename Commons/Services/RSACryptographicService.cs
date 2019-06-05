@@ -109,6 +109,6 @@ namespace Commons
             return true;
         }
 
-        #endregion//Public Metchods
+        #endregion//Public Methods
     }
 }
