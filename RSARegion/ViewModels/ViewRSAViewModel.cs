@@ -182,7 +182,6 @@ namespace ModuleREARegion.ViewModels
                     break;
                 case RSAAction.SavePublicKey:
                     rsaSerializationService.SerializeKey(publicKeyParameters, message.Path);
-
                     message.RSAAction = RSAAction.None;
                     break;
                 case RSAAction.SavePrivateAndPublicKey:
@@ -238,9 +237,7 @@ namespace ModuleREARegion.ViewModels
             => AreActiveEncryptedData && IsActivePrivateKey;
         
         private void ClearTextCommandExecute()
-        {
-            Text = "";
-        }
+            => Text = "";
 
         private bool ClearTextCanCommandExecute()
             => Text?.Length > 0;

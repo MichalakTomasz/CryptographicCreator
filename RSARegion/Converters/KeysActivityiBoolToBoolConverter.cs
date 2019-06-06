@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace RSARegion.Converters
@@ -15,7 +11,6 @@ namespace RSARegion.Converters
             var result = false;
             if (values.Length == 2)
             {
-
                 foreach (var item in values)
                 {
                     if (!(item is bool))
