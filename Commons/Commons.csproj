@@ -41,13 +41,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\ArchiveFrame.cs" />
+    <Compile Include="Models\AESKey.cs" />
+    <Compile Include="Models\BufferFrame.cs" />
     <Compile Include="Models\RSAAction.cs" />
     <Compile Include="Models\RsaMessage.cs" />
     <Compile Include="Models\RSAPairKeyParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\AESCryptographicService.cs" />
+    <Compile Include="Services\IAESCryptographicService.cs" />
     <Compile Include="Services\ICompressionService.cs" />
     <Compile Include="Services\IRSASerializationService.cs" />
+    <Compile Include="Services\MD5Service.cs" />
     <Compile Include="Services\RSAGZipCompressionService.cs" />
     <Compile Include="Services\IRSACryptographicService.cs" />
     <Compile Include="Services\ISerializationService.cs" />

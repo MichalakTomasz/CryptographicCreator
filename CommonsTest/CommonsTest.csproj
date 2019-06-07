@@ -49,6 +49,8 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Services\AESCryptographicServiceTest.cs" />
+    <Compile Include="Services\MD5ServiceTest.cs" />
     <Compile Include="Services\RSACryptographicServeceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\RSAGZipCompressionServiceTest.cs" />

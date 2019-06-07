@@ -9,7 +9,7 @@ namespace Commons
 {
     public class RSAGZipCompressionService : ICompressionService
     {
-        public ArchiveFrame Compress(byte[] source)
+        public BufferFrame Compress(byte[] source)
         {
             try
             {
@@ -19,21 +19,21 @@ namespace Commons
                     using (var entryStream = new MemoryStream(source))
                         entryStream.CopyTo(gZipStream);
 
-                    return new ArchiveFrame
+                    return new BufferFrame
                     {
-                        DecompressedBufferLength = source.Length,
+                        OriginalBufferLength = source.Length,
                         Buffer = compressedStresm.ToArray()
                     };
                 }
             }
             catch (Exception e)
             {
-                Debug.WriteLine($"GZip compression error: {e.Message}");
-                return default(ArchiveFrame);
+                Debug.WriteLine($"GZip compress error: {e.Message}");
+                return default(BufferFrame);
             }
         }
 
-        public ArchiveFrame Compress(RSAParameters rsaParameters)
+        public BufferFrame Compress(RSAParameters rsaParameters)
         {
             try
             {
@@ -60,29 +60,29 @@ namespace Commons
                         entryBuferLength = seriailzedBuffer.Length;
                         gZipStream.Write(seriailzedBuffer, 0, seriailzedBuffer.Length);
                     }
-                    return new ArchiveFrame
+                    return new BufferFrame
                     {
-                        DecompressedBufferLength = entryBuferLength,
+                        OriginalBufferLength = entryBuferLength,
                         Buffer = compressedStream.ToArray()
                     };
                 }
             }
             catch (Exception e)
             {
-                Debug.WriteLine($"GZip Compression exception: {e.Message}");
-                return default(ArchiveFrame);
+                Debug.WriteLine($"GZip Compress exception: {e.Message}");
+                return default(BufferFrame);
             }
         }
 
-        public RSAParameters DecompressRSAParameters(ArchiveFrame compressedData)
+        public RSAParameters DecompressRSAParameters(BufferFrame compressedData)
         {
             try
             {
                 using (var memoryStream = new MemoryStream(compressedData.Buffer))
                 using (var gZipStream = new GZipStream(memoryStream, CompressionMode.Decompress))
                 {
-                    var decompressedArray = new byte[compressedData.DecompressedBufferLength];
-                    gZipStream.Read(decompressedArray, 0, compressedData.DecompressedBufferLength);
+                    var decompressedArray = new byte[compressedData.OriginalBufferLength];
+                    gZipStream.Read(decompressedArray, 0, compressedData.OriginalBufferLength);
                     using (var decompressedStream = new MemoryStream(decompressedArray))
                     {
                         var binaryFormatter = new BinaryFormatter();
@@ -104,12 +104,12 @@ namespace Commons
             }
             catch (Exception e)
             {
-                Debug.WriteLine($"GZip decompression exception: {e.Message}");
+                Debug.WriteLine($"GZip decompress exception: {e.Message}");
                 return default(RSAParameters);
             }
         }
 
-        public byte[] DecompressByteBuffer(ArchiveFrame compressedData)
+        public byte[] DecompressByteBuffer(BufferFrame compressedData)
         {
             try
             {
@@ -123,7 +123,7 @@ namespace Commons
             }
             catch (Exception e)
             {
-                Debug.WriteLine($"GZip decompression exception: {e.Message}");
+                Debug.WriteLine($"GZip decompress exception: {e.Message}");
                 return default(byte[]);
             }
         }

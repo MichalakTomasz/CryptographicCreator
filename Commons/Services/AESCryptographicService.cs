@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 
 namespace Commons.Services
 {
-    public class AESCryptographicService
+    public class AESCryptographicService : IAESCryptographicService
     {
         public BufferFrame Encrypt(byte[] buffer, AESKey aesKey)
         {
@@ -13,7 +13,7 @@ namespace Commons.Services
             {
                 using (var awsAlgoritm = new AesCryptoServiceProvider())
                 {
-                    awsAlgoritm.Key = aesKey.Key;
+                    awsAlgoritm.Key = aesKey.Key; 
                     awsAlgoritm.IV = aesKey.IV;
                     ICryptoTransform encryptor = awsAlgoritm.CreateEncryptor(awsAlgoritm.Key, awsAlgoritm.IV);
                     using (var encryptedMemoryStream = new MemoryStream())
@@ -73,7 +73,7 @@ namespace Commons.Services
             }
             catch (System.Exception e)
             {
-                Debug.WriteLine($"AES generation key errer: {e.Message}");
+                Debug.WriteLine($"AES generate key errer: {e.Message}");
                 return default(AESKey);
             }
         }

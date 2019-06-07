@@ -10,7 +10,7 @@ namespace Commons
     {
         #region Public Methods
 
-        public async Task SerializeAsync(ArchiveFrame data, string path)
+        public async Task SerializeAsync(BufferFrame data, string path)
         {
             try
             {
@@ -30,13 +30,13 @@ namespace Commons
             }
         }
 
-        public void Serialize(ArchiveFrame serializedData, string path)
+        public void Serialize(BufferFrame serializedData, string path)
         {
             try
             {
                 if (!string.IsNullOrWhiteSpace(path) &&
                     Directory.Exists(Path.GetDirectoryName(path)) &&
-                    !serializedData.Equals(default(ArchiveFrame)))
+                    !serializedData.Equals(default(BufferFrame)))
                 {
                     using (var fileStream = File.Open(path, FileMode.OpenOrCreate))
                     {
@@ -45,7 +45,6 @@ namespace Commons
                     }
                 }
             }
-
             catch (Exception e)
             {
                 Debug.WriteLine($"Serialization exception: {e.Message}");
@@ -90,7 +89,7 @@ namespace Commons
             }
         }
 
-        public async Task<ArchiveFrame> DeserializeCompressedDataAsync(string path)
+        public async Task<BufferFrame> DeserializeCompressedDataAsync(string path)
         {
             try
             {
@@ -101,19 +100,19 @@ namespace Commons
                     {
                         var binaryFormater = new BinaryFormatter();
                         return await Task.Run(() => 
-                        (ArchiveFrame)binaryFormater.Deserialize(fileStream));
+                        (BufferFrame)binaryFormater.Deserialize(fileStream));
                     }    
                 }
-                return await Task.Run(() => default(ArchiveFrame));
+                return await Task.Run(() => default(BufferFrame));
             }
             catch (Exception e)
             {
                 Debug.WriteLine($"Deserialization exception: {e.Message}");
-                return  default(ArchiveFrame);
+                return  default(BufferFrame);
             }
         }
 
-        public ArchiveFrame DeserializeCompressedData(string path)
+        public BufferFrame DeserializeCompressedData(string path)
         {
             try
             {
@@ -123,15 +122,15 @@ namespace Commons
                     using (var fileStream = File.Open(path, FileMode.Open))
                     {
                         var binaryFormater = new BinaryFormatter();
-                        return (ArchiveFrame)binaryFormater.Deserialize(fileStream);
+                        return (BufferFrame)binaryFormater.Deserialize(fileStream);
                     } 
                 }
-                return default(ArchiveFrame);
+                return default(BufferFrame);
             }
             catch (Exception e)
             {
                 Debug.WriteLine($"Deserialization exception: {e.Message}");
-                return default(ArchiveFrame);
+                return default(BufferFrame);
             }
         }
 

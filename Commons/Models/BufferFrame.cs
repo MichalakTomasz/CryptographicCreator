@@ -3,9 +3,9 @@
 namespace Commons
 {
     [Serializable]
-    public class ArchiveFrame
+    public class BufferFrame
     {
-        public int DecompressedBufferLength { get; set; }
+        public int OriginalBufferLength { get; set; }
         public byte[] Buffer { get; set; }
     }
 }

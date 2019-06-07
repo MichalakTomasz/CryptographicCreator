@@ -4,9 +4,9 @@ namespace Commons
 {
     public interface ICompressionService
     {
-        ArchiveFrame Compress(byte[] source);
-        ArchiveFrame Compress(RSAParameters rsaParameters);
-        byte[] DecompressByteBuffer(ArchiveFrame archiveFrame);
-        RSAParameters DecompressRSAParameters(ArchiveFrame archiveFrame);
+        BufferFrame Compress(byte[] source);
+        BufferFrame Compress(RSAParameters rsaParameters);
+        byte[] DecompressByteBuffer(BufferFrame archiveFrame);
+        RSAParameters DecompressRSAParameters(BufferFrame archiveFrame);
             }
 }

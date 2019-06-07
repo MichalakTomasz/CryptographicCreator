@@ -20,10 +20,10 @@ namespace CommonsTest.Services
                 buffer[i] = (byte)random.Next(255);
             var path = $"{Environment.CurrentDirectory}\\TempSerialization.ser";
             var serializationService = new SerializationService();
-            var serializationData = new ArchiveFrame
+            var serializationData = new BufferFrame
             {
                 Buffer = buffer,
-                DecompressedBufferLength = buffer.Length
+                OriginalBufferLength = buffer.Length
             };
 
             //Act

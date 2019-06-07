@@ -39,7 +39,7 @@ namespace Commons
 
         public byte[] DeserializeEncryptedData(string path)
         {
-            ArchiveFrame deserializedBuffer =
+            BufferFrame deserializedBuffer =
                 serializationService.DeserializeCompressedData(path);
             byte[] decompressedData =
                 compressionService.DecompressByteBuffer(deserializedBuffer);
@@ -48,7 +48,7 @@ namespace Commons
 
         public RSAParameters DeserializeKey(string path)
         {
-            ArchiveFrame deserializedBuffer =
+            BufferFrame deserializedBuffer =
                 serializationService.DeserializeCompressedData(path);
             RSAParameters rsaParameters =
                 compressionService.DecompressRSAParameters(deserializedBuffer);
