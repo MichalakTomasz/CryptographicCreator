@@ -50,6 +50,7 @@
     <Compile Include="Services\AESCryptographicService.cs" />
     <Compile Include="Services\IAESCryptographicService.cs" />
     <Compile Include="Services\ICompressionService.cs" />
+    <Compile Include="Services\IHashService.cs" />
     <Compile Include="Services\IRSASerializationService.cs" />
     <Compile Include="Services\MD5Service.cs" />
     <Compile Include="Services\RSAGZipCompressionService.cs" />
@@ -58,6 +59,8 @@
     <Compile Include="Services\RSACryptographicService.cs" />
     <Compile Include="Services\RSASerializationService.cs" />
     <Compile Include="Services\SerializationService.cs" />
+    <Compile Include="Services\SHA256Service.cs" />
+    <Compile Include="Services\SHA512Service.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

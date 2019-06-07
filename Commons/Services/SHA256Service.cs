@@ -4,18 +4,18 @@ using System.Security.Cryptography;
 
 namespace Commons.Services
 {
-    public class MD5Service : IHashService
+    public class SHA256Service : IHashService
     {
-        public byte[] GetHash(byte[] sourcebuffer)
+        public byte[] GetHash(byte[] sourceBuffer)
         {
             try
             {
-                var md5 = MD5.Create();
-                return md5.ComputeHash(sourcebuffer);
+                var sha256 = SHA256.Create();
+                return sha256.ComputeHash(sourceBuffer);
             }
             catch (Exception e)
             {
-                Debug.WriteLine($"MD5 service GetMD5Hash error: {e.Message}");
+                Debug.WriteLine($"SHA256 service GetSHA256Hash error: {e.Message}");
                 return default(byte[]);
             }
         }

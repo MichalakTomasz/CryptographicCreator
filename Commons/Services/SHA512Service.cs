@@ -1,21 +1,25 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Security.Cryptography;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Commons.Services
 {
-    public class MD5Service : IHashService
+    public class SHA512Service : IHashService
     {
-        public byte[] GetHash(byte[] sourcebuffer)
+        public byte[] GetHash(byte[] sourceBuffer)
         {
             try
             {
-                var md5 = MD5.Create();
-                return md5.ComputeHash(sourcebuffer);
+                var sha256 = SHA512.Create();
+                return sha256.ComputeHash(sourceBuffer);
             }
             catch (Exception e)
             {
-                Debug.WriteLine($"MD5 service GetMD5Hash error: {e.Message}");
+                Debug.WriteLine($"SHA512 service GetSHA512Hash error: {e.Message}");
                 return default(byte[]);
             }
         }

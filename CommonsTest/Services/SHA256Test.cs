@@ -5,13 +5,13 @@ using System;
 namespace CommonsTest.Services
 {
     [TestClass]
-    public class MD5ServiceTest
+    public class SHA256ServiceTest
     {
         [TestMethod]
-        public void Md5HashingTest()
+        public void SHA256HashingTest()
         {
             //Arrange
-            var md5Service = new MD5Service();
+            var sha256Service = new SHA256Service();
             var bufferLength = 5000;
             var baseBuffer = new byte[bufferLength];
             var random = new Random();
@@ -19,8 +19,8 @@ namespace CommonsTest.Services
                 baseBuffer[i] = (byte)random.Next(255);
 
             //Act
-            var hashedBuffer = md5Service.GetHash(baseBuffer);
-            var verifyResult = md5Service.VerifyHash(baseBuffer, hashedBuffer);
+            var hashedBuffer = sha256Service.GetHash(baseBuffer);
+            var verifyResult = sha256Service.VerifyHash(baseBuffer, hashedBuffer);
 
             //Assert
             Assert.IsTrue(verifyResult);
