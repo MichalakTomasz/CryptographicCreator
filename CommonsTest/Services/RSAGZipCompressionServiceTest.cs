@@ -12,7 +12,6 @@ namespace CommonsTest.Services
         public void CompressDecompressTest()
         {
             //Arrange
-
             var arrayLength = 300;
             var patternArray = new byte[arrayLength];
             var gzip = new RSAGZipCompressionService();
@@ -27,7 +26,6 @@ namespace CommonsTest.Services
             var publicKey = rsaPairParameters.PublicKeyParameters;
 
             //Act
-
             var compressedArrayFrame = gzip.Compress(patternArray);
             byte[] decompressedArray;
             decompressedArray = gzip.DecompressByteBuffer(compressedArrayFrame);
@@ -41,7 +39,6 @@ namespace CommonsTest.Services
 
 
             //Assert
-
             CollectionAssert.AreEqual(patternArray, decompressedArray);
 
             CollectionAssert.AreEqual(privateKey.D, decompressedPrivateKey.D);
