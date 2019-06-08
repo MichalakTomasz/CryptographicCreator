@@ -49,7 +49,6 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Converters\BoolToBrushConverter.cs" />
     <Compile Include="Converters\KeysActivityiBoolToBoolConverter.cs" />
     <Compile Include="RSARegionModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

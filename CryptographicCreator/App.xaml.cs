@@ -1,18 +1,14 @@
 ﻿using Prism.Ioc;
 using Prism.Unity;
 using Prism.Modularity;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using CryptographicCreator.Views;
-using ModuleREARegion;
+using RSARegion;
 using Commons;
 using CryptographicCreator.Models;
-using System.Security.Cryptography;
+using AESRegion;
+using RSARegion.Views;
+using AESRegion.Views;
 
 namespace CryptographicCreator
 {
@@ -27,13 +23,15 @@ namespace CryptographicCreator
             containerRegistry.Register<ISerializationService, SerializationService>();
             containerRegistry.Register<IRSASerializationService, RSASerializationService>();
             containerRegistry.Register<IStatusBarMessages, StatusBarMessages>();
+            containerRegistry.RegisterForNavigation<ViewRSA>("RSARegion");
+            containerRegistry.RegisterForNavigation<ViewAES>("AESRegion");
         }
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
         {
             base.ConfigureModuleCatalog(moduleCatalog);
             moduleCatalog.AddModule<RSARegionModule>();
+            moduleCatalog.AddModule<AESRegionModule>();
         }
     }
-
 }

@@ -56,6 +56,7 @@
     <Compile Include="Services\RSAGZipCompressionServiceTest.cs" />
     <Compile Include="Services\SerializationServiceTest.cs" />
     <Compile Include="Services\SHA256Test.cs" />
+    <Compile Include="Services\SHA512CngSevriceTest.cs" />
     <Compile Include="Services\SHA512Test.cs" />
   </ItemGroup>
   <ItemGroup>

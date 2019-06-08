@@ -127,6 +127,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AESRegion\AESRegion.csproj">
+      <Project>{7d9129de-3e5c-4041-af91-6491a7c831da}</Project>
+      <Name>AESRegion</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Commons\Commons.csproj">
       <Project>{09A2D4A3-ED80-4344-8FD2-09F8A14A8F28}</Project>
       <Name>Commons</Name>

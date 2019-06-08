@@ -77,8 +77,15 @@
                     </RibbonButton>
                 </RibbonGroup>
             </RibbonTab>
+            <RibbonTab Header="AES">
+                <RibbonGroup Header="Keys">
+                    <RibbonButton Label="Generate"/>
+                    <RibbonButton Label="Open"/>
+                    <RibbonButton Label="Save"/>
+                </RibbonGroup>
+            </RibbonTab>
         </Ribbon>
-        <ContentControl Grid.Row="1" prism:RegionManager.RegionName="RSARegion" />
+        <ContentControl Grid.Row="1" prism:RegionManager.RegionName="ContentRegion" />
         <StatusBar Grid.Row="2">
             <StackPanel>
                 <TextBlock Text="{Binding StatusBarLog, Mode=OneWay}"/>

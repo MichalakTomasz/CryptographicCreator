@@ -3,9 +3,9 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace RSARegion.Converters
+namespace Commons
 {
-    class BoolToBrushConverter : IValueConverter
+    public class BoolToBrushConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

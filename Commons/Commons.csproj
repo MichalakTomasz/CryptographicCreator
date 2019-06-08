@@ -31,6 +31,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -41,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converters\BoolToBrushConverter.cs" />
     <Compile Include="Models\AESKey.cs" />
     <Compile Include="Models\BufferFrame.cs" />
     <Compile Include="Models\RSAAction.cs" />
@@ -59,7 +62,9 @@
     <Compile Include="Services\RSACryptographicService.cs" />
     <Compile Include="Services\RSASerializationService.cs" />
     <Compile Include="Services\SerializationService.cs" />
+    <Compile Include="Services\SHA256CngService.cs" />
     <Compile Include="Services\SHA256Service.cs" />
+    <Compile Include="Services\SHA512CngService.cs" />
     <Compile Include="Services\SHA512Service.cs" />
   </ItemGroup>
   <ItemGroup />

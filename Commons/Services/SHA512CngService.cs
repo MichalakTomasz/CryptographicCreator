@@ -4,18 +4,18 @@ using System.Security.Cryptography;
 
 namespace Commons.Services
 {
-    public class SHA512Service : IHashService
+    public class SHA512CngService : IHashService
     {
         public byte[] GetHash(byte[] sourceBuffer)
         {
             try
             {
-                var sha256 = SHA512.Create();
-                return sha256.ComputeHash(sourceBuffer);
+                var sha256Cng = SHA512Cng.Create();
+                return sha256Cng.ComputeHash(sourceBuffer);
             }
             catch (Exception e)
             {
-                Debug.WriteLine($"SHA512 service GetSHA512Hash error: {e.Message}");
+                Debug.WriteLine($"SHA512Cng service GetSHA512CngHash error: {e.Message}");
                 return default(byte[]);
             }
         }

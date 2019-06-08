@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commons", "Commons\Commons.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonsTest", "CommonsTest\CommonsTest.csproj", "{91B1119D-FB7F-4AD4-A3B2-5ECAAEB96352}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AESRegion", "AESRegion\AESRegion.csproj", "{7D9129DE-3E5C-4041-AF91-6491A7C831DA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{91B1119D-FB7F-4AD4-A3B2-5ECAAEB96352}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91B1119D-FB7F-4AD4-A3B2-5ECAAEB96352}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91B1119D-FB7F-4AD4-A3B2-5ECAAEB96352}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D9129DE-3E5C-4041-AF91-6491A7C831DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D9129DE-3E5C-4041-AF91-6491A7C831DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D9129DE-3E5C-4041-AF91-6491A7C831DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D9129DE-3E5C-4041-AF91-6491A7C831DA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

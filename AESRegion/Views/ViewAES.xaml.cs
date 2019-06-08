@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace RSARegion.Views
+namespace AESRegion.Views
 {
     /// <summary>
     /// Interaction logic for ViewA.xaml
     /// </summary>
-    public partial class ViewRSA : UserControl
+    public partial class ViewAES : UserControl
     {
-        public ViewRSA()
+        public ViewAES()
         {
             InitializeComponent();
         }

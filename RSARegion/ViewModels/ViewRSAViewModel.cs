@@ -7,7 +7,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Input;
 
-namespace ModuleREARegion.ViewModels
+namespace RSARegion.ViewModels
 {
     public class ViewRSAViewModel : BindableBase
     {

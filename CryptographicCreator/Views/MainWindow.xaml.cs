@@ -1,4 +1,5 @@
-﻿using ModuleREARegion.Views;
+﻿using AESRegion.Views;
+using RSARegion.Views;
 using Prism.Ioc;
 using Prism.Regions;
 using System.Windows.Controls;
@@ -8,13 +9,11 @@ namespace CryptographicCreator.Views
 {
     public partial class MainWindow : RibbonWindow
     {
-        private readonly IContainerExtension container;
         private readonly IRegionManager regionManager;
 
         public MainWindow(IContainerExtension container, IRegionManager regionManager)
         {
             InitializeComponent();
-            this.container = container;
             this.regionManager = regionManager;
             ribbonMenu.SelectionChanged += RibbonMenu_SelectionChanged;
         }
@@ -25,9 +24,10 @@ namespace CryptographicCreator.Views
             switch (selectedTab.Header)
             {
                 case "RSA":
-                    var region = regionManager.Regions["RSARegion"];
-                    var rsaView = container.Resolve<ViewRSA>();
-                    region.Add(rsaView);
+                    regionManager.RequestNavigate("ContentRegion", "ViewRSA");
+                    break;
+                case "AES":
+                    regionManager.RequestNavigate("ContentRegion", "ViewAES");
                     break;
             }
         }
