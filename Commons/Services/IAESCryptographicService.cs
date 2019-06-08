@@ -1,6 +1,6 @@
-﻿using Commons.Models;
+﻿using Commons;
 
-namespace Commons.Services
+namespace Commons
 {
     public interface IAESCryptographicService
     {

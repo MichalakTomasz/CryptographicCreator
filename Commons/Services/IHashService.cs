@@ -1,4 +1,4 @@
-﻿namespace Commons.Services
+﻿namespace Commons
 {
     public interface IHashService
     {

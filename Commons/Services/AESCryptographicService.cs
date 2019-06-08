@@ -1,9 +1,9 @@
-﻿using Commons.Models;
+﻿using Commons;
 using System.Diagnostics;
 using System.IO;
 using System.Security.Cryptography;
 
-namespace Commons.Services
+namespace Commons
 {
     public class AESCryptographicService : IAESCryptographicService
     {

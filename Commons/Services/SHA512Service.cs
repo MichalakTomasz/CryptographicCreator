@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Security.Cryptography;
 
-namespace Commons.Services
+namespace Commons
 {
     public class SHA512Service : IHashService
     {

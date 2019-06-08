@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Security.Cryptography;
 
-namespace Commons.Services
+namespace Commons
 {
     public class SHA512CngService : IHashService
     {
@@ -10,8 +10,8 @@ namespace Commons.Services
         {
             try
             {
-                var sha256Cng = SHA512Cng.Create();
-                return sha256Cng.ComputeHash(sourceBuffer);
+                var sha512Cng = SHA512Cng.Create();
+                return sha512Cng.ComputeHash(sourceBuffer);
             }
             catch (Exception e)
             {

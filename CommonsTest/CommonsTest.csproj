@@ -55,9 +55,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\RSAGZipCompressionServiceTest.cs" />
     <Compile Include="Services\SerializationServiceTest.cs" />
-    <Compile Include="Services\SHA256Test.cs" />
+    <Compile Include="Services\SHA256CngServiceTest.cs" />
+    <Compile Include="Services\SHA256ServiceTest.cs" />
     <Compile Include="Services\SHA512CngSevriceTest.cs" />
-    <Compile Include="Services\SHA512Test.cs" />
+    <Compile Include="Services\SHA512ServiceTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
