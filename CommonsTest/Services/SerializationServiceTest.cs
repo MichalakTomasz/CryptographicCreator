@@ -1,6 +1,7 @@
 ﻿using Commons;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.IO;
 
 namespace CommonsTest.Services
 {
@@ -19,21 +20,16 @@ namespace CommonsTest.Services
                 buffer[i] = (byte)random.Next(255);
             var path = $"{Environment.CurrentDirectory}\\TempSerialization.ser";
             var serializationService = new SerializationService();
-            var serializationData = new BufferFrame
-            {
-                Buffer = buffer,
-                OriginalBufferLength = buffer.Length
-            };
 
             //Act
 
-            serializationService.Serialize(serializationData, path);
-            var deserializedBuffer = serializationService.DeserializeArrayBuffer(path);
+            serializationService.Serialize(buffer, path);
+            var deserializedBuffer = serializationService.Deserialize(path);
 
             //Assert
 
-           // CollectionAssert.AreEqual(buffer, deserializedBuffer);
-           // File.Delete(path);
+           CollectionAssert.AreEqual(buffer, deserializedBuffer);
+           File.Delete(path);
         }
     }
 }

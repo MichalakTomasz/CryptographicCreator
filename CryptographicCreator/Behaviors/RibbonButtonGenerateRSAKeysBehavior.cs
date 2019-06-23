@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using Commons;
+using System.Windows;
 using System.Windows.Controls.Ribbon;
 using System.Windows.Interactivity;
 
@@ -73,6 +74,19 @@ namespace CryptographicCreator.Behaviors
                 typeof(RibbonButtonGenerateRSAKeysBehavior),
                 new PropertyMetadata(false));
 
+        public RSAAction RSAAction
+        {
+            get { return (RSAAction)GetValue(RSAActionProperty); }
+            set { SetValue(RSAActionProperty, value); }
+        }
+        
+        public static readonly DependencyProperty RSAActionProperty =
+            DependencyProperty.Register(
+                "RSAAction", 
+                typeof(RSAAction), 
+                typeof(RibbonButtonGenerateRSAKeysBehavior),
+                new PropertyMetadata(RSAAction.None));
+
         #endregion//Dependency properties
 
         #region Methods
@@ -96,10 +110,19 @@ namespace CryptographicCreator.Behaviors
                     MessageBoxButton.YesNo,
                     MessageBoxImage.Warning)
                     == MessageBoxResult.Yes)
+                {
                     AcceptEvent = true;
+                    RSAAction = RSAAction.Generate;
+                }
+
+
                 else AcceptEvent = false;
             }
-            else AcceptEvent = true;
+            else
+            {
+                AcceptEvent = true;
+                RSAAction = RSAAction.Generate;
+            }
         }
 
         #endregion//Methods

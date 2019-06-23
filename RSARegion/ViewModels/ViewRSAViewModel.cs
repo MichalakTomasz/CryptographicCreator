@@ -147,9 +147,9 @@ namespace RSARegion.ViewModels
         
         #endregion//Commands
 
-        #region Private Methods
+        #region Methods
 
-        private void ExecuteMessage(RsaMessage message)
+        private void ExecuteMessage(RSAMessage message)
         {
             switch (message.RSAAction)
             {
@@ -176,6 +176,7 @@ namespace RSARegion.ViewModels
                     break;
                 case RSAAction.OpenEncryptedData:
                     encryptedData = rsaSerializationService.DeserializeEncryptedData(message.Path);
+                    EncryptedText = Encoding.Unicode.GetString(encryptedData);
                     AreActiveEncryptedData = true;
                     SetKeyParametersBase();
                     message.RSAAction = RSAAction.None;
@@ -210,14 +211,16 @@ namespace RSARegion.ViewModels
             encryptedData = cryptographicService.Encrypt(byteArrayText, keyToEncrypt);
             EncryptedText = Encoding.Unicode.GetString(encryptedData);
             AreActiveEncryptedData = true;
-            eventAggregator.GetEvent<RSAMessageSentEvent>().Publish(new RsaMessage { RSAAction = RSAAction.Encrypt });
+            eventAggregator.GetEvent<RSAMessageSentEvent>()
+                .Publish(new RSAMessage { RSAAction = RSAAction.Encrypt });
         }
 
         private void DecryptCommandExecute()
         {
             var decryptedData = cryptographicService.Decrypt(encryptedData, privateAndPublicKeyParameters);
             DecryptedText = Encoding.Unicode.GetString(decryptedData);
-            eventAggregator.GetEvent<RSAMessageSentEvent>().Publish(new RsaMessage { RSAAction = RSAAction.Decrypt });
+            eventAggregator.GetEvent<RSAMessageSentEvent>()
+                .Publish(new RSAMessage { RSAAction = RSAAction.Decrypt });
         }
 
         private bool EncryptCommandCanExecute()
@@ -242,6 +245,6 @@ namespace RSARegion.ViewModels
         private bool ClearTextCanCommandExecute()
             => Text?.Length > 0;
 
-        #endregion//Private Methods
+        #endregion//Methods
     }
 }

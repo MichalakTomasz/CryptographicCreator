@@ -12,6 +12,8 @@ namespace AESRegion
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.Register<IAESCryptographicService, AESCryptographicService>();
+            containerRegistry.Register<IAESSerializationService, AESSerializationService>();
+            containerRegistry.Register<IAESMaskService, AESMaskService>();
             containerRegistry.RegisterForNavigation<ViewAES>();
         }
     }

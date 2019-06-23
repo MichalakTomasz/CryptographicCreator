@@ -5,25 +5,25 @@ using System;
 namespace CommonsTest.Services
 {
     [TestClass]
-    public class MD5ServiceTest
+    public class SimpleMaskTest
     {
         [TestMethod]
-        public void MD5HashingTest()
+        public void SipmleMaskServiceUnmaskTest()
         {
             //Arrange
-            var md5Service = new MD5Service();
-            var bufferLength = 5000;
+            SimpleMaskService simpleMask = new SimpleMaskService();
+            var bufferLength = 150000;
             var baseBuffer = new byte[bufferLength];
             var random = new Random();
             for (int i = 0; i < bufferLength; i++)
                 baseBuffer[i] = (byte)random.Next(255);
 
             //Act
-            var hashedBuffer = md5Service.GetHash(baseBuffer);
-            var verifyResult = md5Service.VerifyHash(baseBuffer, hashedBuffer);
+            var masked = simpleMask.MaskUnmask(baseBuffer);
+            var unmasked = simpleMask.MaskUnmask(masked);
 
             //Assert
-            Assert.IsTrue(verifyResult);
+            CollectionAssert.AreEqual(baseBuffer, unmasked);
         }
     }
 }

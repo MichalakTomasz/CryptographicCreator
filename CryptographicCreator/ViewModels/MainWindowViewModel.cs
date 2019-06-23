@@ -4,6 +4,7 @@ using EventAggregator;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
+using System;
 using System.Windows.Input;
 
 namespace CryptographicCreator.ViewModels
@@ -20,17 +21,20 @@ namespace CryptographicCreator.ViewModels
         #region Constructor
 
         public MainWindowViewModel(
-            IEventAggregator eventAggregator, 
+            IEventAggregator eventAggregator,
             IStatusBarMessages statusBarMessages)
         {
             this.eventAggregator = eventAggregator;
             this.statusBarMessages = statusBarMessages;
-            this.eventAggregator.GetEvent<RSAMessageSentEvent>().Subscribe(ExecuteMessage);
+            this.eventAggregator.GetEvent<RSAMessageSentEvent>().Subscribe(ExecuteRSAMessage);
+            this.eventAggregator.GetEvent<AESMessageSentEvent>().Subscribe(ExecuteAESMessage);
         }
 
         #endregion//Constructor
 
         #region Properties
+
+        #region RSA
 
         private bool isActiveRSAPublicKey;
         public bool IsActiveRSAPublicKey
@@ -74,11 +78,11 @@ namespace CryptographicCreator.ViewModels
             set { SetProperty(ref areSavedRSAEncryptedData, value); }
         }
 
-        private bool acceptEvent;
-        public bool AcceptEvent
+        private bool acceptRSAEvent;
+        public bool AcceptRSAEvent
         {
-            get { return acceptEvent; }
-            set { SetProperty(ref acceptEvent, value); }
+            get { return acceptRSAEvent; }
+            set { SetProperty(ref acceptRSAEvent, value); }
         }
 
         private RSAAction rsaAction;
@@ -88,11 +92,64 @@ namespace CryptographicCreator.ViewModels
             set { SetProperty(ref rsaAction, value); }
         }
 
-        private string selectedPath;
-        public string SelectedPath
+        private string selectedRSAPath;
+        public string SelectedRSAPath
         {
-            get { return selectedPath; }
-            set { SetProperty(ref selectedPath, value); }
+            get { return selectedRSAPath; }
+            set { SetProperty(ref selectedRSAPath, value); }
+        }
+
+        #endregion//RSA
+
+        #region AES
+
+        private AESAction aesAction;
+        public AESAction AESAction
+        {
+            get { return aesAction; }
+            set { SetProperty(ref aesAction, value); }
+        }
+
+        private string selectedAESPath;
+        public string SelectedAESPath
+        {
+            get { return selectedAESPath; }
+            set { SetProperty(ref selectedAESPath, value); }
+        }
+
+        private bool acceptAESEvent;
+        public bool AcceptAESEvent
+        {
+            get { return acceptAESEvent; }
+            set { SetProperty(ref acceptAESEvent, value); }
+        }
+
+        private bool isActiveAESKey;
+        public bool IsActiveAESKey
+        {
+            get { return isActiveAESKey; }
+            set { SetProperty(ref isActiveAESKey, value); }
+        }
+
+        private bool isSavedAESKey;
+        public bool IsSavedAESKey
+        {
+            get { return isSavedAESKey; }
+            set { SetProperty(ref isSavedAESKey, value); }
+        }
+
+        private bool areActiveAESEncrypryptedData;
+        public bool AreActiveAESEncryptedData
+        {
+            get { return areActiveAESEncrypryptedData; }
+            set { SetProperty(ref areActiveAESEncrypryptedData, value); }
+        }
+
+        private bool areSavedAESEncryptedData;
+        public bool AreSavedAESEncryptedData
+        {
+            get { return areSavedAESEncryptedData; }
+            set { SetProperty(ref areSavedAESEncryptedData, value); }
         }
 
         private string statusBarLog;
@@ -102,42 +159,85 @@ namespace CryptographicCreator.ViewModels
             set { SetProperty(ref statusBarLog, value); }
         }
 
+        #endregion//AES
+
         #endregion//Properties
 
         #region Commands
 
-        private ICommand generateCommand;
-        public ICommand GenerateCommand
+        #region RSA     
+
+        private ICommand generateRSACommand;
+        public ICommand GenerateRSACommand
         {
             get
             {
-                if (generateCommand == null)
-                    generateCommand = new DelegateCommand(GenerateCommandExecute);
-                return generateCommand;
+                if (generateRSACommand == null)
+                    generateRSACommand = new DelegateCommand(GenerateRSACommandExecute);
+                return generateRSACommand;
             }
         }
 
-        private ICommand openCommand;
-        public ICommand OpenCommand
+        private ICommand openRSACommand;
+        public ICommand OpenRSACommand
         {
             get
             {
-                if (openCommand == null)
-                    openCommand = new DelegateCommand(OpenCommandExecute);
-                return openCommand;
+                if (openRSACommand == null)
+                    openRSACommand = new DelegateCommand(OpenRSACommandExecute);
+                return openRSACommand;
             }
         }
 
-        private ICommand saveCommnad;
-        public ICommand SaveCommand
+        private ICommand saveRSACommnad;
+        public ICommand SaveRSACommand
         {
             get
             {
-                if (saveCommnad == null)
-                    saveCommnad = new DelegateCommand(SaveCommandExecute);
-                return saveCommnad;
+                if (saveRSACommnad == null)
+                    saveRSACommnad = new DelegateCommand(SaveRSACommandExecute);
+                return saveRSACommnad;
             }
         }
+
+        #endregion//RSA
+
+        #region AES
+
+        private ICommand generateAESCommand;
+        public ICommand GenerateAESCommand
+        {
+            get
+            {
+                if (generateAESCommand == null)
+                    generateAESCommand = new DelegateCommand(GenerateAESCommandExecute);
+                return generateAESCommand;
+            }
+        }
+
+        private ICommand openAESCommand;
+        public ICommand OpenAESCommand
+        {
+            get
+            {
+                if (openAESCommand == null)
+                    openAESCommand = new DelegateCommand(OpenAESCommandExecute);
+                return openAESCommand;
+            }
+        }
+
+        private ICommand saveAESCommnad;
+        public ICommand SaveAESCommand
+        {
+            get
+            {
+                if (saveAESCommnad == null)
+                    saveAESCommnad = new DelegateCommand(SaveAESCommandExecute);
+                return saveAESCommnad;
+            }
+        }
+
+        #endregion//AES
 
         private ICommand exitCommnad;
         public ICommand ExitCommand
@@ -154,72 +254,51 @@ namespace CryptographicCreator.ViewModels
 
         #region Methods
 
-        private void GenerateCommandExecute()
+        #region RSA
+
+        private void GenerateRSACommandExecute()
         {
-            if (AcceptEvent)
+            if (AcceptRSAEvent)
             {
                 eventAggregator.GetEvent<RSAMessageSentEvent>()
-                    .Publish(new RsaMessage { RSAAction = RSAAction.Generate });
-                SetRSADataAcrivity(RSAAction.Generate);
-                IsSavedRSAPrivateKey = false;
-                IsSavedRSAPublicKey = false;
-                StatusBarLog = statusBarMessages[StatusBarMessage.RSAKeysGenerated];
+                    .Publish(new RSAMessage { RSAAction = RSAAction.Generate });
+                SetRSADataActivity(RSAAction);
+                SetRSAStatus(RSAAction);
             }
             else StatusBarLog = statusBarMessages[StatusBarMessage.Canceled];
         }
 
-        private void OpenCommandExecute()
+        private void OpenRSACommandExecute()
         {
-            if (AcceptEvent)
+            if (AcceptRSAEvent)
             {
                 eventAggregator.GetEvent<RSAMessageSentEvent>()
-                    .Publish(new RsaMessage { RSAAction = RSAAction, Path = SelectedPath });
-                SetRSADataAcrivity(RSAAction);
-                switch (RSAAction)
-                {
-                    case RSAAction.OpenPublicKey:
-                        StatusBarLog = statusBarMessages[StatusBarMessage.RSAPublicKeyOpened];
-                        break;
-                    case RSAAction.OpenPrivateKey:
-                        StatusBarLog = statusBarMessages[StatusBarMessage.RSAPrivateKeyOpened];
-                        break;
-                    case RSAAction.OpenEncryptedData:
-                        break;
-                }
+                    .Publish(new RSAMessage { RSAAction = RSAAction, Path = SelectedRSAPath });
+                SetRSADataActivity(RSAAction);
+                SetRSAStatus(RSAAction);
             }
         }
 
-        private void SaveCommandExecute()
+        private void SaveRSACommandExecute()
         {
-            if (AcceptEvent)
+            if (AcceptRSAEvent)
             {
                 eventAggregator.GetEvent<RSAMessageSentEvent>()
-                  .Publish(new RsaMessage { RSAAction = RSAAction, Path = SelectedPath });
-                switch (RSAAction)
-                {
-                    case RSAAction.SavePublicKey:
-                        IsSavedRSAPublicKey = true;
-                        StatusBarLog = statusBarMessages[StatusBarMessage.RSAPublicKeySaved];
-                        break;
-                    case RSAAction.SavePrivateAndPublicKey:
-                        IsSavedRSAPrivateKey = true;
-                        StatusBarLog = statusBarMessages[StatusBarMessage.RSAPrivateKeySaved];
-                        break;
-                    case RSAAction.SaveEncryptedData:
-                        AreSavedRSAEncryptedData = true;
-                        StatusBarLog = statusBarMessages[StatusBarMessage.RSAEncryptedDataSaved];
-                        break;
-                }
+                  .Publish(new RSAMessage { RSAAction = RSAAction, Path = SelectedRSAPath });
+                SetRSADataActivity(RSAAction);
+                SetRSAStatus(RSAAction);
             }
         }
 
-        private void SetRSADataAcrivity(RSAAction rsaAction)
+        private void SetRSADataActivity(RSAAction rsaAction)
         {
             switch (rsaAction)
             {
                 case RSAAction.Generate:
                     IsActiveRSAPublicKey = true;
                     IsActiveRSAPrivateKey = true;
+                    IsSavedRSAPrivateKey = false;
+                    IsSavedRSAPublicKey = false;
                     break;
                 case RSAAction.OpenPublicKey:
                     IsActiveRSAPublicKey = true;
@@ -230,16 +309,45 @@ namespace CryptographicCreator.ViewModels
                 case RSAAction.OpenEncryptedData:
                     AreActiveRSAEncryptedData = true;
                     break;
+                case RSAAction.SavePublicKey:
+                    IsSavedRSAPublicKey = true;
+                    break;
+                case RSAAction.SavePrivateAndPublicKey:
+                    IsSavedRSAPrivateKey = true;
+                    break;
+                case RSAAction.SaveEncryptedData:
+                    AreSavedRSAEncryptedData = true;
+                    break;
             }
         }
 
-        private void ExecuteMessage(RsaMessage message)
+        private void SetRSAStatus(RSAAction rsaAction)
         {
-            switch (message.RSAAction)
+            switch (RSAAction)
             {
+                case RSAAction.Generate:
+                    StatusBarLog = statusBarMessages[StatusBarMessage.RSAKeysGenerated];
+                    break;
+                case RSAAction.OpenPublicKey:
+                    StatusBarLog = statusBarMessages[StatusBarMessage.RSAPublicKeyOpened];
+                    break;
+                case RSAAction.OpenPrivateKey:
+                    StatusBarLog = statusBarMessages[StatusBarMessage.RSAPrivateKeyOpened];
+                    break;
+                case RSAAction.OpenEncryptedData:
+                    StatusBarLog = statusBarMessages[StatusBarMessage.RSAEncryptedDataOpened];
+                    break;
+                case RSAAction.SavePublicKey:
+                    StatusBarLog = statusBarMessages[StatusBarMessage.RSAPublicKeySaved];
+                    break;
+                case RSAAction.SavePrivateAndPublicKey:
+                    StatusBarLog = statusBarMessages[StatusBarMessage.RSAPrivateKeySaved];
+                    break;
+                case RSAAction.SaveEncryptedData:
+                    StatusBarLog = statusBarMessages[StatusBarMessage.RSAEncryptedDataSaved];
+                    break;
                 case RSAAction.Encrypt:
-                    AreActiveRSAEncryptedData = true;
-                    statusBarLog = statusBarMessages[StatusBarMessage.RSADataEncrypted];
+                    StatusBarLog = statusBarMessages[StatusBarMessage.RSADataEncrypted];
                     break;
                 case RSAAction.Decrypt:
                     StatusBarLog = statusBarMessages[StatusBarMessage.RSADataDecrypted];
@@ -247,10 +355,112 @@ namespace CryptographicCreator.ViewModels
             }
         }
 
-        private void ExitCommandExecute()
+        private void ExecuteRSAMessage(RSAMessage message)
         {
-            App.Current.MainWindow.Close();
+            if (message.RSAAction == RSAAction.Encrypt)
+                AreActiveRSAEncryptedData = true;
+            SetRSAStatus(message.RSAAction);
         }
+
+        #endregion//RSA
+
+        #region AES
+
+        private void GenerateAESCommandExecute()
+        {
+            if (AcceptAESEvent)
+            {
+                eventAggregator.GetEvent<AESMessageSentEvent>()
+                    .Publish(new AESMessage { AESAction = AESAction.Generate });
+                SetAESDataActivity(AESAction);
+                SetAESStatus(AESAction);
+            }
+        }
+
+        private void OpenAESCommandExecute()
+        {
+            if (AcceptAESEvent)
+            {
+                eventAggregator.GetEvent<AESMessageSentEvent>().
+                    Publish(new AESMessage { AESAction = AESAction, Path = SelectedAESPath });
+                SetAESDataActivity(AESAction);
+                SetAESStatus(AESAction);
+            }
+        }
+
+        private void SaveAESCommandExecute()
+        {
+            if (AcceptAESEvent)
+            {
+                eventAggregator.GetEvent<AESMessageSentEvent>()
+                .Publish(new AESMessage { AESAction = AESAction, Path = SelectedAESPath });
+                SetAESDataActivity(AESAction);
+                SetAESStatus(AESAction);
+            }
+        }
+
+        private void ExecuteAESMessage(AESMessage message)
+        {
+            if (message.AESAction == AESAction.Encrypt)
+                AreActiveAESEncryptedData = true;
+            SetAESStatus(AESAction);
+        }
+
+        private void SetAESDataActivity(AESAction aesAction)
+        {
+            switch (aesAction)
+            {
+                case AESAction.Generate:
+                    IsActiveAESKey = true;
+                    isSavedAESKey = false;
+                    break;
+                case AESAction.OpenKey:
+                    IsActiveAESKey = true;
+                    break;
+                case AESAction.OpenEncryptedData:
+                    areActiveAESEncrypryptedData = true;
+                    break;
+                case AESAction.SaveKey:
+                    isSavedAESKey = true;
+                    break;
+                case AESAction.SaveEncryptedData:
+                    AreActiveAESEncryptedData = true;
+                    break;
+            }
+        }
+
+        private void SetAESStatus(AESAction aesAction)
+        {
+            switch (aesAction)
+            {
+                case AESAction.Generate:
+                    StatusBarLog = statusBarMessages[StatusBarMessage.AESKeyGenerated];
+                    break;
+                case AESAction.OpenKey:
+                    StatusBarLog = statusBarMessages[StatusBarMessage.AESKeyOpened];
+                    break;
+                case AESAction.OpenEncryptedData:
+                    StatusBarLog = statusBarMessages[StatusBarMessage.AESEncryptedDataOpened];
+                    break;
+                case AESAction.SaveKey:
+                    StatusBarLog = statusBarMessages[StatusBarMessage.AESKeySaved];
+                    break;
+                case AESAction.SaveEncryptedData:
+                    StatusBarLog = statusBarMessages[StatusBarMessage.AESEncryptedDataSaved];
+                    break;
+                case AESAction.Encrypt:
+                    StatusBarLog = statusBarMessages[StatusBarMessage.AESDataEncrypted];
+                    break;
+                case AESAction.Decrypt:
+                    StatusBarLog = statusBarMessages[StatusBarMessage.AESDataDecrypted];
+                    break;
+            }
+        }
+
+        #endregion//AES
+
+        private void ExitCommandExecute()
+            => App.Current.MainWindow.Close();
 
         #endregion//Methods
     }

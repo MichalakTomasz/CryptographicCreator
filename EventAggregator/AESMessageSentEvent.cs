@@ -3,5 +3,5 @@ using Prism.Events;
 
 namespace EventAggregator
 {
-    public class RSAMessageSentEvent : PubSubEvent<RSAMessage> { }
+    public class AESMessageSentEvent :PubSubEvent<AESMessage> { }
 }

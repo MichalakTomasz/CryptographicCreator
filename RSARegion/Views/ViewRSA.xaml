@@ -13,7 +13,7 @@
              Padding="15">
     <UserControl.Resources>
         <comconv:BoolToBrushConverter x:Key="BoolToBrushConverter"/>
-        <converter:KeysActivityiBoolToBoolConverter x:Key="KeysActivityiBoolToBoolConverter"/>
+        <converter:KeysActivityConverter x:Key="KeysActivityConverter"/>
     </UserControl.Resources>
     <DockPanel Grid.Row="1">
         <StackPanel DockPanel.Dock="Top"
@@ -53,7 +53,7 @@
                           VerticalScrollBarVisibility="Auto">
                 <DockPanel>
                     <DockPanel.IsEnabled>
-                        <MultiBinding Converter="{StaticResource KeysActivityiBoolToBoolConverter}">
+                        <MultiBinding Converter="{StaticResource KeysActivityConverter}">
                             <Binding Path="IsActivePublicKey"/>
                             <Binding Path="IsActivePrivateKey"/>
                         </MultiBinding>

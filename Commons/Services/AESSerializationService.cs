@@ -1,37 +1,35 @@
-﻿using System.Security.Cryptography;
-
-namespace Commons
+﻿namespace Commons
 {
-    public class RSASerializationService : IRSASerializationService
+    public class AESSerializationService : IAESSerializationService
     {
         #region Fields
 
         private readonly IGZipCompressionService compressionService;
         private readonly ISerializationService serializationService;
-        private readonly IRSAMaskService rsaMaskService;
+        private readonly IAESMaskService maskService;
 
         #endregion//Fields
 
         #region Constructor
 
-        public RSASerializationService(
+        public AESSerializationService(
             IGZipCompressionService compressionService,
             ISerializationService serializationService,
-            IRSAMaskService rsaMaskService)
+            IAESMaskService aesMaskService)
         {
             this.compressionService = compressionService;
             this.serializationService = serializationService;
-            this.rsaMaskService = rsaMaskService;
+            this.maskService = aesMaskService;
         }
 
         #endregion//Constructor
 
-        #region Methods
+        #region Mehtods
 
-        public void SerializeKey(RSAParameters rsaParameters, string path)
+        public void SerializeKey(AESKey aesKey, string path)
         {
-            var maskedKey = rsaMaskService.Mask(rsaParameters);
-            serializationService.Serialize(maskedKey, path);
+            var masked = maskService.Mask(aesKey);
+            serializationService.Serialize(masked, path);
         }
 
         public void SerializeEncryptedData(byte[] buffer, string path)
@@ -49,12 +47,11 @@ namespace Commons
             return decompressedData;
         }
 
-        public RSAParameters DeserializeKey(string path)
+        public AESKey DeserializeKey(string path)
         {
             var deserializedBuffer =
                 serializationService.Deserialize(path);
-            var rsaParameters = rsaMaskService.Unmask(deserializedBuffer);
-            return rsaParameters;
+            return maskService.Unmask(deserializedBuffer);
         }
 
         #endregion//Methods

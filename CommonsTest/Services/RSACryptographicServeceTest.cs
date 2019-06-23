@@ -9,7 +9,7 @@ namespace CommonsTest.Services
     public class RSACryptographicServeceTest
     {
         [TestMethod]
-        public void CompareKeyModulesTest()
+        public void RSACompareKeyModulesTest()
         {
             //Arrange
 
@@ -39,7 +39,7 @@ namespace CommonsTest.Services
         }
 
         [TestMethod]
-        public void GenerateKeys()
+        public void RSAGenerateKeys()
         {
             //Arrange
 
@@ -59,7 +59,7 @@ namespace CommonsTest.Services
         }
 
         [TestMethod]
-        public void EncryptDecryptTest()
+        public void RSAEncryptDecryptTest()
         {
             //Arrange
             var text = "This is simple Example text to testing.";

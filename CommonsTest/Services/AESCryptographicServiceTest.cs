@@ -12,7 +12,7 @@ namespace CommonsTest.Services
         int bufferLength = 2500;
         byte[] baseBuffer;
         AESKey aesKey;
-
+        
         public AESCryptographicServiceTest()
         {
             baseBuffer = new byte[bufferLength];
@@ -23,7 +23,7 @@ namespace CommonsTest.Services
         }
         
         [TestMethod]
-        public void EncryptDecryptByteBuffer()
+        public void AESEncryptDecryptByteBufferTest()
         {
             //Act
             var encryptedData = aesCryptographicService.Encrypt(baseBuffer, aesKey);

@@ -9,10 +9,10 @@ namespace CommonsTest.Services
     {
         [TestMethod]
         public void SHA256HashingTest()
-        {
+        {       
             //Arrange
             var sha256CngService = new SHA256CngService();
-            var bufferLength = 5000;
+            var bufferLength = 150;
             var baseBuffer = new byte[bufferLength];
             var random = new Random();
             for (int i = 0; i < bufferLength; i++)

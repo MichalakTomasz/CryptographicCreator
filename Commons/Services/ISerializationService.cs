@@ -5,11 +5,9 @@ namespace Commons
 {
     public interface ISerializationService
     {
-        Task SerializeAsync(BufferFrame data, string path);
-        void Serialize(BufferFrame data, string path);
-        Task<byte[]> DeserializeArrayBufferAsync(string path);
-        byte[] DeserializeArrayBuffer(string path);
-        Task<BufferFrame> DeserializeCompressedDataAsync(string path);
-        BufferFrame DeserializeCompressedData(string path);
+        Task SerializeAsync(byte[] data, string path);
+        void Serialize(byte[] data, string path);
+        Task<byte[]> DeserializeAsync(string path);
+        byte[] Deserialize(string path);
     }
 }

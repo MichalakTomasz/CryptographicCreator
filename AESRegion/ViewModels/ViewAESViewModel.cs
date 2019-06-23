@@ -1,16 +1,42 @@
-﻿using Prism.Commands;
+﻿using Commons;
+using EventAggregator;
+using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace AESRegion.ViewModels
 {
     public class ViewAESViewModel : BindableBase
     {
+        #region Fields
+
+        private readonly IEventAggregator eventAggregator;
+        private readonly IAESCryptographicService aesCryptographicService;
+        private readonly IAESSerializationService aesSerializaionService;
+
+        private AESKey aesKey;
+        private byte[] encryptedBuffer;
+
+        #endregion//Fields
+
+        #region Constructor
+
+        public ViewAESViewModel(
+            IEventAggregator eventAggregator,
+            IAESCryptographicService aesCryptographicService,
+            IAESSerializationService aesSerializaionService)
+        {
+            this.eventAggregator = eventAggregator;
+            this.aesCryptographicService = aesCryptographicService;
+            this.aesSerializaionService = aesSerializaionService;
+            eventAggregator.GetEvent<AESMessageSentEvent>()
+                .Subscribe(ExecuteMessage);
+        }
+        
+        #endregion//Region
+
         #region Properties
 
         private string text;
@@ -18,6 +44,13 @@ namespace AESRegion.ViewModels
         {
             get { return text; }
             set { SetProperty(ref text, value); }
+        }
+
+        private string encryptedText;
+        public string EncryptedText
+        {
+            get { return encryptedText; }
+            set { SetProperty(ref encryptedText, value); }
         }
 
         private bool isActiveKey;
@@ -66,9 +99,7 @@ namespace AESRegion.ViewModels
             {
                 if (decryptCommand == null)
                     decryptCommand = new DelegateCommand(DecryptCommandExecute, DecryptCommandCanExecute)
-                        .ObservesProperty(() => IsActiveKey)
-                        .ObservesProperty(() => AreActiveEncryptedData)
-                        .ObservesProperty(() => DecryptedText);
+                        .ObservesProperty(() => AreActiveEncryptedData);
                 return decryptCommand;
             }
         }
@@ -89,12 +120,49 @@ namespace AESRegion.ViewModels
 
         #region Methods
 
+        private void ExecuteMessage(AESMessage message)
+        {
+            switch (message.AESAction)
+            {
+                case AESAction.Generate:
+                    aesKey = aesCryptographicService.GenerateKey();
+                    IsActiveKey = true;
+                    message.AESAction = AESAction.None;
+                    break;
+                case AESAction.OpenKey:
+                    aesKey = aesSerializaionService.DeserializeKey(message.Path);
+                    IsActiveKey = true;
+                    message.AESAction = AESAction.None;
+                    break;
+                case AESAction.OpenEncryptedData:
+                    encryptedBuffer = aesSerializaionService.DeserializeEncryptedData(message.Path);   
+                    EncryptedText = Encoding.Unicode.GetString(encryptedBuffer);
+                    Text = string.Empty;
+                    AreActiveEncryptedData = true;
+                    message.AESAction = AESAction.None;
+                    break;
+                case AESAction.SaveKey:
+                    aesSerializaionService.SerializeKey(aesKey, message.Path);
+                    message.AESAction = AESAction.None;
+                    break;
+                case AESAction.SaveEncryptedData:
+                    aesSerializaionService.SerializeEncryptedData(encryptedBuffer, message.Path);
+                    message.AESAction = AESAction.None;
+                    break;
+            }
+        }
+
         private bool EncryptCommandCanExecute()
             => IsActiveKey && Text?.Length > 0;
 
         private void EncryptCommandExecute()
         {
-            throw new NotImplementedException();
+            var byteArrayText = Encoding.Unicode.GetBytes(Text);
+            encryptedBuffer = aesCryptographicService.Encrypt(byteArrayText, aesKey);
+            EncryptedText = Encoding.Unicode.GetString(encryptedBuffer);
+            AreActiveEncryptedData = true;
+            eventAggregator.GetEvent<AESMessageSentEvent>()
+                .Publish(new AESMessage { AESAction = AESAction.Encrypt });
         }
 
         private bool DecryptCommandCanExecute()
@@ -102,7 +170,10 @@ namespace AESRegion.ViewModels
 
         private void DecryptCommandExecute()
         {
-            throw new NotImplementedException();
+            var decryptedData = aesCryptographicService.Decrypt(encryptedBuffer, aesKey);
+            DecryptedText = Encoding.Unicode.GetString(decryptedData);
+            eventAggregator.GetEvent<AESMessageSentEvent>()
+                .Publish(new AESMessage { AESAction = AESAction.Decrypt });
         }
 
         private bool ClearTextCanCommandExecute()

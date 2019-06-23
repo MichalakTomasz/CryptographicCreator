@@ -12,6 +12,8 @@ namespace RSARegion
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.Register<IRSACryptographicService, RSACryptographicService>();
+            containerRegistry.Register<IRSASerializationService, RSASerializationService>();
+            containerRegistry.Register<IRSAMaskService, RSAMaskService>();
             containerRegistry.RegisterForNavigation<ViewRSA>();
         }
     }

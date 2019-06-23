@@ -20,6 +20,13 @@ namespace CryptographicCreator.Models
         RSAEncryptedDataOpened,
         RSAEncryptedDataSaved,
         RSADataEncrypted,
-        RSADataDecrypted
+        RSADataDecrypted,
+        AESKeyGenerated,
+        AESKeyOpened,
+        AESKeySaved,
+        AESEncryptedDataOpened,
+        AESEncryptedDataSaved,
+        AESDataEncrypted,
+        AESDataDecrypted
     }
 }

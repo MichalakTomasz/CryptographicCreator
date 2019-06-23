@@ -4,7 +4,7 @@ using System.Windows.Data;
 
 namespace RSARegion.Converters
 {
-    public class KeysActivityiBoolToBoolConverter : IMultiValueConverter
+    public class KeysActivityConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {

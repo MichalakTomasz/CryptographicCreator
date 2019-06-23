@@ -87,7 +87,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Behaviors\ClosingMainWindowBehavior.cs" />
+    <Compile Include="Behaviors\RibbinButtonGenerateAESKeyBehavior.cs" />
     <Compile Include="Behaviors\RibbonButtonGenerateRSAKeysBehavior.cs" />
+    <Compile Include="Behaviors\RibbonButtonOpenSaveAESKeyBehavior.cs" />
     <Compile Include="Behaviors\RibbonButtonOpenSaveRSAKeysBehavior.cs" />
     <Compile Include="Models\FileAction.cs" />
     <Compile Include="Models\IStatusBarMessages.cs" />

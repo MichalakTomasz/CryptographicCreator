@@ -10,17 +10,15 @@ namespace Commons
     {
         #region Public Methods
 
-        public async Task SerializeAsync(BufferFrame data, string path)
+        public async Task SerializeAsync(byte[] data, string path)
         {
             try
             {
                 if (data != null && Directory.Exists(Path.GetDirectoryName(path)))
                 {
-                    using (var binaryWriter = 
-                        new BinaryWriter(File.Open(path, FileMode.OpenOrCreate)))
+                    using (var binaryWriter = new BinaryWriter(File.Open(path, FileMode.OpenOrCreate)))
                     {
-                        await Task.Run(() => 
-                        binaryWriter.Write(data.Buffer, 0, data.Buffer.Length));
+                        await Task.Run(() => binaryWriter.Write(data, 0, data.Length));
                     }
                 }
             }
@@ -30,18 +28,19 @@ namespace Commons
             }
         }
 
-        public void Serialize(BufferFrame serializedData, string path)
+        public void Serialize(byte[] buffer, string path)
         {
             try
             {
                 if (!string.IsNullOrWhiteSpace(path) &&
                     Directory.Exists(Path.GetDirectoryName(path)) &&
-                    !serializedData.Equals(default(BufferFrame)))
+                    !buffer.Equals(default(byte[])))
                 {
                     using (var fileStream = File.Open(path, FileMode.OpenOrCreate))
+                    using (var binaryWriter = new BinaryWriter(fileStream))
                     {
-                        var binaryFormater = new BinaryFormatter();
-                        binaryFormater.Serialize(fileStream, serializedData);
+                        binaryWriter.Write(buffer.Length);
+                        binaryWriter.Write(buffer, 0, buffer.Length);
                     }
                 }
             }
@@ -51,7 +50,7 @@ namespace Commons
             }
         }
 
-        public async Task<byte[]> DeserializeArrayBufferAsync(string path)
+        public async Task<byte[]> DeserializeAsync(string path)
         {
             try
             {
@@ -70,7 +69,7 @@ namespace Commons
             }
         }
 
-        public byte[] DeserializeArrayBuffer(string path)
+        public byte[] Deserialize(string path)
         {
             try
             {
@@ -78,7 +77,13 @@ namespace Commons
                     Directory.Exists(Path.GetDirectoryName(path)))
                 {
                     using (var fileStream = File.Open(path, FileMode.Open))
-                        return File.ReadAllBytes(path);
+                    using (var binaryReader = new BinaryReader(fileStream))
+                    {
+                        var bufferLength = binaryReader.ReadInt32();
+                        var resultBuffer = new byte[bufferLength];
+                        binaryReader.Read(resultBuffer, 0, bufferLength);
+                        return resultBuffer;
+                    }
                 }
                 return default(byte[]);
             }
@@ -86,51 +91,6 @@ namespace Commons
             {
                 Debug.WriteLine($"Deserialization exception: {e.Message}");
                 return default(byte[]);
-            }
-        }
-
-        public async Task<BufferFrame> DeserializeCompressedDataAsync(string path)
-        {
-            try
-            {
-                if (!string.IsNullOrWhiteSpace(path) && 
-                    Directory.Exists(Path.GetDirectoryName(path)))
-                {
-                    using (var fileStream = File.Open(path, FileMode.Open))
-                    {
-                        var binaryFormater = new BinaryFormatter();
-                        return await Task.Run(() => 
-                        (BufferFrame)binaryFormater.Deserialize(fileStream));
-                    }    
-                }
-                return await Task.Run(() => default(BufferFrame));
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine($"Deserialization exception: {e.Message}");
-                return  default(BufferFrame);
-            }
-        }
-
-        public BufferFrame DeserializeCompressedData(string path)
-        {
-            try
-            {
-                if (!string.IsNullOrWhiteSpace(path) && 
-                    Directory.Exists(Path.GetDirectoryName(path)))
-                {
-                    using (var fileStream = File.Open(path, FileMode.Open))
-                    {
-                        var binaryFormater = new BinaryFormatter();
-                        return (BufferFrame)binaryFormater.Deserialize(fileStream);
-                    } 
-                }
-                return default(BufferFrame);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine($"Deserialization exception: {e.Message}");
-                return default(BufferFrame);
             }
         }
 

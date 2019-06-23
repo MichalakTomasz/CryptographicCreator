@@ -7,8 +7,6 @@ using RSARegion;
 using Commons;
 using CryptographicCreator.Models;
 using AESRegion;
-using RSARegion.Views;
-using AESRegion.Views;
 
 namespace CryptographicCreator
 {
@@ -19,12 +17,10 @@ namespace CryptographicCreator
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.Register<ICompressionService, RSAGZipCompressionService>();
             containerRegistry.Register<ISerializationService, SerializationService>();
-            containerRegistry.Register<IRSASerializationService, RSASerializationService>();
+            containerRegistry.Register<IGZipCompressionService, GZipCompressionService>();
+            containerRegistry.Register<ISimpleMaskService, SimpleMaskService>();
             containerRegistry.Register<IStatusBarMessages, StatusBarMessages>();
-            containerRegistry.RegisterForNavigation<ViewRSA>("RSARegion");
-            containerRegistry.RegisterForNavigation<ViewAES>("AESRegion");
         }
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)

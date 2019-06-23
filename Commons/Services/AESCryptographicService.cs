@@ -1,5 +1,4 @@
-﻿using Commons;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Security.Cryptography;
 
@@ -7,55 +6,51 @@ namespace Commons
 {
     public class AESCryptographicService : IAESCryptographicService
     {
-        public BufferFrame Encrypt(byte[] buffer, AESKey aesKey)
+        public byte[] Encrypt(byte[] buffer, AESKey aesKey)
         {
             try
             {
-                using (var awsAlgoritm = new AesCryptoServiceProvider())
+                using (var aesAlgoritm = new AesCryptoServiceProvider())
                 {
-                    awsAlgoritm.Key = aesKey.Key; 
-                    awsAlgoritm.IV = aesKey.IV;
-                    ICryptoTransform encryptor = awsAlgoritm.CreateEncryptor(awsAlgoritm.Key, awsAlgoritm.IV);
+                    aesAlgoritm.Key = aesKey.Key;
+                    aesAlgoritm.IV = aesKey.IV;
+                    ICryptoTransform encryptor = aesAlgoritm.CreateEncryptor(aesAlgoritm.Key, aesAlgoritm.IV);
                     using (var encryptedMemoryStream = new MemoryStream())
+                    using (var sourceStream = new MemoryStream(buffer))
                     {
                         using (var cryptoStream = new CryptoStream(encryptedMemoryStream, encryptor, CryptoStreamMode.Write))
-                            cryptoStream.Write(buffer, 0, buffer.Length);
-
-                        return new BufferFrame
-                        {
-                            Buffer = encryptedMemoryStream.ToArray(),
-                            OriginalBufferLength = buffer.Length
-                        };
+                            sourceStream.CopyTo(cryptoStream);
+                        return encryptedMemoryStream.ToArray();
                     }
                 }
             }
             catch (System.Exception e)
             {
                 Debug.WriteLine($"AES encrypt error: {e.Message}");
-                return default(BufferFrame);
+                return default(byte[]);
             }
         }
 
-        public byte[] Decrypt(BufferFrame encryptedBuffer, AESKey aesKey)
+        public byte[] Decrypt(byte[] encryptedBuffer, AESKey aesKey)
         {
             try
             {
-                using (var aesAlg = new AesCryptoServiceProvider())
+                using (var decryptedStream = new MemoryStream())
                 {
-                    aesAlg.Key = aesKey.Key;
-                    aesAlg.IV = aesKey.IV;
-                    ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
-                    using (var msDecrypt = new MemoryStream(encryptedBuffer.Buffer))
+                    using (var aesAlg = new AesCryptoServiceProvider())
                     {
+                        aesAlg.Key = aesKey.Key;
+                        aesAlg.IV = aesKey.IV;
+                        ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
+                        using (var msDecrypt = new MemoryStream(encryptedBuffer))
                         using (var csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
                         {
-                            var length = encryptedBuffer.OriginalBufferLength;
-                            byte[] decryptedData = new byte[length];
-                            csDecrypt.Read(decryptedData, 0, length);
-                            return decryptedData;
+                            csDecrypt.CopyTo(decryptedStream);
+                            return decryptedStream.ToArray();
                         }
                     }
                 }
+                
             }
             catch (System.Exception e)
             {
