@@ -29,6 +29,9 @@ namespace CryptographicCreator.Views
                 case "AES":
                     regionManager.RequestNavigate("ContentRegion", "ViewAES");
                     break;
+                case "MD5":
+                    regionManager.RequestNavigate("ContentRegion", "ViewMD5");
+                    break;
             }
         }
     }

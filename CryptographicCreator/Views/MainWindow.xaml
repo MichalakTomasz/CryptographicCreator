@@ -116,6 +116,9 @@
                     </RibbonButton>
                 </RibbonGroup>
             </RibbonTab>
+            <RibbonTab Header="MD5">
+                
+            </RibbonTab>
         </Ribbon>
         <ContentControl Grid.Row="1" prism:RegionManager.RegionName="ContentRegion" />
         <StatusBar Grid.Row="2">

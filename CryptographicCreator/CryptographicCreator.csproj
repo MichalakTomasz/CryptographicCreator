@@ -141,6 +141,10 @@
       <Project>{028c4630-1634-4f39-9e6d-323f440afcd6}</Project>
       <Name>EventAggregator</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MD5Region\MD5Region.csproj">
+      <Project>{59f9f783-b25a-4351-94d2-0244a1ef8b41}</Project>
+      <Name>MD5Region</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RSARegion\RSARegion.csproj">
       <Project>{0e387b4c-4a31-4257-a5cc-be139bb9a96c}</Project>
       <Name>RSARegion</Name>

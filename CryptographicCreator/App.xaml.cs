@@ -7,6 +7,7 @@ using RSARegion;
 using Commons;
 using CryptographicCreator.Models;
 using AESRegion;
+using MD5Region;
 
 namespace CryptographicCreator
 {
@@ -28,6 +29,7 @@ namespace CryptographicCreator
             base.ConfigureModuleCatalog(moduleCatalog);
             moduleCatalog.AddModule<RSARegionModule>();
             moduleCatalog.AddModule<AESRegionModule>();
+            moduleCatalog.AddModule<MD5RegionModule>();
         }
     }
 }

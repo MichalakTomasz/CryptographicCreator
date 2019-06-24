@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonsTest", "CommonsTest\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AESRegion", "AESRegion\AESRegion.csproj", "{7D9129DE-3E5C-4041-AF91-6491A7C831DA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MD5Region", "MD5Region\MD5Region.csproj", "{59F9F783-B25A-4351-94D2-0244A1EF8B41}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{7D9129DE-3E5C-4041-AF91-6491A7C831DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D9129DE-3E5C-4041-AF91-6491A7C831DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D9129DE-3E5C-4041-AF91-6491A7C831DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59F9F783-B25A-4351-94D2-0244A1EF8B41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59F9F783-B25A-4351-94D2-0244A1EF8B41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59F9F783-B25A-4351-94D2-0244A1EF8B41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59F9F783-B25A-4351-94D2-0244A1EF8B41}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
