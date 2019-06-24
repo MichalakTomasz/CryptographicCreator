@@ -175,7 +175,7 @@ namespace RSARegion.ViewModels
                     message.RSAAction = RSAAction.None;
                     break;
                 case RSAAction.OpenEncryptedData:
-                    encryptedData = rsaSerializationService.DeserializeEncryptedData(message.Path);
+                    encryptedData = rsaSerializationService.Deserialize(message.Path);
                     EncryptedText = Encoding.Unicode.GetString(encryptedData);
                     AreActiveEncryptedData = true;
                     SetKeyParametersBase();
@@ -190,7 +190,7 @@ namespace RSARegion.ViewModels
                     message.RSAAction = RSAAction.None;
                     break;
                 case RSAAction.SaveEncryptedData:
-                    rsaSerializationService.SerializeEncryptedData(encryptedData, message.Path);
+                    rsaSerializationService.Serialize(encryptedData, message.Path);
                     message.RSAAction = RSAAction.None;
                     break;
             }

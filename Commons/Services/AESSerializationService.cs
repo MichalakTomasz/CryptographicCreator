@@ -32,13 +32,13 @@
             serializationService.Serialize(masked, path);
         }
 
-        public void SerializeEncryptedData(byte[] buffer, string path)
+        public void Serialize(byte[] buffer, string path)
         {
             var archiveFrame = compressionService.Compress(buffer);
             serializationService.Serialize(archiveFrame, path);
         }
 
-        public byte[] DeserializeEncryptedData(string path)
+        public byte[] Deserialize(string path)
         {
             var deserializedBuffer =
                 serializationService.Deserialize(path);

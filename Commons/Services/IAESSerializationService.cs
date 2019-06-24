@@ -2,9 +2,9 @@
 {
     public interface IAESSerializationService
     {
-        byte[] DeserializeEncryptedData(string path);
+        byte[] Deserialize(string path);
         AESKey DeserializeKey(string path);
-        void SerializeEncryptedData(byte[] buffer, string path);
+        void Serialize(byte[] buffer, string path);
         void SerializeKey(AESKey aesKey, string path);
     }
 }

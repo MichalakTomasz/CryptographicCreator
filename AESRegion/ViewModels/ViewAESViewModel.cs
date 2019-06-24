@@ -135,7 +135,7 @@ namespace AESRegion.ViewModels
                     message.AESAction = AESAction.None;
                     break;
                 case AESAction.OpenEncryptedData:
-                    encryptedBuffer = aesSerializaionService.DeserializeEncryptedData(message.Path);   
+                    encryptedBuffer = aesSerializaionService.Deserialize(message.Path);   
                     EncryptedText = Encoding.Unicode.GetString(encryptedBuffer);
                     Text = string.Empty;
                     AreActiveEncryptedData = true;
@@ -146,7 +146,7 @@ namespace AESRegion.ViewModels
                     message.AESAction = AESAction.None;
                     break;
                 case AESAction.SaveEncryptedData:
-                    aesSerializaionService.SerializeEncryptedData(encryptedBuffer, message.Path);
+                    aesSerializaionService.Serialize(encryptedBuffer, message.Path);
                     message.AESAction = AESAction.None;
                     break;
             }

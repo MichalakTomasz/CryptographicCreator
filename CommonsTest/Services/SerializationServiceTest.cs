@@ -13,7 +13,7 @@ namespace CommonsTest.Services
         {
             //Arrange
 
-            var bufferLength = 500;
+            var bufferLength = 2500;
             var buffer = new byte[bufferLength];
             var random = new Random();
             for (int i = 0; i < bufferLength; i++)

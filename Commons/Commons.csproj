@@ -54,13 +54,10 @@
     <Compile Include="Services\AESCryptographicService.cs" />
     <Compile Include="Services\AESMaskService.cs" />
     <Compile Include="Services\AESSerializationService.cs" />
-    <Compile Include="Services\DictionaryCompressionService.cs" />
-    <Compile Include="Services\GenericCryptographicService.cs" />
     <Compile Include="Services\GZipCompressionService.cs" />
     <Compile Include="Services\IAESCryptographicService.cs" />
     <Compile Include="Services\IAESMaskService.cs" />
     <Compile Include="Services\IAESSerializationService.cs" />
-    <Compile Include="Services\IGenericCryptographicService.cs" />
     <Compile Include="Services\IGZipCompressionService.cs" />
     <Compile Include="Services\IHashService.cs" />
     <Compile Include="Services\IRSASerializationService.cs" />

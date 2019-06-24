@@ -5,8 +5,8 @@ namespace Commons
     public interface IRSASerializationService
     { 
         void SerializeKey(RSAParameters rsaParameters, string path);
-        void SerializeEncryptedData(byte[] buffer, string path);
+        void Serialize(byte[] buffer, string path);
         RSAParameters DeserializeKey(string path);
-        byte[] DeserializeEncryptedData(string path);
+        byte[] Deserialize(string path);
     }
 }
