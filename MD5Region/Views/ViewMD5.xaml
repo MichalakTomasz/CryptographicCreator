@@ -19,7 +19,7 @@
                 <Button Content="Create MD5 checksum"
                         Padding="10 0"
                         HorizontalAlignment="Right"
-                        Command="{Binding GenerateCheckSumCommand }" />
+                        Command="{Binding GenerateChecksumCommand }" />
                 <TextBox IsEnabled="False" 
                          MinWidth="200"
                          Height="70"

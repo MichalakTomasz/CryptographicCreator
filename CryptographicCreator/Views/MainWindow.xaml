@@ -117,7 +117,12 @@
                 </RibbonGroup>
             </RibbonTab>
             <RibbonTab Header="MD5">
-                
+                <RibbonGroup Header="File">
+                    <RibbonButton Content="Open"
+                                  Command="{Binding OpenMD5HecksumCommand }" />
+                    <RibbonButton Content="Save"
+                                  Command="{Binding SaveMD5ChecksumCommand }" />
+                </RibbonGroup>
             </RibbonTab>
         </Ribbon>
         <ContentControl Grid.Row="1" prism:RegionManager.RegionName="ContentRegion" />

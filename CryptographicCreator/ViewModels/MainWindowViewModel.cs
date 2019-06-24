@@ -239,6 +239,31 @@ namespace CryptographicCreator.ViewModels
 
         #endregion//AES
 
+        #region MD5
+
+        private ICommand openMD5Command;
+        public ICommand OpenMD5Command
+        {
+            get
+            {
+                if (openMD5Command == null)
+                    openMD5Command = new DelegateCommand(OpenMD5CommandExecute);
+                return openMD5Command;
+            }
+        }
+
+        private ICommand saveMD5Command;
+        public ICommand SaveMD5Command
+        {
+            get
+            {
+                if (saveMD5Command == null)
+                    saveMD5Command = new DelegateCommand(SaveMD5CommandExecute);
+                return saveMD5Command;
+            }
+        }
+
+        #endregion
         private ICommand exitCommnad;
         public ICommand ExitCommand
         {
@@ -458,6 +483,20 @@ namespace CryptographicCreator.ViewModels
         }
 
         #endregion//AES
+
+        #region MD5
+
+        private void OpenMD5CommandExecute()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void SaveMD5CommandExecute()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
 
         private void ExitCommandExecute()
             => App.Current.MainWindow.Close();

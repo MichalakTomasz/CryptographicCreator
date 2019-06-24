@@ -5,21 +5,34 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace MD5Region.ViewModels
 {
     public class ViewMD5ViewModel : BindableBase
     {
-        private string _message;
-        public string Message
+        #region Commands
+
+        private ICommand generateMD5ChecksumCommand;
+        public ICommand GenerateMD5ChecksumCommand
         {
-            get { return _message; }
-            set { SetProperty(ref _message, value); }
+            get
+            {
+                if (generateMD5ChecksumCommand == null)
+                    generateMD5ChecksumCommand = new DelegateCommand(GenerateMD5ChecksumCommandExecute);
+                return generateMD5ChecksumCommand;
+            }
         }
 
-        public ViewMD5ViewModel()
+        #endregion//Commands
+
+        #region Methods
+
+        private void GenerateMD5ChecksumCommandExecute()
         {
-            Message = "View A from your Prism Module";
+            throw new NotImplementedException();
         }
+
+        #endregion//Methods
     }
 }
