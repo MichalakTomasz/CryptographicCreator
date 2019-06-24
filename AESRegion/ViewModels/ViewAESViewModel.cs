@@ -157,9 +157,9 @@ namespace AESRegion.ViewModels
 
         private void EncryptCommandExecute()
         {
-            var byteArrayText = Encoding.Unicode.GetBytes(Text);
+            var byteArrayText = Encoding.UTF8.GetBytes(Text);
             encryptedBuffer = aesCryptographicService.Encrypt(byteArrayText, aesKey);
-            EncryptedText = Encoding.Unicode.GetString(encryptedBuffer);
+            EncryptedText = Encoding.UTF8.GetString(encryptedBuffer);
             AreActiveEncryptedData = true;
             eventAggregator.GetEvent<AESMessageSentEvent>()
                 .Publish(new AESMessage { AESAction = AESAction.Encrypt });

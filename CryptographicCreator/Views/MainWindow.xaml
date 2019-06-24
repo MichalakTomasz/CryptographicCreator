@@ -118,9 +118,9 @@
             </RibbonTab>
             <RibbonTab Header="MD5">
                 <RibbonGroup Header="File">
-                    <RibbonButton Content="Open"
-                                  Command="{Binding OpenMD5HecksumCommand }" />
-                    <RibbonButton Content="Save"
+                    <RibbonButton Label="Open"
+                                  Command="{Binding OpenMD5ChecksumCommand }" />
+                    <RibbonButton Label="Save"
                                   Command="{Binding SaveMD5ChecksumCommand }" />
                 </RibbonGroup>
             </RibbonTab>
