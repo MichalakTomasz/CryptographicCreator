@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
 
 namespace Commons
@@ -10,21 +9,25 @@ namespace Commons
     {
         #region Public Methods
 
-        public async Task SerializeAsync(byte[] data, string path)
+        public async Task SerializeAsync(byte[] buffer, string path)
         {
             try
             {
-                if (data != null && Directory.Exists(Path.GetDirectoryName(path)))
+                if (buffer != null && Directory.Exists(Path.GetDirectoryName(path)))
                 {
                     using (var binaryWriter = new BinaryWriter(File.Open(path, FileMode.OpenOrCreate)))
                     {
-                        await Task.Run(() => binaryWriter.Write(data, 0, data.Length));
+                        await Task.Run(() => 
+                        {
+                            binaryWriter.Write(buffer.Length);
+                            binaryWriter.Write(buffer, 0, buffer.Length);
+                        });
                     }
                 }
             }
             catch (Exception e)
             {
-                Debug.WriteLine($"Serialization exception: {e.Message}");
+                Debug.WriteLine($"Deserialization exception: {e.Message}");
             }
         }
 
@@ -58,7 +61,16 @@ namespace Commons
                     Directory.Exists(Path.GetDirectoryName(path)))
                 {
                     using (var fileStream = File.Open(path, FileMode.Open))
-                        return await Task.Run(() => File.ReadAllBytes(path));
+                    using (var binaryReader = new BinaryReader(fileStream))
+                    {
+                        return await Task.Run(() => 
+                        {
+                            var bufferLength = binaryReader.ReadInt32();
+                            var resultBuffer = new byte[bufferLength];
+                            binaryReader.Read(resultBuffer, 0, bufferLength);
+                            return resultBuffer;
+                        });
+                    }
                 }
                 return default(byte[]);
             }

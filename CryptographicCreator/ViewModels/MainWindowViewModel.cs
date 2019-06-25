@@ -241,29 +241,30 @@ namespace CryptographicCreator.ViewModels
 
         #region MD5
 
-        private ICommand openMD5Command;
-        public ICommand OpenMD5Command
+        private ICommand openMD5ChecksumCommand;
+        public ICommand OpenMD5ChecksumCommand
         {
             get
             {
-                if (openMD5Command == null)
-                    openMD5Command = new DelegateCommand(OpenMD5CommandExecute);
-                return openMD5Command;
+                if (openMD5ChecksumCommand == null)
+                    openMD5ChecksumCommand = new DelegateCommand(OpenMD5CommandExecute);
+                return openMD5ChecksumCommand;
             }
         }
 
-        private ICommand saveMD5Command;
-        public ICommand SaveMD5Command
+        private ICommand saveMD5ChecksumCommand;
+        public ICommand SaveMD5ChecksumCommand
         {
             get
             {
-                if (saveMD5Command == null)
-                    saveMD5Command = new DelegateCommand(SaveMD5CommandExecute);
-                return saveMD5Command;
+                if (saveMD5ChecksumCommand == null)
+                    saveMD5ChecksumCommand = new DelegateCommand(SaveMD5CommandExecute);
+                return saveMD5ChecksumCommand;
             }
         }
 
         #endregion
+
         private ICommand exitCommnad;
         public ICommand ExitCommand
         {

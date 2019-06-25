@@ -205,11 +205,11 @@ namespace RSARegion.ViewModels
 
         private void EncryptCommandExecute()
         {
-            var byteArrayText = Encoding.Unicode.GetBytes(Text);
+            var byteArrayText = Encoding.UTF8.GetBytes(Text);
             var keyToEncrypt = PrivateKeyForEncryptionDecryption ? 
                 privateAndPublicKeyParameters : publicKeyParameters; 
             encryptedData = cryptographicService.Encrypt(byteArrayText, keyToEncrypt);
-            EncryptedText = Encoding.Unicode.GetString(encryptedData);
+            EncryptedText = Encoding.UTF8.GetString(encryptedData);
             AreActiveEncryptedData = true;
             eventAggregator.GetEvent<RSAMessageSentEvent>()
                 .Publish(new RSAMessage { RSAAction = RSAAction.Encrypt });
