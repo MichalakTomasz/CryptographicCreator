@@ -47,6 +47,8 @@
     <Compile Include="Models\AESAction.cs" />
     <Compile Include="Models\AESKey.cs" />
     <Compile Include="Models\AESMessage.cs" />
+    <Compile Include="Models\ChecksumAction.cs" />
+    <Compile Include="Models\MD5Message.cs" />
     <Compile Include="Models\RSAAction.cs" />
     <Compile Include="Models\RSAMessage.cs" />
     <Compile Include="Models\RSAPairKeyParameters.cs" />

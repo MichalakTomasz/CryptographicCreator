@@ -7,7 +7,7 @@ namespace Commons
 {
     public class RSACryptographicService : IRSACryptographicService
     {
-        #region Public Methods
+        #region Methods
 
         public byte[] Encrypt(byte[] data, RSAParameters rsaParameters)
         {

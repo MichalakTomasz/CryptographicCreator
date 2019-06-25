@@ -82,6 +82,10 @@
       <Project>{09A2D4A3-ED80-4344-8FD2-09F8A14A8F28}</Project>
       <Name>Commons</Name>
     </ProjectReference>
+    <ProjectReference Include="..\EventAggregator\EventAggregator.csproj">
+      <Project>{028C4630-1634-4F39-9E6D-323F440AFCD6}</Project>
+      <Name>EventAggregator</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Page Include="Views\ViewMD5.xaml">

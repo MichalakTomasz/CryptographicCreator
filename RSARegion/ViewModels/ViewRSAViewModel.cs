@@ -176,7 +176,7 @@ namespace RSARegion.ViewModels
                     break;
                 case RSAAction.OpenEncryptedData:
                     encryptedData = rsaSerializationService.Deserialize(message.Path);
-                    EncryptedText = Encoding.Unicode.GetString(encryptedData);
+                    EncryptedText = Encoding.UTF8.GetString(encryptedData);
                     AreActiveEncryptedData = true;
                     SetKeyParametersBase();
                     message.RSAAction = RSAAction.None;
@@ -218,7 +218,7 @@ namespace RSARegion.ViewModels
         private void DecryptCommandExecute()
         {
             var decryptedData = cryptographicService.Decrypt(encryptedData, privateAndPublicKeyParameters);
-            DecryptedText = Encoding.Unicode.GetString(decryptedData);
+            DecryptedText = Encoding.UTF8.GetString(decryptedData);
             eventAggregator.GetEvent<RSAMessageSentEvent>()
                 .Publish(new RSAMessage { RSAAction = RSAAction.Decrypt });
         }

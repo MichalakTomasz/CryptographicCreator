@@ -90,6 +90,7 @@
     <Compile Include="Behaviors\RibbinButtonGenerateAESKeyBehavior.cs" />
     <Compile Include="Behaviors\RibbonButtonGenerateRSAKeysBehavior.cs" />
     <Compile Include="Behaviors\RibbonButtonOpenSaveAESKeyBehavior.cs" />
+    <Compile Include="Behaviors\RibbonButtonOpenSaveMD5HashsumBehavior.cs" />
     <Compile Include="Behaviors\RibbonButtonOpenSaveRSAKeysBehavior.cs" />
     <Compile Include="Models\FileAction.cs" />
     <Compile Include="Models\IStatusBarMessages.cs" />

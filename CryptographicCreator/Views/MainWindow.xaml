@@ -17,12 +17,17 @@
         WindowStartupLocation="CenterScreen">
     <i:Interaction.Behaviors>
         <behavior:ClosingMainWindowBehavior 
-            IsActivePrivateKey="{Binding IsActiveRSAPrivateKey, Mode=OneWay}"
-            IsActivePublicKey="{Binding IsActiveRSAPublicKey, Mode=OneWay}"
-            AreActiveEncryptedData="{Binding AreActiveRSAEncryptedData, Mode=OneWay}"
-            AreSavedEncryptedData="{Binding AreSavedRSAEncryptedData, Mode=OneWay}"
-            IsSavedPrivateKey="{Binding IsSavedRSAPrivateKey, Mode=OneWay}"
-            IsSavedPublicKey="{Binding IsSavedRSAPublicKey, Mode=OneWay}"/>
+            IsActiveRSAPrivateKey="{Binding IsActiveRSAPrivateKey, Mode=OneWay}"
+            IsActiveRSAPublicKey="{Binding IsActiveRSAPublicKey, Mode=OneWay}"
+            AreActiveRSAEncryptedData="{Binding AreActiveRSAEncryptedData, Mode=OneWay}"
+            AreSavedRSAEncryptedData="{Binding AreSavedRSAEncryptedData, Mode=OneWay}"
+            IsSavedRSAPrivateKey="{Binding IsSavedRSAPrivateKey, Mode=OneWay}"
+            IsSavedRSAPublicKey="{Binding IsSavedRSAPublicKey, Mode=OneWay}"
+            IsActiveAESKey="{Binding IsActiveAESKey, Mode=OneWay}"
+            IsSavedAESKey="{Binding IsSavedAESKey, Mode=OneWay}"
+            AreActiveAESEncryptedData="{Binding AreActiveAESEncryptedData, Mode=OneWay}"
+            IsActiveMD5Checksum="{Binding IsActiveMD5Checksum, Mode=OneWay}"
+            IsSavedMD5CheckSum="{Binding IsSavedMD5Checksum, Mode=OneWay}"/>
     </i:Interaction.Behaviors>
     <Grid>
         <Grid.RowDefinitions>
@@ -119,9 +124,27 @@
             <RibbonTab Header="MD5">
                 <RibbonGroup Header="File">
                     <RibbonButton Label="Open"
-                                  Command="{Binding OpenMD5ChecksumCommand }" />
+                                  Command="{Binding OpenMD5ChecksumCommand, Mode=OneWay}">
+                        <i:Interaction.Behaviors>
+                            <behavior:RibbonButtonOpenSaveMD5HashsumBehavior 
+                                FileAction="Open" 
+                                SelectedPath="{Binding SelectedMD5Path, Mode=OneWayToSource}"
+                                IsActiveHash="{Binding IsActiveMD5Checksum, Mode=OneWay}"
+                                ChecksumAction="{Binding ChecksumAction, Mode=OneWayToSource}"
+                                AcceptEvent="{Binding AcceptMD5Event, Mode=OneWayToSource}"/>
+                        </i:Interaction.Behaviors>
+                    </RibbonButton>
                     <RibbonButton Label="Save"
-                                  Command="{Binding SaveMD5ChecksumCommand }" />
+                                  Command="{Binding SaveMD5ChecksumCommand, Mode=OneWay}">
+                        <i:Interaction.Behaviors>
+                            <behavior:RibbonButtonOpenSaveMD5HashsumBehavior 
+                                FileAction="Open"                            
+                                SelectedPath="{Binding SelectedMD5Path, Mode=OneWayToSource}"
+                                IsActiveHash="{Binding IsActiveMD5Checksum, Mode=OneWay}"
+                                ChecksumAction="{Binding ChecksumAction, Mode=OneWayToSource}"
+                                AcceptEvent="{Binding AcceptMD5Event, Mode=OneWayToSource}" />
+                        </i:Interaction.Behaviors>
+                    </RibbonButton>
                 </RibbonGroup>
             </RibbonTab>
         </Ribbon>

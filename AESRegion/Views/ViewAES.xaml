@@ -13,7 +13,7 @@
     <UserControl.Resources>
         <comconv:BoolToBrushConverter x:Key="BoolToBrushConverter"/>
     </UserControl.Resources>
-    <DockPanel Grid.Row="1">
+    <DockPanel>
         <StackPanel DockPanel.Dock="Top"
                     Orientation="Horizontal">
             <GroupBox Header="Key">
@@ -33,12 +33,12 @@
             <ScrollViewer HorizontalScrollBarVisibility="Auto"
                           VerticalScrollBarVisibility="Auto">
                 <DockPanel IsEnabled="{Binding IsActiveKey, Mode=OneWay}">
-                    <GroupBox DockPanel.Dock="Top" 
-                  Header="Text" 
-                  Height="50">
+                    <GroupBox DockPanel.Dock="Top"
+                              Header="Text"
+                              Height="50">
                         <StackPanel Orientation="Horizontal">
                             <ScrollViewer HorizontalScrollBarVisibility="Auto"
-                          VerticalScrollBarVisibility="Auto">
+                                          VerticalScrollBarVisibility="Auto">
                                 <TextBox Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"
                                          MinWidth="500"/>
                             </ScrollViewer>
@@ -46,25 +46,27 @@
                                     Command="{Binding ClearTextCommand}"/>
                         </StackPanel>
                     </GroupBox>
-                    <StackPanel DockPanel.Dock="Top" 
-                    Orientation="Horizontal"
+                    <StackPanel DockPanel.Dock="Top"
+                                Orientation="Horizontal"
                                 Height="50">
-                        <Button Margin="4 10" 
-                                    Content="Encrypt"
-                        Command="{Binding EncryptCommand}"/>
-                        <Button Margin="4 10" 
-                                    Content="Decrypt"
-                                    Command="{Binding DecryptCommand}"/>
+                        <Button Margin="4 10"
+                                Padding="10 0"
+                                Content="Encrypt"
+                                Command="{Binding EncryptCommand}"/>
+                        <Button Margin="4 10"
+                                Padding="10 0"
+                                Content="Decrypt"
+                                Command="{Binding DecryptCommand}"/>
                     </StackPanel>
-                    <GroupBox DockPanel.Dock="Top" 
-                  Header="Encrypted text">
+                    <GroupBox DockPanel.Dock="Top"
+                              Header="Encrypted text">
                         <TextBlock Text="{Binding EncryptedText}"
                                    Height="70"/>
                     </GroupBox>
                     <GroupBox DockPanel.Dock="Top"
-                  Header="Decrypted text">
+                              Header="Decrypted text">
                         <ScrollViewer VerticalScrollBarVisibility="Auto"
-                          HorizontalScrollBarVisibility="Auto">
+                                      HorizontalScrollBarVisibility="Auto">
                             <TextBlock Text="{Binding DecryptedText}" 
                                        Height="70"/>
                         </ScrollViewer>

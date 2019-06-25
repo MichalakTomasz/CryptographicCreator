@@ -9,94 +9,192 @@ namespace CryptographicCreator.Behaviors
     {
         #region Fields
 
-        private const string privateKeyFilterExtension =
-            "Private Key (*.prk)|*.prk";
-        private const string publicKeyFilterExtension =
-            "Public Key (*.pbk)|*.pbk";
-        private const string encryptedDataFilterExtension =
-            "Encrypred data (*.enc)|*.enc";
+        private const string privateRSAKeyFilterExtension =
+            "RSA Private Key (*.prk)|*.prk";
+        private const string publicRSAKeyFilterExtension =
+            "RSA Public Key (*.pbk)|*.pbk";
+        private const string rsaEncryptedDataFilterExtension =
+            "RSA Encrypred data (*.enc)|*.enc";
+
+        private const string aesKeyFileExtension =
+            "AES Key (*.ask)|*.ask";
+        private const string aesEncryptedDataFilterExtension =
+            "AES Encrypred data (*.aed)|*.aed";
+
+        private const string md5FileFilterExtension =
+            "MD5 hash (*.md5)|*.md5";
 
         #endregion//Fields
 
         #region Dependency properties
 
-        public bool IsSavedPublicKey
-        {
-            get { return (bool)GetValue(IsSavedPublicKeyProperty); }
-            set { SetValue(IsSavedPublicKeyProperty, value); }
-        }
-        
-        public static readonly DependencyProperty IsSavedPublicKeyProperty =
-            DependencyProperty.Register(
-                "IsSavedPublicKey", 
-                typeof(bool), 
-                typeof(ClosingMainWindowBehavior), 
-                new PropertyMetadata(false));
+        #region RSA
 
-        public bool IsSavedPrivateKey
+        public bool IsSavedRSAPublicKey
         {
-            get { return (bool)GetValue(IsSavedPrivateKeyProperty); }
-            set { SetValue(IsSavedPrivateKeyProperty, value); }
+            get { return (bool)GetValue(IsSavedRSAPublicKeyProperty); }
+            set { SetValue(IsSavedRSAPublicKeyProperty, value); }
         }
-        
-        public static readonly DependencyProperty IsSavedPrivateKeyProperty =
+
+        public static readonly DependencyProperty IsSavedRSAPublicKeyProperty =
             DependencyProperty.Register(
-                "IsSavedPrivateKey", 
+                "IsSavedRSAPublicKey",
                 typeof(bool),
-                typeof(ClosingMainWindowBehavior), 
+                typeof(ClosingMainWindowBehavior),
                 new PropertyMetadata(false));
 
-        public bool AreSavedEncryptedData
+        public bool IsSavedRSAPrivateKey
         {
-            get { return (bool)GetValue(AreSavedEncryptedDataProperty); }
-            set { SetValue(AreSavedEncryptedDataProperty, value); }
+            get { return (bool)GetValue(IsSavedRSAPrivateKeyProperty); }
+            set { SetValue(IsSavedRSAPrivateKeyProperty, value); }
         }
-        
-        public static readonly DependencyProperty AreSavedEncryptedDataProperty =
+
+        public static readonly DependencyProperty IsSavedRSAPrivateKeyProperty =
             DependencyProperty.Register(
-                "AreSavedEncryptedData", 
+                "IsSavedRSAPrivateKey",
+                typeof(bool),
+                typeof(ClosingMainWindowBehavior),
+                new PropertyMetadata(false));
+
+        public bool AreSavedRSAEncryptedData
+        {
+            get { return (bool)GetValue(AreSavedRSAEncryptedDataProperty); }
+            set { SetValue(AreSavedRSAEncryptedDataProperty, value); }
+        }
+
+        public static readonly DependencyProperty AreSavedRSAEncryptedDataProperty =
+            DependencyProperty.Register(
+                "AreSavedRSAEncryptedData",
+                typeof(bool),
+                typeof(ClosingMainWindowBehavior),
+                new PropertyMetadata(false));
+
+        public bool AreActiveRSAEncryptedData
+        {
+            get { return (bool)GetValue(AreActiveRSAEncryptedDataProperty); }
+            set { SetValue(AreActiveRSAEncryptedDataProperty, value); }
+        }
+
+        public static readonly DependencyProperty AreActiveRSAEncryptedDataProperty =
+            DependencyProperty.Register(
+                "AreActiveRSAEncryptedData",
+                typeof(bool),
+                typeof(ClosingMainWindowBehavior),
+                new PropertyMetadata(false));
+
+        public bool IsActiveRSAPrivateKey
+        {
+            get { return (bool)GetValue(IsActiveRSAPrivateKeyProperty); }
+            set { SetValue(IsActiveRSAPrivateKeyProperty, value); }
+        }
+
+        public static readonly DependencyProperty IsActiveRSAPrivateKeyProperty =
+            DependencyProperty.Register(
+                "IsActiveRSAPrivateKey",
+                typeof(bool),
+                typeof(ClosingMainWindowBehavior),
+                new PropertyMetadata(false));
+
+        public bool IsActiveRSAPublicKey
+        {
+            get { return (bool)GetValue(IsActiveRSAPublicKeyProperty); }
+            set { SetValue(IsActiveRSAPublicKeyProperty, value); }
+        }
+
+        public static readonly DependencyProperty IsActiveRSAPublicKeyProperty =
+            DependencyProperty.Register(
+                "IsActiveRSAPublicKey",
+                typeof(bool),
+                typeof(ClosingMainWindowBehavior),
+                new PropertyMetadata(false));
+
+        #endregion//RSA
+
+        #region AES
+
+        public bool IsSavedAESKey
+        {
+            get { return (bool)GetValue(IsSavedAESKeyProperty); }
+            set { SetValue(IsSavedAESKeyProperty, value); }
+        }
+
+        public static readonly DependencyProperty IsSavedAESKeyProperty =
+            DependencyProperty.Register(
+                "IsSavedAESKey",
+                typeof(bool),
+                typeof(ClosingMainWindowBehavior),
+                new PropertyMetadata(false));
+
+        public bool AreSavedAESEncryptedData
+        {
+            get { return (bool)GetValue(AreSavedAESEncryptedDataProperty); }
+            set { SetValue(AreSavedAESEncryptedDataProperty, value); }
+        }
+
+        public static readonly DependencyProperty AreSavedAESEncryptedDataProperty =
+            DependencyProperty.Register(
+                "AreSavedAESEncryptedData",
+                typeof(bool),
+                typeof(ClosingMainWindowBehavior),
+                new PropertyMetadata(false));
+
+        public bool AreActiveAESEncryptedData
+        {
+            get { return (bool)GetValue(AreActiveAESEncryptedDataProperty); }
+            set { SetValue(AreActiveAESEncryptedDataProperty, value); }
+        }
+
+        public static readonly DependencyProperty AreActiveAESEncryptedDataProperty =
+            DependencyProperty.Register(
+                "AreActiveAESEncryptedData", 
                 typeof(bool), 
                 typeof(ClosingMainWindowBehavior), 
                 new PropertyMetadata(false));
 
-        public bool AreActiveEncryptedData
+        public bool IsActiveAESKey
         {
-            get { return (bool)GetValue(AreActiveEncryptedDataProperty); }
-            set { SetValue(AreActiveEncryptedDataProperty, value); }
+            get { return (bool)GetValue(IsActiveAESKeyProperty); }
+            set { SetValue(IsActiveAESKeyProperty, value); }
         }
 
-        public static readonly DependencyProperty AreActiveEncryptedDataProperty =
+        public static readonly DependencyProperty IsActiveAESKeyProperty =
             DependencyProperty.Register(
-                "AreActiveEncryptedData", 
-                typeof(bool), 
-                typeof(ClosingMainWindowBehavior), 
+                "IsActiveAESKey",
+                typeof(bool),
+                typeof(ClosingMainWindowBehavior),
                 new PropertyMetadata(false));
 
-        public bool IsActivePrivateKey
+        #endregion//AES
+
+        #region MD5
+
+        public bool IsActiveMD5Checksum
         {
-            get { return (bool)GetValue(IsActivePrivateKeyProperty); }
-            set { SetValue(IsActivePrivateKeyProperty, value); }
+            get { return (bool)GetValue(IsActiveMD5ChecksumProperty); }
+            set { SetValue(IsActiveMD5ChecksumProperty, value); }
         }
 
-        public static readonly DependencyProperty IsActivePrivateKeyProperty =
+        public static readonly DependencyProperty IsActiveMD5ChecksumProperty =
             DependencyProperty.Register(
-                "IsActivePrivateKey", 
-                typeof(bool), 
-                typeof(ClosingMainWindowBehavior), 
+                "IsActiveMD5Checksum",
+                typeof(bool),
+                typeof(ClosingMainWindowBehavior),
                 new PropertyMetadata(false));
-        
-        public bool IsActivePublicKey
+
+        public bool IsSavedMD5CheckSum
         {
-            get { return (bool)GetValue(IsActivePublicKeyProperty); }
-            set { SetValue(IsActivePublicKeyProperty, value); }
+            get { return (bool)GetValue(IsSavedMD5CheckSumProperty); }
+            set { SetValue(IsSavedMD5CheckSumProperty, value); }
         }
 
-        public static readonly DependencyProperty IsActivePublicKeyProperty =
+        public static readonly DependencyProperty IsSavedMD5CheckSumProperty =
             DependencyProperty.Register(
-                "IsActivePublicKey", 
-                typeof(bool), 
-                typeof(ClosingMainWindowBehavior), 
+                "IsSavedMD5CheckSum",
+                typeof(bool),
+                typeof(ClosingMainWindowBehavior),
                 new PropertyMetadata(false));
+
+        #endregion//MD5
 
         #endregion//Dependency properties
 
@@ -107,16 +205,17 @@ namespace CryptographicCreator.Behaviors
             base.OnAttached();
             var window = AssociatedObject as Window;
             if (window != null)
-            {
                 window.Closing += Window_Closing;
-            }
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if ((IsActivePrivateKey && !IsSavedPrivateKey) || 
-                 (IsActivePublicKey && !IsSavedPublicKey) ||
-                 (AreActiveEncryptedData && !AreSavedEncryptedData))
+            if ((IsActiveRSAPrivateKey && !IsSavedRSAPrivateKey) ||
+                 (IsActiveRSAPublicKey && !IsSavedRSAPublicKey) ||
+                 (AreActiveRSAEncryptedData && !AreSavedRSAEncryptedData ||
+                 IsActiveAESKey && !IsSavedAESKey ||
+                 AreActiveAESEncryptedData && !AreSavedAESEncryptedData ||
+                 IsActiveMD5Checksum && !IsSavedMD5CheckSum))
             {
                 var messageBoxResult = MessageBox.Show(
                     "Some data aren't saved. Do you want close application without saving? Yes - Close without saving, No - Save data and close application, Cancel - cancel exit.",
@@ -127,22 +226,39 @@ namespace CryptographicCreator.Behaviors
                 {
                     case MessageBoxResult.No:
                         var saveFile = new SaveFileDialog();
-                        if (IsActivePrivateKey && !IsSavedPrivateKey)
+                        if (IsActiveRSAPrivateKey && !IsSavedRSAPrivateKey)
                         {
-
-                            saveFile.Filter = privateKeyFilterExtension;
+                            saveFile.Filter = privateRSAKeyFilterExtension;
                             saveFile.ShowDialog();
                         }
 
-                        if (IsActivePublicKey && !IsSavedPublicKey)
+                        if (IsActiveRSAPublicKey && !IsSavedRSAPublicKey)
                         {
-                            saveFile.Filter = publicKeyFilterExtension;
+                            saveFile.Filter = publicRSAKeyFilterExtension;
                             saveFile.ShowDialog();
                         }
 
-                        if (AreActiveEncryptedData && !AreSavedEncryptedData)
+                        if (AreActiveRSAEncryptedData && !AreSavedRSAEncryptedData)
                         {
-                            saveFile.Filter = encryptedDataFilterExtension;
+                            saveFile.Filter = rsaEncryptedDataFilterExtension;
+                            saveFile.ShowDialog();
+                        }
+
+                        if (IsActiveAESKey && !IsSavedAESKey)
+                        {
+                            saveFile.Filter = aesKeyFileExtension;
+                            saveFile.ShowDialog();
+                        }
+
+                        if (AreActiveAESEncryptedData && !AreSavedAESEncryptedData)
+                        {
+                            saveFile.Filter = aesEncryptedDataFilterExtension;
+                            saveFile.ShowDialog();
+                        }
+
+                        if (IsActiveMD5Checksum && !IsSavedMD5CheckSum)
+                        {
+                            saveFile.Filter = md5FileFilterExtension;
                             saveFile.ShowDialog();
                         }
                         break;

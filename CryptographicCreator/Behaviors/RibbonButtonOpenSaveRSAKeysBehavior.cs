@@ -10,8 +10,14 @@ namespace CryptographicCreator.Behaviors
 {
     public class RibbonButtonOpenSaveRSAKeysBehavior : Behavior<RibbonButton>
     {
-        private const string fileFilterExtension = 
+        #region Fields
+
+        private const string fileFilterExtension =
             "Private Key (*.prk)|*.prk|Public Key (*.pbk)|*.pbk|Encrypred data (*.enc)|*.enc";
+
+        #endregion//Fields
+
+        #region Dependency Properties
 
         public string SelectedPath
         {
@@ -30,11 +36,11 @@ namespace CryptographicCreator.Behaviors
             get { return (FileAction)GetValue(FileActionProperty); }
             set { SetValue(FileActionProperty, value); }
         }
-        
+
         public static readonly DependencyProperty FileActionProperty =
             DependencyProperty.Register(
-                "FileAction", 
-                typeof(FileAction), 
+                "FileAction",
+                typeof(FileAction),
                 typeof(RibbonButtonOpenSaveRSAKeysBehavior));
 
         public bool IsActivePrivateKey
@@ -45,35 +51,35 @@ namespace CryptographicCreator.Behaviors
 
         public static readonly DependencyProperty IsActivePrivateKeyProperty =
             DependencyProperty.Register(
-                "IsActivePrivateKey", 
-                typeof(bool), 
-                typeof(RibbonButtonOpenSaveRSAKeysBehavior), 
+                "IsActivePrivateKey",
+                typeof(bool),
+                typeof(RibbonButtonOpenSaveRSAKeysBehavior),
                 new PropertyMetadata(false));
-        
+
         public bool IsActivePublicKey
         {
             get { return (bool)GetValue(IsActivePublicKeyProperty); }
             set { SetValue(IsActivePublicKeyProperty, value); }
         }
-        
+
         public static readonly DependencyProperty IsActivePublicKeyProperty =
             DependencyProperty.Register(
-                "IsActivePublicKey", 
-                typeof(bool), 
-                typeof(RibbonButtonOpenSaveRSAKeysBehavior), 
+                "IsActivePublicKey",
+                typeof(bool),
+                typeof(RibbonButtonOpenSaveRSAKeysBehavior),
                 new PropertyMetadata(false));
-        
+
         public bool AreActiveEncryptedData
         {
             get { return (bool)GetValue(AreActiveEncryptedDataProperty); }
             set { SetValue(AreActiveEncryptedDataProperty, value); }
         }
-        
+
         public static readonly DependencyProperty AreActiveEncryptedDataProperty =
             DependencyProperty.Register(
-                "AreActiveEncryptedData", 
-                typeof(bool), 
-                typeof(RibbonButtonOpenSaveRSAKeysBehavior), 
+                "AreActiveEncryptedData",
+                typeof(bool),
+                typeof(RibbonButtonOpenSaveRSAKeysBehavior),
                 new PropertyMetadata(false));
 
         public bool AcceptEvent
@@ -84,9 +90,9 @@ namespace CryptographicCreator.Behaviors
 
         public static readonly DependencyProperty AcceptEventProperty =
             DependencyProperty.Register(
-                "AcceptEvent", 
-                typeof(bool), 
-                typeof(RibbonButtonOpenSaveRSAKeysBehavior), 
+                "AcceptEvent",
+                typeof(bool),
+                typeof(RibbonButtonOpenSaveRSAKeysBehavior),
                 new PropertyMetadata(false));
 
         public RSAAction RSAAction
@@ -94,11 +100,11 @@ namespace CryptographicCreator.Behaviors
             get { return (RSAAction)GetValue(RSAActionProperty); }
             set { SetValue(RSAActionProperty, value); }
         }
-        
+
         public static readonly DependencyProperty RSAActionProperty =
             DependencyProperty.Register(
                 "RSAAction",
-                typeof(RSAAction), 
+                typeof(RSAAction),
                 typeof(RibbonButtonOpenSaveRSAKeysBehavior),
                 new PropertyMetadata(RSAAction.None));
 
@@ -111,6 +117,10 @@ namespace CryptographicCreator.Behaviors
                 button.Click += Button_Click;
             }
         }
+
+        #endregion//Dependency Properties
+
+        #region Methods
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -138,8 +148,8 @@ namespace CryptographicCreator.Behaviors
                     }
                     break;
                 case FileAction.Save:
-                    if (IsActivePrivateKey || 
-                        IsActivePublicKey || 
+                    if (IsActivePrivateKey ||
+                        IsActivePublicKey ||
                         AreActiveEncryptedData)
                     {
                         var saveFileDialog = new SaveFileDialog();
@@ -164,7 +174,7 @@ namespace CryptographicCreator.Behaviors
                                     break;
                             }
                             SelectedPath = saveFileDialog.FileName;
-                        }    
+                        }
                     }
                     else
                     {
@@ -188,7 +198,7 @@ namespace CryptographicCreator.Behaviors
                     return;
                 }
                 else OpenPrivateKeySequence(selectedPath);
-            }  
+            }
             else OpenPrivateKeySequence(selectedPath);
         }
 
@@ -248,5 +258,7 @@ namespace CryptographicCreator.Behaviors
             RSAAction = RSAAction.OpenEncryptedData;
             AcceptEvent = true;
         }
+
+        #endregion//Methods
     }
 }

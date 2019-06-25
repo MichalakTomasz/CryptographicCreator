@@ -27,6 +27,9 @@ namespace CryptographicCreator.Models
         AESEncryptedDataOpened,
         AESEncryptedDataSaved,
         AESDataEncrypted,
-        AESDataDecrypted
+        AESDataDecrypted,
+        MD5HashOpened,
+        MD5HashSaved,
+        MD5HashGenerated
     }
 }

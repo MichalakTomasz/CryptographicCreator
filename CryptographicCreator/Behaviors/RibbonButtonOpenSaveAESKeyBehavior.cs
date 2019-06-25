@@ -10,8 +10,14 @@ namespace CryptographicCreator.Behaviors
 {
     public class RibbonButtonOpenSaveAESKeyBehavior : Behavior<RibbonButton>
     {
+        #region Fields
+
         private const string fileFilterExtension =
             "Key (*.ask)|*.ask|Encrypred data (*.aed)|*.aed";
+
+        #endregion//Fields
+
+        #region Dependency Properties
 
         public string SelectedPath
         {
@@ -88,6 +94,10 @@ namespace CryptographicCreator.Behaviors
                 typeof(AESAction),
                 typeof(RibbonButtonOpenSaveAESKeyBehavior),
                 new PropertyMetadata(AESAction.None));
+
+        #endregion//Dependency Properties
+
+        #region Methods
 
         protected override void OnAttached()
         {
@@ -199,5 +209,7 @@ namespace CryptographicCreator.Behaviors
             AESAction = AESAction.OpenEncryptedData;
             AcceptEvent = true;
         }
+
+        #endregion//Methods
     }
 }

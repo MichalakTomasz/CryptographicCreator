@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AESMessageSentEvent.cs" />
+    <Compile Include="MD5MessageSentEvent.cs" />
     <Compile Include="RSAMessageSentEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

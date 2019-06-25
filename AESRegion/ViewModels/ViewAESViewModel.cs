@@ -136,7 +136,7 @@ namespace AESRegion.ViewModels
                     break;
                 case AESAction.OpenEncryptedData:
                     encryptedBuffer = aesSerializaionService.Deserialize(message.Path);   
-                    EncryptedText = Encoding.Unicode.GetString(encryptedBuffer);
+                    EncryptedText = Encoding.UTF8.GetString(encryptedBuffer);
                     Text = string.Empty;
                     AreActiveEncryptedData = true;
                     message.AESAction = AESAction.None;
@@ -171,7 +171,7 @@ namespace AESRegion.ViewModels
         private void DecryptCommandExecute()
         {
             var decryptedData = aesCryptographicService.Decrypt(encryptedBuffer, aesKey);
-            DecryptedText = Encoding.Unicode.GetString(decryptedData);
+            DecryptedText = Encoding.UTF8.GetString(decryptedData);
             eventAggregator.GetEvent<AESMessageSentEvent>()
                 .Publish(new AESMessage { AESAction = AESAction.Decrypt });
         }

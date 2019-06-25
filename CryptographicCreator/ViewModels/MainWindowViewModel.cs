@@ -28,6 +28,7 @@ namespace CryptographicCreator.ViewModels
             this.statusBarMessages = statusBarMessages;
             this.eventAggregator.GetEvent<RSAMessageSentEvent>().Subscribe(ExecuteRSAMessage);
             this.eventAggregator.GetEvent<AESMessageSentEvent>().Subscribe(ExecuteAESMessage);
+            this.eventAggregator.GetEvent<MD5MessageSentEvent>().Subscribe(ExecuteMD5Message);
         }
 
         #endregion//Constructor
@@ -152,6 +153,40 @@ namespace CryptographicCreator.ViewModels
             set { SetProperty(ref areSavedAESEncryptedData, value); }
         }
 
+        #endregion//AES
+
+        #region MD5
+
+        private string selectedMD5Path;
+        public string SelectedMD5Path
+        {
+            get { return selectedMD5Path; }
+            set { SetProperty(ref selectedMD5Path, value); }
+        }
+
+        private bool isActiveMD5checksum;
+        public bool IsActiveMD5Checksum
+        {
+            get { return isActiveMD5checksum; }
+            set { SetProperty(ref isActiveMD5checksum, value); }
+        }
+
+        private bool acceptMD5Event;
+        public bool AcceptMD5Event
+        {
+            get { return acceptMD5Event; }
+            set { SetProperty(ref acceptMD5Event, value); }
+        }
+
+        private bool isSavedMD5Checksum;
+        public bool IsSavedMD5Checksum
+        {
+            get { return isSavedMD5Checksum; }
+            set { SetProperty(ref isSavedMD5Checksum, value); }
+        }
+
+        #endregion//MD5
+
         private string statusBarLog;
         public string StatusBarLog
         {
@@ -159,7 +194,12 @@ namespace CryptographicCreator.ViewModels
             set { SetProperty(ref statusBarLog, value); }
         }
 
-        #endregion//AES
+        private ChecksumAction checksumAction;
+        public ChecksumAction ChecksumAction
+        {
+            get { return checksumAction; }
+            set { SetProperty(ref checksumAction, value); }
+        }
 
         #endregion//Properties
 
@@ -263,7 +303,7 @@ namespace CryptographicCreator.ViewModels
             }
         }
 
-        #endregion
+        #endregion//MD5
 
         private ICommand exitCommnad;
         public ICommand ExitCommand
@@ -489,10 +529,27 @@ namespace CryptographicCreator.ViewModels
 
         private void OpenMD5CommandExecute()
         {
-            throw new NotImplementedException();
+            if (AcceptMD5Event)
+            {
+                eventAggregator.GetEvent<MD5MessageSentEvent>()
+                    .Publish(new MD5Message { HahshsumAction = ChecksumAction.Open });
+                IsActiveMD5Checksum = true;
+                StatusBarLog = statusBarMessages[StatusBarMessage.MD5HashOpened];
+            }
         }
 
         private void SaveMD5CommandExecute()
+        {
+            if (AcceptMD5Event)
+            {
+                eventAggregator.GetEvent<MD5MessageSentEvent>()
+                .Publish(new MD5Message { HahshsumAction = ChecksumAction, Path = SelectedMD5Path });
+                IsSavedMD5Checksum = false;
+                StatusBarLog = statusBarMessages[StatusBarMessage.MD5HashSaved];
+            }
+        }
+
+        private void ExecuteMD5Message(MD5Message message)
         {
             throw new NotImplementedException();
         }
