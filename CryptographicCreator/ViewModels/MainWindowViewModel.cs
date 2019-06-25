@@ -4,7 +4,6 @@ using EventAggregator;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using System;
 using System.Windows.Input;
 
 namespace CryptographicCreator.ViewModels
@@ -169,6 +168,13 @@ namespace CryptographicCreator.ViewModels
         {
             get { return isActiveMD5checksum; }
             set { SetProperty(ref isActiveMD5checksum, value); }
+        }
+
+        private bool isActiveMD5ChecksumToCompare;
+        public bool IsActiveMD5ChecksumToCompare
+        {
+            get { return isActiveMD5ChecksumToCompare; }
+            set { SetProperty(ref isActiveMD5ChecksumToCompare, value); }
         }
 
         private bool acceptMD5Event;
@@ -532,9 +538,9 @@ namespace CryptographicCreator.ViewModels
             if (AcceptMD5Event)
             {
                 eventAggregator.GetEvent<MD5MessageSentEvent>()
-                    .Publish(new MD5Message { HahshsumAction = ChecksumAction.Open });
-                IsActiveMD5Checksum = true;
-                StatusBarLog = statusBarMessages[StatusBarMessage.MD5HashOpened];
+                    .Publish(new MD5Message { HahshsumAction = ChecksumAction.Open, Path = SelectedMD5Path });
+                IsActiveMD5ChecksumToCompare = true;
+                StatusBarLog = statusBarMessages[StatusBarMessage.MD5ChecksumOpened];
             }
         }
 
@@ -544,14 +550,18 @@ namespace CryptographicCreator.ViewModels
             {
                 eventAggregator.GetEvent<MD5MessageSentEvent>()
                 .Publish(new MD5Message { HahshsumAction = ChecksumAction, Path = SelectedMD5Path });
-                IsSavedMD5Checksum = false;
-                StatusBarLog = statusBarMessages[StatusBarMessage.MD5HashSaved];
+                IsSavedMD5Checksum = true;
+                StatusBarLog = statusBarMessages[StatusBarMessage.MD5ChecksumhSaved];
             }
         }
 
         private void ExecuteMD5Message(MD5Message message)
         {
-            throw new NotImplementedException();
+            if (message.HahshsumAction == ChecksumAction.Generate)
+            {
+                IsActiveMD5Checksum = true;
+                StatusBarLog = statusBarMessages[StatusBarMessage.MD5ChecksumGenerated];
+            }
         }
 
         #endregion

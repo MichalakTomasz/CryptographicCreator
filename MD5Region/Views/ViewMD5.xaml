@@ -30,12 +30,12 @@
                                  MinWidth="200"
                                  Height="50"
                                  Margin="10"
-                                 Text="{Binding MD5Hash, Mode=OneWay}" />
+                                 Text="{Binding MD5Checksum, Mode=OneWay}" />
                     </StackPanel>
                 </GroupBox>
                 <GroupBox Header="Checksum to compare">
                     <StackPanel>
-                        <TextBox Text="{Binding ChecksumToCompare, Mode=OneWay}"
+                        <TextBox Text="{Binding ChecksumToCompareText, Mode=OneWay}"
                                  IsEnabled="False"
                                  Height="50" 
                                  Margin="10"/>
@@ -48,7 +48,8 @@
                                        Text="{Binding ChecksumsCompareText,Mode=OneWay}" 
                                        HorizontalAlignment="Left"
                                        Margin="10"/>
-                            <Button Grid.Column="1" Command="{Binding CompareCommand, Mode=OneWay}"
+                            <Button Grid.Column="1" 
+                                    Command="{Binding CompareCommand, Mode=OneWay}"
                                     Content="Compare"
                                     HorizontalAlignment="Right"
                                     Padding="10 3"

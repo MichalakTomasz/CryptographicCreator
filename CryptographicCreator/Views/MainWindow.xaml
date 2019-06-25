@@ -129,7 +129,7 @@
                             <behavior:RibbonButtonOpenSaveMD5HashsumBehavior 
                                 FileAction="Open" 
                                 SelectedPath="{Binding SelectedMD5Path, Mode=OneWayToSource}"
-                                IsActiveHash="{Binding IsActiveMD5Checksum, Mode=OneWay}"
+                                IsActiveChecksum="{Binding IsActiveMD5Checksum, Mode=OneWay}"
                                 ChecksumAction="{Binding ChecksumAction, Mode=OneWayToSource}"
                                 AcceptEvent="{Binding AcceptMD5Event, Mode=OneWayToSource}"/>
                         </i:Interaction.Behaviors>
@@ -138,9 +138,10 @@
                                   Command="{Binding SaveMD5ChecksumCommand, Mode=OneWay}">
                         <i:Interaction.Behaviors>
                             <behavior:RibbonButtonOpenSaveMD5HashsumBehavior 
-                                FileAction="Open"                            
+                                FileAction="Save"                            
                                 SelectedPath="{Binding SelectedMD5Path, Mode=OneWayToSource}"
-                                IsActiveHash="{Binding IsActiveMD5Checksum, Mode=OneWay}"
+                                IsActiveChecksum="{Binding IsActiveMD5Checksum, Mode=OneWay}"
+                                IsSavedChecksum="{Binding IsSavedMD5Checksum, Mode=OneWay}"
                                 ChecksumAction="{Binding ChecksumAction, Mode=OneWayToSource}"
                                 AcceptEvent="{Binding AcceptMD5Event, Mode=OneWayToSource}" />
                         </i:Interaction.Behaviors>

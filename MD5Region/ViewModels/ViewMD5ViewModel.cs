@@ -40,18 +40,18 @@ namespace MD5Region.ViewModels
             set { SetProperty(ref text, value); }
         }
 
-        private string md5Hash;
-        public string MD5Hash
+        private string md5Checksum;
+        public string MD5Checksum
         {
-            get { return md5Hash; }
-            set { SetProperty(ref md5Hash, value); }
+            get { return md5Checksum; }
+            set { SetProperty(ref md5Checksum, value); }
         }
 
-        private string checksumToCompare;
-        public string ChecksumToCompare
+        private string checksumToCompareText;
+        public string ChecksumToCompareText
         {
-            get { return checksumToCompare; }
-            set { SetProperty(ref checksumToCompare, value); }
+            get { return checksumToCompareText; }
+            set { SetProperty(ref checksumToCompareText, value); }
         }
 
         private string checksumsCompareText;
@@ -86,9 +86,9 @@ namespace MD5Region.ViewModels
                 if (compareCommand == null)
                     compareCommand = new DelegateCommand(CompareCommandExecute,
                         CompareCommandCanExecute)
-                        .ObservesProperty(() => Text)
-                        .ObservesProperty(() => ChecksumToCompare);
-                return generateMD5ChecksumCommand;
+                        .ObservesProperty(() => MD5Checksum)
+                        .ObservesProperty(() => ChecksumsCompareText);
+                return compareCommand;
             }
         }
 
@@ -99,34 +99,32 @@ namespace MD5Region.ViewModels
         private void GenerateMD5ChecksumCommandExecute()
         {
             var buffer = Encoding.UTF8.GetBytes(Text);
-            hashsumBuffer = md5HashService.GetHash(buffer);
-            var stringBuilder = new StringBuilder();
-            foreach (var item in hashsumBuffer)
-                stringBuilder.Append(item.ToString("x2"));
-            MD5Hash = stringBuilder.ToString();
+            checkSumBuffer = md5HashService.GetHash(buffer);
+            MD5Checksum = GetChecksum(checkSumBuffer);
+            eventAggregator.GetEvent<MD5MessageSentEvent>()
+                .Publish(new MD5Message { HahshsumAction = ChecksumAction.Generate });
         }
 
         private bool GnerateMD5ChecksumCommandCanExecute()
             => Text?.Length > 0;
 
         private bool CompareCommandCanExecute()
-            => Text?.Length > 0 && ChecksumToCompare.Length > 0;
+            => MD5Checksum?.Length > 0 && ChecksumToCompareText.Length > 0;
 
         private void CompareCommandExecute()
         {
             bool areTheSameChecksum = false;
-            if (hashsumBuffer != null && hashsumBufferToCompare != null &&
-                hashsumBuffer.Length == hashsumBufferToCompare.Length)
+            if (checkSumBuffer != null && checksumBufferToCompare != null &&
+                checkSumBuffer.Length == checksumBufferToCompare.Length)
             {
                 var i = 0;
-                while (i < hashsumBuffer.Length && hashsumBuffer[i] != hashsumBufferToCompare[i])
+                while (i < checkSumBuffer.Length && checkSumBuffer[i] != checksumBufferToCompare[i])
                     i++;
-                areTheSameChecksum = i < hashsumBuffer.Length;
+                areTheSameChecksum = i < checkSumBuffer.Length;
             }
             ChecksumsCompareText =  areTheSameChecksum ? 
                 "Checksums are the same" :
                 "Checksums are different";
-
         }
 
         private void ExecuteMessage(MD5Message message)
@@ -134,14 +132,22 @@ namespace MD5Region.ViewModels
             switch (message.HahshsumAction)
             {
                 case ChecksumAction.Open:
-                    hashsumBufferToCompare = serializationService.Deserialize(message.Path);
-                    
+                    checksumBufferToCompare = serializationService.Deserialize(message.Path);
+                    ChecksumToCompareText = GetChecksum(checksumBufferToCompare);
                     break;
                 case ChecksumAction.Save:
-                    serializationService.Serialize(hashsumBuffer, message.Path);
+                    serializationService.Serialize(checkSumBuffer, message.Path);
                     message.HahshsumAction = ChecksumAction.None;
                     break;
             }
+        }
+
+        private string GetChecksum(byte[] buffer)
+        {
+            var stringBuilder = new StringBuilder();
+            foreach (var item in buffer)
+                stringBuilder.Append(item.ToString("x2"));
+            return stringBuilder.ToString();
         }
 
         #endregion//Methods
@@ -152,8 +158,8 @@ namespace MD5Region.ViewModels
         private readonly IEventAggregator eventAggregator;
         private readonly ISerializationService serializationService;
 
-        private byte[] hashsumBuffer;
-        private byte[] hashsumBufferToCompare;
+        private byte[] checkSumBuffer;
+        private byte[] checksumBufferToCompare;
 
         #endregion//Fields
     }

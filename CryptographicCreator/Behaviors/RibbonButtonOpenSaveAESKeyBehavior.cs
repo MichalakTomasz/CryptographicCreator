@@ -153,6 +153,7 @@ namespace CryptographicCreator.Behaviors
                                     break;
                             }
                             SelectedPath = saveFileDialog.FileName;
+                            AcceptEvent = true;
                         }
                     }
                     else AcceptEvent = false;

@@ -1,12 +1,6 @@
 ﻿using Commons;
 using CryptographicCreator.Models;
 using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.Ribbon;
 using System.Windows.Interactivity;
@@ -32,9 +26,9 @@ namespace CryptographicCreator.Behaviors
 
         public static readonly DependencyProperty SelectedPathProperty =
             DependencyProperty.Register(
-                "SelectedPath", 
-                typeof(string), 
-                typeof(RibbonButtonOpenSaveMD5HashsumBehavior), 
+                "SelectedPath",
+                typeof(string),
+                typeof(RibbonButtonOpenSaveMD5HashsumBehavior),
                 new PropertyMetadata(string.Empty));
 
         public FileAction FileAction
@@ -45,8 +39,8 @@ namespace CryptographicCreator.Behaviors
 
         public static readonly DependencyProperty FileActionProperty =
             DependencyProperty.Register(
-                "FileAction", 
-                typeof(FileAction), 
+                "FileAction",
+                typeof(FileAction),
                 typeof(RibbonButtonOpenSaveMD5HashsumBehavior));
 
         public ChecksumAction ChecksumAction
@@ -57,23 +51,36 @@ namespace CryptographicCreator.Behaviors
 
         public static readonly DependencyProperty ChecksumActionProperty =
             DependencyProperty.Register(
-                "ChecksumAction", 
-                typeof(ChecksumAction), 
-                typeof(RibbonButtonOpenSaveMD5HashsumBehavior), 
+                "ChecksumAction",
+                typeof(ChecksumAction),
+                typeof(RibbonButtonOpenSaveMD5HashsumBehavior),
                 new PropertyMetadata(ChecksumAction.None));
 
-        public bool IsActiveHash
+        public bool IsActiveChecksum
         {
-            get { return (bool)GetValue(IsActiveHashProperty); }
-            set { SetValue(IsActiveHashProperty, value); }
+            get { return (bool)GetValue(IsActiveChecksumProperty); }
+            set { SetValue(IsActiveChecksumProperty, value); }
         }
 
-        public static readonly DependencyProperty IsActiveHashProperty =
+        public static readonly DependencyProperty IsActiveChecksumProperty =
             DependencyProperty.Register(
-                "IsActiveHash", 
+                "IsActiveChecksum",
+                typeof(bool),
+                typeof(RibbonButtonOpenSaveMD5HashsumBehavior),
+                new PropertyMetadata(null));
+
+        public bool IsSavedChecksum
+        {
+            get { return (bool)GetValue(IsSavedChecksumProperty); }
+            set { SetValue(IsSavedChecksumProperty, value); }
+        }
+
+        public static readonly DependencyProperty IsSavedChecksumProperty =
+            DependencyProperty.Register(
+                "IsSavedChecksum", 
                 typeof(bool), 
                 typeof(RibbonButtonOpenSaveMD5HashsumBehavior), 
-                new PropertyMetadata(null));
+                new PropertyMetadata(false));
 
         public bool AcceptEvent
         {
@@ -83,11 +90,11 @@ namespace CryptographicCreator.Behaviors
 
         public static readonly DependencyProperty AcceptEventProperty =
             DependencyProperty.Register(
-                "AcceptEvent", 
-                typeof(bool), 
-                typeof(RibbonButtonOpenSaveMD5HashsumBehavior), 
+                "AcceptEvent",
+                typeof(bool),
+                typeof(RibbonButtonOpenSaveMD5HashsumBehavior),
                 new PropertyMetadata(false));
-        
+
         #endregion//Dependency Properties
 
         #region Methods
@@ -109,32 +116,27 @@ namespace CryptographicCreator.Behaviors
                     openFileDialog.Filter = fileFilterExtension;
                     if (openFileDialog.ShowDialog().Value)
                     {
-                        var selectedPath = openFileDialog.FileName;
-                        if (IsActiveHash)
-                        {
-                            if (MessageBox.Show(
-                                "MD5 checksum is opened, overide this checksum?",
-                                "Attention",
-                                MessageBoxButton.YesNo,
-                                MessageBoxImage.Question) == MessageBoxResult.No)
-                            {
-                                AcceptEvent = false;
-                            }
-                            else OpenMD5HashsumSequence(selectedPath);
-                        }
-                        else OpenMD5HashsumSequence(selectedPath);
+                        SelectedPath = openFileDialog.FileName;
+                        ChecksumAction = ChecksumAction.Open;
+                        AcceptEvent = true;
                     }
                     break;
                 case FileAction.Save:
+                    if (IsActiveChecksum)
+                    {
+                        var saveFileDialog = new SaveFileDialog();
+                        saveFileDialog.Filter = fileFilterExtension;
+                        if (saveFileDialog.ShowDialog().Value)
+                        {
+                            var selectedPath = saveFileDialog.FileName;
+                            SelectedPath = selectedPath;
+                            AcceptEvent = true;
+                            ChecksumAction = ChecksumAction.Save;
+                        }
+                    }
+                    else AcceptEvent = false;
                     break;
             }
-        }
-
-        private void OpenMD5HashsumSequence(string selectedPath)
-        {
-            SelectedPath = selectedPath;
-            ChecksumAction = ChecksumAction.Open;
-            AcceptEvent = true;
         }
 
         #endregion//Methods
