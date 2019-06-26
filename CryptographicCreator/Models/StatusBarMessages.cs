@@ -30,9 +30,9 @@ namespace CryptographicCreator.Models
                 [StatusBarMessage.AESEncryptedDataOpened] = "AES encrypted data opened successful",
                 [StatusBarMessage.AESEncryptedDataSaved] = "AES encrypted data saved successful",
                 [StatusBarMessage.AESDataEncrypted] = "AES data encrypted successful",
-                [StatusBarMessage.MD5HashGenerated] = "MD5 hashsum generated successful",
-                [StatusBarMessage.MD5HashOpened] = "MD5 hashsum opened successful",
-                [StatusBarMessage.MD5HashSaved] = "MD5 hashsum saved successful",
+                [StatusBarMessage.MD5ChecksumGenerated] = "MD5 hashsum generated successful",
+                [StatusBarMessage.MD5ChecksumOpened] = "MD5 hashsum opened successful",
+                [StatusBarMessage.MD5ChecksumhSaved] = "MD5 hashsum saved successful",
             };
 
         public string this[StatusBarMessage message]

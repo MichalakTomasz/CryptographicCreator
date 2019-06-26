@@ -28,8 +28,8 @@ namespace CryptographicCreator.Models
         AESEncryptedDataSaved,
         AESDataEncrypted,
         AESDataDecrypted,
-        MD5HashOpened,
-        MD5HashSaved,
-        MD5HashGenerated
+        MD5ChecksumOpened,
+        MD5ChecksumhSaved,
+        MD5ChecksumGenerated
     }
 }
