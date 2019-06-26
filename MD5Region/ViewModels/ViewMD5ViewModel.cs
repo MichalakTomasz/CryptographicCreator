@@ -87,7 +87,7 @@ namespace MD5Region.ViewModels
                     compareCommand = new DelegateCommand(CompareCommandExecute,
                         CompareCommandCanExecute)
                         .ObservesProperty(() => MD5Checksum)
-                        .ObservesProperty(() => ChecksumsCompareText);
+                        .ObservesProperty(() => checksumBufferToCompare);
                 return compareCommand;
             }
         }
@@ -102,14 +102,14 @@ namespace MD5Region.ViewModels
             checkSumBuffer = md5HashService.GetHash(buffer);
             MD5Checksum = GetChecksum(checkSumBuffer);
             eventAggregator.GetEvent<MD5MessageSentEvent>()
-                .Publish(new MD5Message { HahshsumAction = ChecksumAction.Generate });
+                .Publish(new MD5Message { ChecksumAction = ChecksumAction.Generate });
         }
 
         private bool GnerateMD5ChecksumCommandCanExecute()
             => Text?.Length > 0;
 
         private bool CompareCommandCanExecute()
-            => MD5Checksum?.Length > 0 && ChecksumToCompareText.Length > 0;
+            => MD5Checksum?.Length > 0 && ChecksumToCompareText?.Length > 0;
 
         private void CompareCommandExecute()
         {
@@ -129,7 +129,7 @@ namespace MD5Region.ViewModels
 
         private void ExecuteMessage(MD5Message message)
         {
-            switch (message.HahshsumAction)
+            switch (message.ChecksumAction)
             {
                 case ChecksumAction.Open:
                     checksumBufferToCompare = serializationService.Deserialize(message.Path);
@@ -137,7 +137,7 @@ namespace MD5Region.ViewModels
                     break;
                 case ChecksumAction.Save:
                     serializationService.Serialize(checkSumBuffer, message.Path);
-                    message.HahshsumAction = ChecksumAction.None;
+                    message.ChecksumAction = ChecksumAction.None;
                     break;
             }
         }

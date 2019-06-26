@@ -1,6 +1,4 @@
-﻿using AESRegion.Views;
-using RSARegion.Views;
-using Prism.Ioc;
+﻿using Prism.Ioc;
 using Prism.Regions;
 using System.Windows.Controls;
 using System.Windows.Controls.Ribbon;

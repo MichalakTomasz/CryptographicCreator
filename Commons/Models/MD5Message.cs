@@ -2,7 +2,7 @@
 {
     public class MD5Message
     {
-        public ChecksumAction HahshsumAction { get; set; }
+        public ChecksumAction ChecksumAction { get; set; }
         public string Path { get; set; }
     }
 }

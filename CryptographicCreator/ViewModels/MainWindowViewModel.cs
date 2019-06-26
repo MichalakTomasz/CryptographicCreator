@@ -1,9 +1,13 @@
 ﻿using Commons;
 using CryptographicCreator.Models;
 using EventAggregator;
+using Microsoft.Win32;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
+using System;
+using System.ComponentModel;
+using System.Windows;
 using System.Windows.Input;
 
 namespace CryptographicCreator.ViewModels
@@ -14,6 +18,21 @@ namespace CryptographicCreator.ViewModels
 
         private readonly IEventAggregator eventAggregator;
         private readonly IStatusBarMessages statusBarMessages;
+
+        private const string privateRSAKeyFilterExtension =
+            "RSA Private Key (*.prk)|*.prk";
+        private const string publicRSAKeyFilterExtension =
+            "RSA Public Key (*.pbk)|*.pbk";
+        private const string rsaEncryptedDataFilterExtension =
+            "RSA Encrypred data (*.enc)|*.enc";
+
+        private const string aesKeyFileExtension =
+            "AES Key (*.ask)|*.ask";
+        private const string aesEncryptedDataFilterExtension =
+            "AES Encrypred data (*.aed)|*.aed";
+
+        private const string md5FileFilterExtension =
+            "MD5 hash (*.md5)|*.md5";
 
         #endregion//Fiels
 
@@ -311,6 +330,17 @@ namespace CryptographicCreator.ViewModels
 
         #endregion//MD5
 
+        private ICommand closingCommnad;
+        public ICommand ClosingCommand
+        {
+            get
+            {
+                if (closingCommnad == null)
+                    closingCommnad = new DelegateCommand<CancelEventArgs>(ClosingCommandExecute);
+                return closingCommnad;
+            }
+        }
+
         private ICommand exitCommnad;
         public ICommand ExitCommand
         {
@@ -538,7 +568,7 @@ namespace CryptographicCreator.ViewModels
             if (AcceptMD5Event)
             {
                 eventAggregator.GetEvent<MD5MessageSentEvent>()
-                    .Publish(new MD5Message { HahshsumAction = ChecksumAction.Open, Path = SelectedMD5Path });
+                    .Publish(new MD5Message { ChecksumAction = ChecksumAction.Open, Path = SelectedMD5Path });
                 IsActiveMD5ChecksumToCompare = true;
                 StatusBarLog = statusBarMessages[StatusBarMessage.MD5ChecksumOpened];
             }
@@ -549,7 +579,7 @@ namespace CryptographicCreator.ViewModels
             if (AcceptMD5Event)
             {
                 eventAggregator.GetEvent<MD5MessageSentEvent>()
-                .Publish(new MD5Message { HahshsumAction = ChecksumAction, Path = SelectedMD5Path });
+                .Publish(new MD5Message { ChecksumAction = ChecksumAction, Path = SelectedMD5Path });
                 IsSavedMD5Checksum = true;
                 StatusBarLog = statusBarMessages[StatusBarMessage.MD5ChecksumhSaved];
             }
@@ -557,7 +587,7 @@ namespace CryptographicCreator.ViewModels
 
         private void ExecuteMD5Message(MD5Message message)
         {
-            if (message.HahshsumAction == ChecksumAction.Generate)
+            if (message.ChecksumAction == ChecksumAction.Generate)
             {
                 IsActiveMD5Checksum = true;
                 StatusBarLog = statusBarMessages[StatusBarMessage.MD5ChecksumGenerated];
@@ -566,8 +596,140 @@ namespace CryptographicCreator.ViewModels
 
         #endregion
 
+        #region Commons
+
+        private void ClosingCommandExecute(CancelEventArgs eventArgs)
+        {
+            if ((IsActiveRSAPrivateKey && !IsSavedRSAPrivateKey) ||
+                 (IsActiveRSAPublicKey && !IsSavedRSAPublicKey) ||
+                 (AreActiveRSAEncryptedData && !AreSavedRSAEncryptedData ||
+                 IsActiveAESKey && !IsSavedAESKey ||
+                 AreActiveAESEncryptedData && !AreSavedAESEncryptedData ||
+                 IsActiveMD5Checksum && !IsSavedMD5Checksum))
+            {
+                var messageBoxResult = MessageBox.Show(
+                    "Some data aren't saved. Do you want to save any date before exit? Yes" +
+                    " - Save data and close application, No - Close without saving, Cancel - cancel exit.",
+                    "Attention",
+                    MessageBoxButton.YesNoCancel,
+                    MessageBoxImage.Question);
+                switch (messageBoxResult)
+                {
+                    case MessageBoxResult.Yes:
+                        var saveFile = new SaveFileDialog();
+                        if (IsActiveRSAPrivateKey && !IsSavedRSAPrivateKey)
+                            SaveSequenceRSAPrivateKey();
+
+                        if (IsActiveRSAPublicKey && !IsSavedRSAPublicKey)
+                            SaveSequenceRSAPublicKey();
+
+                        if (AreActiveRSAEncryptedData && !AreSavedRSAEncryptedData)
+                            SaveSequenceRSAEncryptedData();
+
+                        if (IsActiveAESKey && !IsSavedAESKey)
+                            SaveSequenceAESKey();
+
+                        if (AreActiveAESEncryptedData && !AreSavedAESEncryptedData)
+                            SaveSequenceAESEncryptedData();
+
+                        if (IsActiveMD5Checksum && !IsSavedMD5Checksum)
+                            SaveSequenceMD5Checksum();
+                        break;
+                    case MessageBoxResult.Cancel:
+                        eventArgs.Cancel = true;
+                        break;
+                }
+            }
+        }
+
         private void ExitCommandExecute()
             => App.Current.MainWindow.Close();
+
+        private void SaveSequenceRSAPrivateKey()
+        {
+            var saveFile = new SaveFileDialog();
+            saveFile.Filter = privateRSAKeyFilterExtension;
+            if (saveFile.ShowDialog().Value)
+            {
+                eventAggregator.GetEvent<RSAMessageSentEvent>().Publish(new RSAMessage
+                {
+                    RSAAction = RSAAction.SavePrivateAndPublicKey,
+                    Path = saveFile.FileName
+                });
+            }
+        }
+
+        private void SaveSequenceRSAPublicKey()
+        {
+            var saveFile = new SaveFileDialog();
+            saveFile.Filter = publicRSAKeyFilterExtension;
+            if (saveFile.ShowDialog().Value)
+            {
+                eventAggregator.GetEvent<RSAMessageSentEvent>().Publish(new RSAMessage
+                {
+                    RSAAction = RSAAction.SavePublicKey,
+                    Path = saveFile.FileName
+                });
+            }
+        }
+
+        private void SaveSequenceRSAEncryptedData()
+        {
+            var saveFile = new SaveFileDialog();
+            saveFile.Filter = rsaEncryptedDataFilterExtension;
+            if (saveFile.ShowDialog().Value)
+            {
+                eventAggregator.GetEvent<RSAMessageSentEvent>().Publish(new RSAMessage
+                {
+                    RSAAction = RSAAction.SaveEncryptedData,
+                    Path = saveFile.FileName
+                });
+            }
+        }
+
+        private void SaveSequenceAESKey()
+        {
+            var saveFile = new SaveFileDialog();
+            saveFile.Filter = aesKeyFileExtension;
+            if (saveFile.ShowDialog().Value)
+            {
+                eventAggregator.GetEvent<AESMessageSentEvent>().Publish(new AESMessage
+                {
+                    AESAction = AESAction.SaveKey,
+                    Path = saveFile.FileName
+                });
+            }
+        }
+
+        private void SaveSequenceAESEncryptedData()
+        {
+            var saveFile = new SaveFileDialog();
+            saveFile.Filter = aesEncryptedDataFilterExtension;
+            if (saveFile.ShowDialog().Value)
+            {
+                eventAggregator.GetEvent<AESMessageSentEvent>().Publish(new AESMessage
+                {
+                    AESAction = AESAction.SaveEncryptedData,
+                    Path = saveFile.FileName
+                });
+            }
+        }
+
+        private void SaveSequenceMD5Checksum()
+        {
+            var saveFile = new SaveFileDialog();
+            saveFile.Filter = md5FileFilterExtension;
+            if (saveFile.ShowDialog().Value)
+            {
+                eventAggregator.GetEvent<MD5MessageSentEvent>().Publish(new MD5Message
+                {
+                    ChecksumAction = ChecksumAction.Save,
+                    Path = saveFile.FileName
+                });
+            }
+        }
+
+        #endregion//Commons
 
         #endregion//Methods
     }

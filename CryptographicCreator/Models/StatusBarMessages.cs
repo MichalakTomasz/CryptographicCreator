@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace CryptographicCreator.Models
 {
@@ -30,9 +26,9 @@ namespace CryptographicCreator.Models
                 [StatusBarMessage.AESEncryptedDataOpened] = "AES encrypted data opened successful",
                 [StatusBarMessage.AESEncryptedDataSaved] = "AES encrypted data saved successful",
                 [StatusBarMessage.AESDataEncrypted] = "AES data encrypted successful",
-                [StatusBarMessage.MD5ChecksumGenerated] = "MD5 hashsum generated successful",
-                [StatusBarMessage.MD5ChecksumOpened] = "MD5 hashsum opened successful",
-                [StatusBarMessage.MD5ChecksumhSaved] = "MD5 hashsum saved successful",
+                [StatusBarMessage.MD5ChecksumGenerated] = "MD5 checksum generated successful",
+                [StatusBarMessage.MD5ChecksumOpened] = "MD5 checksum opened successful",
+                [StatusBarMessage.MD5ChecksumhSaved] = "MD5 checksum saved successful",
             };
 
         public string this[StatusBarMessage message]
