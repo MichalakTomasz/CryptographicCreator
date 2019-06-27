@@ -30,6 +30,9 @@ namespace CryptographicCreator.Views
                 case "MD5":
                     regionManager.RequestNavigate("ContentRegion", "ViewMD5");
                     break;
+                case "SHA512":
+                    regionManager.RequestNavigate("ContentRegion", "ViewSHA512");
+                    break;
             }
         }
     }

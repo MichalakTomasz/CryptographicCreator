@@ -86,11 +86,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Behaviors\RibbinButtonGenerateAESKeyBehavior.cs" />
+    <Compile Include="Behaviors\RibbonButtonGenerateAESKeyBehavior.cs" />
     <Compile Include="Behaviors\RibbonButtonGenerateRSAKeysBehavior.cs" />
     <Compile Include="Behaviors\RibbonButtonOpenSaveAESKeyBehavior.cs" />
     <Compile Include="Behaviors\RibbonButtonOpenSaveMD5HashsumBehavior.cs" />
     <Compile Include="Behaviors\RibbonButtonOpenSaveRSAKeysBehavior.cs" />
+    <Compile Include="Behaviors\RibbonButtonOpenSaveSHA512HashsumBehavior.cs" />
     <Compile Include="Models\FileAction.cs" />
     <Compile Include="Models\IStatusBarMessages.cs" />
     <Compile Include="Models\StatusBarMessage.cs" />
@@ -148,6 +149,10 @@
     <ProjectReference Include="..\RSARegion\RSARegion.csproj">
       <Project>{0e387b4c-4a31-4257-a5cc-be139bb9a96c}</Project>
       <Name>RSARegion</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SHA512Region\SHA512Region.csproj">
+      <Project>{CE8BEA55-4667-4605-96C9-F47A937C3ADF}</Project>
+      <Name>SHA512Region</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

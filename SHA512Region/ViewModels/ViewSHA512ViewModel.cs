@@ -3,28 +3,32 @@ using EventAggregator;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace MD5Region.ViewModels
+namespace SHA512Region.ViewModels
 {
-    public class ViewMD5ViewModel : BindableBase
+    public class ViewSHA512ViewModel : BindableBase
     {
         #region Constructor
 
-        public ViewMD5ViewModel(
-            IHashService md5HashService,
+        public ViewSHA512ViewModel(
+            IHashService sha512HashService,
             IEventAggregator eventAggregator,
             ISerializationService serializationService)
         {
-            this.md5HashService = md5HashService;
+            this.sha512HashService = sha512HashService;
             this.eventAggregator = eventAggregator;
             this.serializationService = serializationService;
 
-            eventAggregator.GetEvent<MD5MessageSentEvent>()
+            eventAggregator.GetEvent<SHA512MessageSentEvent>()
                 .Subscribe(ExecuteMessage);
         }
-        
+
         #endregion//Constructor
 
         #region Properties
@@ -36,11 +40,11 @@ namespace MD5Region.ViewModels
             set { SetProperty(ref text, value); }
         }
 
-        private string md5Checksum;
-        public string MD5Checksum
+        private string sha512Checksum;
+        public string SHA512Checksum
         {
-            get { return md5Checksum; }
-            set { SetProperty(ref md5Checksum, value); }
+            get { return sha512Checksum; }
+            set { SetProperty(ref sha512Checksum, value); }
         }
 
         private string checksumToCompareText;
@@ -61,16 +65,16 @@ namespace MD5Region.ViewModels
 
         #region Commands
 
-        private ICommand generateMD5ChecksumCommand;
-        public ICommand GenerateMD5ChecksumCommand
+        private ICommand generateSHA512ChecksumCommand;
+        public ICommand GenerateSHA512ChecksumCommand
         {
             get
             {
-                if (generateMD5ChecksumCommand == null)
-                    generateMD5ChecksumCommand = new DelegateCommand(GenerateMD5ChecksumCommandExecute, 
-                        GenerateMD5ChecksumCommandCanExecute)
+                if (generateSHA512ChecksumCommand == null)
+                    generateSHA512ChecksumCommand = new DelegateCommand(GenerateSHA512ChecksumCommandExecute,
+                        GenerateSHA512ChecksumCommandCanExecute)
                         .ObservesProperty(() => Text);
-                return generateMD5ChecksumCommand;
+                return generateSHA512ChecksumCommand;
             }
         }
 
@@ -82,7 +86,7 @@ namespace MD5Region.ViewModels
                 if (compareCommand == null)
                     compareCommand = new DelegateCommand(CompareCommandExecute,
                         CompareCommandCanExecute)
-                        .ObservesProperty(() => MD5Checksum)
+                        .ObservesProperty(() => SHA512Checksum)
                         .ObservesProperty(() => checksumBufferToCompare);
                 return compareCommand;
             }
@@ -92,20 +96,20 @@ namespace MD5Region.ViewModels
 
         #region Methods
 
-        private void GenerateMD5ChecksumCommandExecute()
+        private void GenerateSHA512ChecksumCommandExecute()
         {
             var buffer = Encoding.UTF8.GetBytes(Text);
-            checkSumBuffer = md5HashService.GetHash(buffer);
-            MD5Checksum = GetChecksum(checkSumBuffer);
-            eventAggregator.GetEvent<MD5MessageSentEvent>()
-                .Publish(new MD5Message { ChecksumAction = ChecksumAction.Generate });
+            checkSumBuffer = sha512HashService.GetHash(buffer);
+            SHA512Checksum = GetChecksum(checkSumBuffer);
+            eventAggregator.GetEvent<SHA512MessageSentEvent>()
+                .Publish(new SHA512Message { ChecksumAction = ChecksumAction.Generate });
         }
 
-        private bool GenerateMD5ChecksumCommandCanExecute()
+        private bool GenerateSHA512ChecksumCommandCanExecute()
             => Text?.Length > 0;
 
         private bool CompareCommandCanExecute()
-            => MD5Checksum?.Length > 0 && ChecksumToCompareText?.Length > 0;
+            => SHA512Checksum?.Length > 0 && ChecksumToCompareText?.Length > 0;
 
         private void CompareCommandExecute()
         {
@@ -118,12 +122,12 @@ namespace MD5Region.ViewModels
                     i++;
                 areTheSameChecksum = i < checkSumBuffer.Length;
             }
-            ChecksumsCompareResultText =  areTheSameChecksum ? 
+            ChecksumsCompareResultText = areTheSameChecksum ?
                 "Checksums are the same" :
                 "Checksums are different";
         }
 
-        private void ExecuteMessage(MD5Message message)
+        private void ExecuteMessage(SHA512Message message)
         {
             switch (message.ChecksumAction)
             {
@@ -150,7 +154,7 @@ namespace MD5Region.ViewModels
 
         #region Fields
 
-        private readonly IHashService md5HashService;
+        private readonly IHashService sha512HashService;
         private readonly IEventAggregator eventAggregator;
         private readonly ISerializationService serializationService;
 

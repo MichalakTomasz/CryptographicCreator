@@ -17,7 +17,8 @@
               WindowStartupLocation="CenterScreen">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closing">
-            <prism:InvokeCommandAction Command="{Binding ClosingCommand, Mode=OneWay}" TriggerParameterPath=""/>
+            <prism:InvokeCommandAction Command="{Binding ClosingCommand, Mode=OneWay}" 
+                                       TriggerParameterPath=""/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Grid>
@@ -135,6 +136,33 @@
                                 IsSavedChecksum="{Binding IsSavedMD5Checksum, Mode=OneWay}"
                                 ChecksumAction="{Binding ChecksumAction, Mode=OneWayToSource}"
                                 AcceptEvent="{Binding AcceptMD5Event, Mode=OneWayToSource}" />
+                        </i:Interaction.Behaviors>
+                    </RibbonButton>
+                </RibbonGroup>
+            </RibbonTab>
+            <RibbonTab Header="SHA512">
+                <RibbonGroup Header="File">
+                    <RibbonButton Label="Open"
+                                  Command="{Binding OpenSHA512ChecksumCommand, Mode=OneWay}">
+                        <i:Interaction.Behaviors>
+                            <behavior:RibbonButtonOpenSaveSHA512HashsumBehavior 
+                                FileAction="Open"
+                                SelectedPath="{Binding SelectedSHA512Path, Mode=OneWayToSource}"
+                                IsActiveChecksum="{Binding IsActiveSHA512Checksum, Mode=OneWay}"
+                                ChecksumAction="{Binding ChecksumAction, Mode=OneWayToSource}"
+                                AcceptEvent="{Binding AcceptSHA512Event, Mode=OneWayToSource}" />
+                        </i:Interaction.Behaviors>
+                    </RibbonButton>
+                    <RibbonButton Label="Save"
+                                  Command="{Binding SaveSHA512ChecksumCommand, Mode=OneWay}">
+                        <i:Interaction.Behaviors>
+                            <behavior:RibbonButtonOpenSaveSHA512HashsumBehavior 
+                                FileAction="Save"
+                                SelectedPath="{Binding SelectedSHA512Path, Mode=OneWayToSource}"
+                                IsActiveChecksum="{Binding IsActiveSHA512Checksum, Mode=OneWay}"
+                                IsSavedChecksum="{Binding IsSavedSHA512Checksum, Mode=OneWay}"
+                                ChecksumAction="{Binding ChecksumAction, Mode=OneWayToSource}"
+                                AcceptEvent="{Binding AcceptSHA512Event, Mode=OneWayToSource}" />
                         </i:Interaction.Behaviors>
                     </RibbonButton>
                 </RibbonGroup>

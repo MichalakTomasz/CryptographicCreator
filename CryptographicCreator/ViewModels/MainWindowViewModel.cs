@@ -34,6 +34,9 @@ namespace CryptographicCreator.ViewModels
         private const string md5FileFilterExtension =
             "MD5 hash (*.md5)|*.md5";
 
+        private const string sha512FileFilterExtension =
+            "SHA512 hash (*.sha512)|*.sha512";
+
         #endregion//Fiels
 
         #region Constructor
@@ -47,6 +50,7 @@ namespace CryptographicCreator.ViewModels
             this.eventAggregator.GetEvent<RSAMessageSentEvent>().Subscribe(ExecuteRSAMessage);
             this.eventAggregator.GetEvent<AESMessageSentEvent>().Subscribe(ExecuteAESMessage);
             this.eventAggregator.GetEvent<MD5MessageSentEvent>().Subscribe(ExecuteMD5Message);
+            this.eventAggregator.GetEvent<SHA512MessageSentEvent>().Subscribe(ExecuteSHA512Message);
         }
 
         #endregion//Constructor
@@ -212,6 +216,46 @@ namespace CryptographicCreator.ViewModels
 
         #endregion//MD5
 
+        #region SHA512
+
+
+        private string selectedSHA512Path;
+        public string SelectedSHA512Path
+        {
+            get { return selectedSHA512Path; }
+            set { SetProperty(ref selectedSHA512Path, value); }
+        }
+
+        private bool isActiveSHA512checksum;
+        public bool IsActiveSHA512Checksum
+        {
+            get { return isActiveSHA512checksum; }
+            set { SetProperty(ref isActiveSHA512checksum, value); }
+        }
+
+        private bool isActiveSHA512ChecksumToCompare;
+        public bool IsActiveSHA512ChecksumToCompare
+        {
+            get { return isActiveSHA512ChecksumToCompare; }
+            set { SetProperty(ref isActiveSHA512ChecksumToCompare, value); }
+        }
+
+        private bool acceptSHA512Event;
+        public bool AcceptSHA512Event
+        {
+            get { return acceptSHA512Event; }
+            set { SetProperty(ref acceptSHA512Event, value); }
+        }
+
+        private bool isSavedSHA512Checksum;
+        public bool IsSavedSHA512Checksum
+        {
+            get { return isSavedSHA512Checksum; }
+            set { SetProperty(ref isSavedSHA512Checksum, value); }
+        }
+
+        #endregion//SHA512
+
         private string statusBarLog;
         public string StatusBarLog
         {
@@ -330,6 +374,34 @@ namespace CryptographicCreator.ViewModels
 
         #endregion//MD5
 
+        #region SHA512
+
+        private ICommand openSHA512ChecksumCommand;
+        public ICommand OpenSHA512ChecksumCommand
+        {
+            get
+            {
+                if (openSHA512ChecksumCommand == null)
+                    openSHA512ChecksumCommand = new DelegateCommand(OpenSHA512CommandExecute);
+                return openSHA512ChecksumCommand;
+            }
+        }
+
+        private ICommand saveSHA512ChecksumCommand;
+        public ICommand SaveSHA512ChecksumCommand
+        {
+            get
+            {
+                if (saveSHA512ChecksumCommand == null)
+                    saveSHA512ChecksumCommand = new DelegateCommand(SaveSHA512CommandExecute);
+                return saveSHA512ChecksumCommand;
+            }
+        }
+
+        #endregion//SHA512
+
+        #region Commons
+
         private ICommand closingCommnad;
         public ICommand ClosingCommand
         {
@@ -351,6 +423,8 @@ namespace CryptographicCreator.ViewModels
                 return exitCommnad;
             }
         }
+
+        #endregion//Commons
 
         #endregion//Commands
 
@@ -596,16 +670,52 @@ namespace CryptographicCreator.ViewModels
 
         #endregion
 
+        #region SHA512
+
+        private void OpenSHA512CommandExecute()
+        {
+            if (AcceptSHA512Event)
+            {
+                eventAggregator.GetEvent<SHA512MessageSentEvent>()
+                    .Publish(new SHA512Message { ChecksumAction = ChecksumAction.Open, Path = SelectedSHA512Path });
+                IsActiveSHA512ChecksumToCompare = true;
+                StatusBarLog = statusBarMessages[StatusBarMessage.SHA512ChecksumOpened];
+            }
+        }
+
+        private void SaveSHA512CommandExecute()
+        {
+            if (AcceptSHA512Event)
+            {
+                eventAggregator.GetEvent<SHA512MessageSentEvent>()
+                .Publish(new SHA512Message { ChecksumAction = ChecksumAction, Path = SelectedSHA512Path });
+                IsSavedSHA512Checksum = true;
+                StatusBarLog = statusBarMessages[StatusBarMessage.SHA512ChecksumhSaved];
+            }
+        }        
+
+        private void ExecuteSHA512Message(SHA512Message message)
+        {
+            if (message.ChecksumAction == ChecksumAction.Generate)
+            {
+                IsActiveSHA512Checksum = true;
+                StatusBarLog = statusBarMessages[StatusBarMessage.SHA512ChecksumGenerated];
+            }
+        }
+
+        #endregion//SHA512
+
         #region Commons
 
         private void ClosingCommandExecute(CancelEventArgs eventArgs)
         {
-            if ((IsActiveRSAPrivateKey && !IsSavedRSAPrivateKey) ||
-                 (IsActiveRSAPublicKey && !IsSavedRSAPublicKey) ||
-                 (AreActiveRSAEncryptedData && !AreSavedRSAEncryptedData ||
+            if (IsActiveRSAPrivateKey && !IsSavedRSAPrivateKey ||
+                 IsActiveRSAPublicKey && !IsSavedRSAPublicKey ||
+                 AreActiveRSAEncryptedData && !AreSavedRSAEncryptedData ||
                  IsActiveAESKey && !IsSavedAESKey ||
                  AreActiveAESEncryptedData && !AreSavedAESEncryptedData ||
-                 IsActiveMD5Checksum && !IsSavedMD5Checksum))
+                 IsActiveMD5Checksum && !IsSavedMD5Checksum ||
+                 IsActiveSHA512Checksum && !IsSavedSHA512Checksum)
             {
                 var messageBoxResult = MessageBox.Show(
                     "Some data aren't saved. Do you want to save any date before exit? Yes" +
@@ -634,6 +744,9 @@ namespace CryptographicCreator.ViewModels
 
                         if (IsActiveMD5Checksum && !IsSavedMD5Checksum)
                             SaveSequenceMD5Checksum();
+
+                        if (IsActiveSHA512Checksum && !IsSavedSHA512Checksum)
+                            SaveSequenceSHA512Checksum();
                         break;
                     case MessageBoxResult.Cancel:
                         eventArgs.Cancel = true;
@@ -722,6 +835,20 @@ namespace CryptographicCreator.ViewModels
             if (saveFile.ShowDialog().Value)
             {
                 eventAggregator.GetEvent<MD5MessageSentEvent>().Publish(new MD5Message
+                {
+                    ChecksumAction = ChecksumAction.Save,
+                    Path = saveFile.FileName
+                });
+            }
+        }
+
+        private void SaveSequenceSHA512Checksum()
+        {
+            var saveFile = new SaveFileDialog();
+            saveFile.Filter = sha512FileFilterExtension;
+            if (saveFile.ShowDialog().Value)
+            {
+                eventAggregator.GetEvent<SHA512MessageSentEvent>().Publish(new SHA512Message
                 {
                     ChecksumAction = ChecksumAction.Save,
                     Path = saveFile.FileName
