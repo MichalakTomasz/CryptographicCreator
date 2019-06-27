@@ -7,36 +7,9 @@ namespace CryptographicCreator.Views
 {
     public partial class MainWindow : RibbonWindow
     {
-        private readonly IRegionManager regionManager;
-
-        public MainWindow(IContainerExtension container, IRegionManager regionManager)
+        public MainWindow()
         {
             InitializeComponent();
-            this.regionManager = regionManager;
-            ribbonMenu.SelectionChanged += RibbonMenu_SelectionChanged;
-        }
-
-        private void RibbonMenu_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var selectedTab = e.AddedItems[0] as RibbonTab;
-            switch (selectedTab.Header)
-            {
-                case "RSA":
-                    regionManager.RequestNavigate("ContentRegion", "ViewRSA");
-                    break;
-                case "AES":
-                    regionManager.RequestNavigate("ContentRegion", "ViewAES");
-                    break;
-                case "MD5":
-                    regionManager.RequestNavigate("ContentRegion", "ViewMD5");
-                    break;
-                case "SHA256":
-                    regionManager.RequestNavigate("ContentRegion", "ViewSHA256");
-                    break;
-                case "SHA512":
-                    regionManager.RequestNavigate("ContentRegion", "ViewSHA512");
-                    break;
-            }
         }
     }
 }

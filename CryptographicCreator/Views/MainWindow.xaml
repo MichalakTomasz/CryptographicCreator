@@ -28,6 +28,12 @@
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Ribbon x:Name="ribbonMenu" Grid.Row="0">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <prism:InvokeCommandAction Command="{Binding RibbonMenuSelectionChangedCommand, Mode=OneWay}" 
+                                               TriggerParameterPath=""/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
             <Ribbon.ApplicationMenu>
                 <RibbonApplicationMenu>
                     <RibbonApplicationMenuItem Header="Exit"

@@ -4,18 +4,25 @@ using EventAggregator;
 using Microsoft.Win32;
 using Prism.Commands;
 using Prism.Events;
+using Prism.Ioc;
 using Prism.Mvvm;
+using Prism.Regions;
 using System;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Ribbon;
 using System.Windows.Input;
 
 namespace CryptographicCreator.ViewModels
 {
     public class MainWindowViewModel : BindableBase
     {
+
         #region Fields
 
+        private readonly IContainerExtension container;
+        private readonly IRegionManager regionManager;
         private readonly IEventAggregator eventAggregator;
         private readonly IStatusBarMessages statusBarMessages;
 
@@ -45,9 +52,13 @@ namespace CryptographicCreator.ViewModels
         #region Constructor
 
         public MainWindowViewModel(
+            IContainerExtension container, 
+            IRegionManager regionManager,
             IEventAggregator eventAggregator,
             IStatusBarMessages statusBarMessages)
         {
+            this.container = container;
+            this.regionManager = regionManager;
             this.eventAggregator = eventAggregator;
             this.statusBarMessages = statusBarMessages;
             this.eventAggregator.GetEvent<RSAMessageSentEvent>().Subscribe(ExecuteRSAMessage);
@@ -474,6 +485,18 @@ namespace CryptographicCreator.ViewModels
 
         #region Commons
 
+        private ICommand ribbonMenuSelectionChangedCommand;
+        public ICommand RibbonMenuSelectionChangedCommand
+        {
+            get
+            {
+                if (ribbonMenuSelectionChangedCommand == null)
+                    ribbonMenuSelectionChangedCommand = new 
+                        DelegateCommand<SelectionChangedEventArgs>(RibbonMenuSelectionChangedCommandExecute);
+                return ribbonMenuSelectionChangedCommand;
+            }
+        }
+
         private ICommand closingCommnad;
         public ICommand ClosingCommand
         {
@@ -814,7 +837,30 @@ namespace CryptographicCreator.ViewModels
 
         #region Commons
 
-        private void ClosingCommandExecute(CancelEventArgs eventArgs)
+        private void RibbonMenuSelectionChangedCommandExecute(SelectionChangedEventArgs e)
+        {
+            var selectedTab = e.AddedItems[0] as RibbonTab;
+            switch (selectedTab.Header)
+            {
+                case "RSA":
+                    regionManager.RequestNavigate("ContentRegion", "ViewRSA");
+                    break;
+                case "AES":
+                    regionManager.RequestNavigate("ContentRegion", "ViewAES");
+                    break;
+                case "MD5":
+                    regionManager.RequestNavigate("ContentRegion", "ViewMD5");
+                    break;
+                case "SHA256":
+                    regionManager.RequestNavigate("ContentRegion", "ViewSHA256");
+                    break;
+                case "SHA512":
+                    regionManager.RequestNavigate("ContentRegion", "ViewSHA512");
+                    break;
+            }
+        }
+
+        private void ClosingCommandExecute(CancelEventArgs e)
         {
             if (IsActiveRSAPrivateKey && !IsSavedRSAPrivateKey ||
                  IsActiveRSAPublicKey && !IsSavedRSAPublicKey ||
@@ -860,7 +906,7 @@ namespace CryptographicCreator.ViewModels
                             SaveSequenceSHA512Checksum();
                         break;
                     case MessageBoxResult.Cancel:
-                        eventArgs.Cancel = true;
+                        e.Cancel = true;
                         break;
                 }
             }
