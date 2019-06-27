@@ -1,33 +1,71 @@
 ﻿using Commons;
 using CryptographicCreator.Models;
 using EventAggregator;
+using Microsoft.Win32;
 using Prism.Commands;
 using Prism.Events;
+using Prism.Ioc;
 using Prism.Mvvm;
+using Prism.Regions;
+using System;
+using System.ComponentModel;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Ribbon;
 using System.Windows.Input;
 
 namespace CryptographicCreator.ViewModels
 {
     public class MainWindowViewModel : BindableBase
     {
+
         #region Fields
 
+        private readonly IContainerExtension container;
+        private readonly IRegionManager regionManager;
         private readonly IEventAggregator eventAggregator;
         private readonly IStatusBarMessages statusBarMessages;
+
+        private const string privateRSAKeyFilterExtension =
+            "RSA Private Key (*.prk)|*.prk";
+        private const string publicRSAKeyFilterExtension =
+            "RSA Public Key (*.pbk)|*.pbk";
+        private const string rsaEncryptedDataFilterExtension =
+            "RSA Encrypred data (*.enc)|*.enc";
+
+        private const string aesKeyFileExtension =
+            "AES Key (*.ask)|*.ask";
+        private const string aesEncryptedDataFilterExtension =
+            "AES Encrypred data (*.aed)|*.aed";
+
+        private const string md5FileFilterExtension =
+            "MD5 hash (*.md5)|*.md5";
+
+        private const string sha256FileFilterExtension =
+            "SHA256 hash (*.sha256)|*.sha256";
+
+        private const string sha512FileFilterExtension =
+            "SHA512 hash (*.sha512)|*.sha512";
 
         #endregion//Fiels
 
         #region Constructor
 
         public MainWindowViewModel(
+            IContainerExtension container, 
+            IRegionManager regionManager,
             IEventAggregator eventAggregator,
             IStatusBarMessages statusBarMessages)
         {
+            this.container = container;
+            this.regionManager = regionManager;
             this.eventAggregator = eventAggregator;
             this.statusBarMessages = statusBarMessages;
             this.eventAggregator.GetEvent<RSAMessageSentEvent>().Subscribe(ExecuteRSAMessage);
             this.eventAggregator.GetEvent<AESMessageSentEvent>().Subscribe(ExecuteAESMessage);
             this.eventAggregator.GetEvent<MD5MessageSentEvent>().Subscribe(ExecuteMD5Message);
+            this.eventAggregator.GetEvent<SHA512MessageSentEvent>().Subscribe(ExecuteSHA512Message);
+            this.eventAggregator.GetEvent<SHA256MessageSentEvent>().Subscribe(ExecuteSHA256Message);
         }
 
         #endregion//Constructor
@@ -193,6 +231,86 @@ namespace CryptographicCreator.ViewModels
 
         #endregion//MD5
 
+        #region SHA256
+
+        private string selectedSHA256Path;
+        public string SelectedSHA256Path
+        {
+            get { return selectedSHA256Path; }
+            set { SetProperty(ref selectedSHA256Path, value); }
+        }
+
+        private bool isActiveSHA256checksum;
+        public bool IsActiveSHA256Checksum
+        {
+            get { return isActiveSHA256checksum; }
+            set { SetProperty(ref isActiveSHA256checksum, value); }
+        }
+
+        private bool isActiveSHA256ChecksumToCompare;
+        public bool IsActiveSHA256ChecksumToCompare
+        {
+            get { return isActiveSHA256ChecksumToCompare; }
+            set { SetProperty(ref isActiveSHA256ChecksumToCompare, value); }
+        }
+
+        private bool acceptSHA256Event;
+        public bool AcceptSHA256Event
+        {
+            get { return acceptSHA256Event; }
+            set { SetProperty(ref acceptSHA256Event, value); }
+        }
+
+        private bool isSavedSHA256Checksum;
+        public bool IsSavedSHA256Checksum
+        {
+            get { return isSavedSHA256Checksum; }
+            set { SetProperty(ref isSavedSHA256Checksum, value); }
+        }
+
+        #endregion//SHA256
+
+        #region SHA512
+
+        private string selectedSHA512Path;
+        public string SelectedSHA512Path
+        {
+            get { return selectedSHA512Path; }
+            set { SetProperty(ref selectedSHA512Path, value); }
+        }
+
+        private bool isActiveSHA512checksum;
+        public bool IsActiveSHA512Checksum
+        {
+            get { return isActiveSHA512checksum; }
+            set { SetProperty(ref isActiveSHA512checksum, value); }
+        }
+
+        private bool isActiveSHA512ChecksumToCompare;
+        public bool IsActiveSHA512ChecksumToCompare
+        {
+            get { return isActiveSHA512ChecksumToCompare; }
+            set { SetProperty(ref isActiveSHA512ChecksumToCompare, value); }
+        }
+
+        private bool acceptSHA512Event;
+        public bool AcceptSHA512Event
+        {
+            get { return acceptSHA512Event; }
+            set { SetProperty(ref acceptSHA512Event, value); }
+        }
+
+        private bool isSavedSHA512Checksum;
+        public bool IsSavedSHA512Checksum
+        {
+            get { return isSavedSHA512Checksum; }
+            set { SetProperty(ref isSavedSHA512Checksum, value); }
+        }
+
+        #endregion//SHA512
+
+        #region Commons
+
         private string statusBarLog;
         public string StatusBarLog
         {
@@ -206,6 +324,8 @@ namespace CryptographicCreator.ViewModels
             get { return checksumAction; }
             set { SetProperty(ref checksumAction, value); }
         }
+
+        #endregion//Commons
 
         #endregion//Properties
 
@@ -311,6 +431,83 @@ namespace CryptographicCreator.ViewModels
 
         #endregion//MD5
 
+        #region SHA256
+
+        private ICommand openSHA256ChecksumCommand;
+        public ICommand OpenSHA256ChecksumCommand
+        {
+            get
+            {
+                if (openSHA256ChecksumCommand == null)
+                    openSHA256ChecksumCommand = new DelegateCommand(OpenSHA256CommandExecute);
+                return openSHA256ChecksumCommand;
+            }
+        }
+
+        private ICommand saveSHA256ChecksumCommand;
+        public ICommand SaveSHA256ChecksumCommand
+        {
+            get
+            {
+                if (saveSHA256ChecksumCommand == null)
+                    saveSHA256ChecksumCommand = new DelegateCommand(SaveSHA256CommandExecute);
+                return saveSHA256ChecksumCommand;
+            }
+        }
+
+        #endregion//SHA256
+
+        #region SHA512
+
+        private ICommand openSHA512ChecksumCommand;
+        public ICommand OpenSHA512ChecksumCommand
+        {
+            get
+            {
+                if (openSHA512ChecksumCommand == null)
+                    openSHA512ChecksumCommand = new DelegateCommand(OpenSHA512CommandExecute);
+                return openSHA512ChecksumCommand;
+            }
+        }
+
+        private ICommand saveSHA512ChecksumCommand;
+        public ICommand SaveSHA512ChecksumCommand
+        {
+            get
+            {
+                if (saveSHA512ChecksumCommand == null)
+                    saveSHA512ChecksumCommand = new DelegateCommand(SaveSHA512CommandExecute);
+                return saveSHA512ChecksumCommand;
+            }
+        }
+
+        #endregion//SHA512
+
+        #region Commons
+
+        private ICommand ribbonMenuSelectionChangedCommand;
+        public ICommand RibbonMenuSelectionChangedCommand
+        {
+            get
+            {
+                if (ribbonMenuSelectionChangedCommand == null)
+                    ribbonMenuSelectionChangedCommand = new 
+                        DelegateCommand<SelectionChangedEventArgs>(RibbonMenuSelectionChangedCommandExecute);
+                return ribbonMenuSelectionChangedCommand;
+            }
+        }
+
+        private ICommand closingCommnad;
+        public ICommand ClosingCommand
+        {
+            get
+            {
+                if (closingCommnad == null)
+                    closingCommnad = new DelegateCommand<CancelEventArgs>(ClosingCommandExecute);
+                return closingCommnad;
+            }
+        }
+
         private ICommand exitCommnad;
         public ICommand ExitCommand
         {
@@ -321,6 +518,8 @@ namespace CryptographicCreator.ViewModels
                 return exitCommnad;
             }
         }
+
+        #endregion//Commons
 
         #endregion//Commands
 
@@ -538,7 +737,7 @@ namespace CryptographicCreator.ViewModels
             if (AcceptMD5Event)
             {
                 eventAggregator.GetEvent<MD5MessageSentEvent>()
-                    .Publish(new MD5Message { HahshsumAction = ChecksumAction.Open, Path = SelectedMD5Path });
+                    .Publish(new MD5Message { ChecksumAction = ChecksumAction.Open, Path = SelectedMD5Path });
                 IsActiveMD5ChecksumToCompare = true;
                 StatusBarLog = statusBarMessages[StatusBarMessage.MD5ChecksumOpened];
             }
@@ -549,7 +748,7 @@ namespace CryptographicCreator.ViewModels
             if (AcceptMD5Event)
             {
                 eventAggregator.GetEvent<MD5MessageSentEvent>()
-                .Publish(new MD5Message { HahshsumAction = ChecksumAction, Path = SelectedMD5Path });
+                .Publish(new MD5Message { ChecksumAction = ChecksumAction, Path = SelectedMD5Path });
                 IsSavedMD5Checksum = true;
                 StatusBarLog = statusBarMessages[StatusBarMessage.MD5ChecksumhSaved];
             }
@@ -557,7 +756,7 @@ namespace CryptographicCreator.ViewModels
 
         private void ExecuteMD5Message(MD5Message message)
         {
-            if (message.HahshsumAction == ChecksumAction.Generate)
+            if (message.ChecksumAction == ChecksumAction.Generate)
             {
                 IsActiveMD5Checksum = true;
                 StatusBarLog = statusBarMessages[StatusBarMessage.MD5ChecksumGenerated];
@@ -566,8 +765,285 @@ namespace CryptographicCreator.ViewModels
 
         #endregion
 
+        #region SHA256
+
+        private void OpenSHA256CommandExecute()
+        {
+            if (AcceptSHA256Event)
+            {
+                eventAggregator.GetEvent<SHA256MessageSentEvent>()
+                    .Publish(new SHA256Message { ChecksumAction = ChecksumAction.Open, Path = SelectedSHA256Path });
+                IsActiveSHA256ChecksumToCompare = true;
+                StatusBarLog = statusBarMessages[StatusBarMessage.SHA256ChecksumOpened];
+            }
+        }
+
+        private void SaveSHA256CommandExecute()
+        {
+            if (AcceptSHA256Event)
+            {
+                eventAggregator.GetEvent<SHA256MessageSentEvent>()
+                .Publish(new SHA256Message { ChecksumAction = ChecksumAction, Path = SelectedSHA256Path });
+                IsSavedSHA256Checksum = true;
+                StatusBarLog = statusBarMessages[StatusBarMessage.SHA256ChecksumhSaved];
+            }
+        }
+
+        private void ExecuteSHA256Message(SHA256Message message)
+        {
+            if (message.ChecksumAction == ChecksumAction.Generate)
+            {
+                IsActiveSHA256Checksum = true;
+                StatusBarLog = statusBarMessages[StatusBarMessage.SHA256ChecksumGenerated];
+            }
+        }
+
+        #endregion//SHA256
+
+        #region SHA512
+
+        private void OpenSHA512CommandExecute()
+        {
+            if (AcceptSHA512Event)
+            {
+                eventAggregator.GetEvent<SHA512MessageSentEvent>()
+                    .Publish(new SHA512Message { ChecksumAction = ChecksumAction.Open, Path = SelectedSHA512Path });
+                IsActiveSHA512ChecksumToCompare = true;
+                StatusBarLog = statusBarMessages[StatusBarMessage.SHA512ChecksumOpened];
+            }
+        }
+
+        private void SaveSHA512CommandExecute()
+        {
+            if (AcceptSHA512Event)
+            {
+                eventAggregator.GetEvent<SHA512MessageSentEvent>()
+                .Publish(new SHA512Message { ChecksumAction = ChecksumAction, Path = SelectedSHA512Path });
+                IsSavedSHA512Checksum = true;
+                StatusBarLog = statusBarMessages[StatusBarMessage.SHA512ChecksumhSaved];
+            }
+        }        
+
+        private void ExecuteSHA512Message(SHA512Message message)
+        {
+            if (message.ChecksumAction == ChecksumAction.Generate)
+            {
+                IsActiveSHA512Checksum = true;
+                StatusBarLog = statusBarMessages[StatusBarMessage.SHA512ChecksumGenerated];
+            }
+        }
+
+        #endregion//SHA512
+
+        #region Commons
+
+        private void RibbonMenuSelectionChangedCommandExecute(SelectionChangedEventArgs e)
+        {
+            var selectedTab = e.AddedItems[0] as RibbonTab;
+            switch (selectedTab.Header)
+            {
+                case "RSA":
+                    regionManager.RequestNavigate("ContentRegion", "ViewRSA");
+                    break;
+                case "AES":
+                    regionManager.RequestNavigate("ContentRegion", "ViewAES");
+                    break;
+                case "MD5":
+                    regionManager.RequestNavigate("ContentRegion", "ViewMD5");
+                    break;
+                case "SHA256":
+                    regionManager.RequestNavigate("ContentRegion", "ViewSHA256");
+                    break;
+                case "SHA512":
+                    regionManager.RequestNavigate("ContentRegion", "ViewSHA512");
+                    break;
+            }
+        }
+
+        private void ClosingCommandExecute(CancelEventArgs e)
+        {
+            if (IsActiveRSAPrivateKey && !IsSavedRSAPrivateKey ||
+                 IsActiveRSAPublicKey && !IsSavedRSAPublicKey ||
+                 AreActiveRSAEncryptedData && !AreSavedRSAEncryptedData ||
+                 IsActiveAESKey && !IsSavedAESKey ||
+                 AreActiveAESEncryptedData && !AreSavedAESEncryptedData ||
+                 IsActiveMD5Checksum && !IsSavedMD5Checksum ||
+                 IsActiveSHA256Checksum && !IsSavedSHA256Checksum ||
+                 IsActiveSHA512Checksum && !IsSavedSHA512Checksum)
+            {
+                var messageBoxResult = MessageBox.Show(
+                    "Some data aren't saved. Do you want to save any date before exit? Yes" +
+                    " - Save data and close application, No - Close without saving, Cancel - cancel exit.",
+                    "Attention",
+                    MessageBoxButton.YesNoCancel,
+                    MessageBoxImage.Question);
+                switch (messageBoxResult)
+                {
+                    case MessageBoxResult.Yes:
+                        var saveFile = new SaveFileDialog();
+                        if (IsActiveRSAPrivateKey && !IsSavedRSAPrivateKey)
+                            SaveSequenceRSAPrivateKey();
+
+                        if (IsActiveRSAPublicKey && !IsSavedRSAPublicKey)
+                            SaveSequenceRSAPublicKey();
+
+                        if (AreActiveRSAEncryptedData && !AreSavedRSAEncryptedData)
+                            SaveSequenceRSAEncryptedData();
+
+                        if (IsActiveAESKey && !IsSavedAESKey)
+                            SaveSequenceAESKey();
+
+                        if (AreActiveAESEncryptedData && !AreSavedAESEncryptedData)
+                            SaveSequenceAESEncryptedData();
+
+                        if (IsActiveMD5Checksum && !IsSavedMD5Checksum)
+                            SaveSequenceMD5Checksum();
+
+                        if (IsActiveSHA256Checksum && !IsSavedSHA256Checksum)
+                            SaveSequenceSHA256Checksum();
+
+                        if (IsActiveSHA512Checksum && !IsSavedSHA512Checksum)
+                            SaveSequenceSHA512Checksum();
+                        break;
+                    case MessageBoxResult.Cancel:
+                        e.Cancel = true;
+                        break;
+                }
+            }
+        }
+
         private void ExitCommandExecute()
             => App.Current.MainWindow.Close();
+
+        private void SaveSequenceRSAPrivateKey()
+        {
+            var saveFile = new SaveFileDialog
+            {
+                Filter = privateRSAKeyFilterExtension
+            };
+            if (saveFile.ShowDialog().Value)
+            {
+                eventAggregator.GetEvent<RSAMessageSentEvent>().Publish(new RSAMessage
+                {
+                    RSAAction = RSAAction.SavePrivateAndPublicKey,
+                    Path = saveFile.FileName
+                });
+            }
+        }
+
+        private void SaveSequenceRSAPublicKey()
+        {
+            var saveFile = new SaveFileDialog
+            {
+                Filter = publicRSAKeyFilterExtension
+            };
+            if (saveFile.ShowDialog().Value)
+            {
+                eventAggregator.GetEvent<RSAMessageSentEvent>().Publish(new RSAMessage
+                {
+                    RSAAction = RSAAction.SavePublicKey,
+                    Path = saveFile.FileName
+                });
+            }
+        }
+
+        private void SaveSequenceRSAEncryptedData()
+        {
+            var saveFile = new SaveFileDialog
+            {
+                Filter = rsaEncryptedDataFilterExtension
+            };
+            if (saveFile.ShowDialog().Value)
+            {
+                eventAggregator.GetEvent<RSAMessageSentEvent>().Publish(new RSAMessage
+                {
+                    RSAAction = RSAAction.SaveEncryptedData,
+                    Path = saveFile.FileName
+                });
+            }
+        }
+
+        private void SaveSequenceAESKey()
+        {
+            var saveFile = new SaveFileDialog
+            {
+                Filter = aesKeyFileExtension
+            };
+            if (saveFile.ShowDialog().Value)
+            {
+                eventAggregator.GetEvent<AESMessageSentEvent>().Publish(new AESMessage
+                {
+                    AESAction = AESAction.SaveKey,
+                    Path = saveFile.FileName
+                });
+            }
+        }
+
+        private void SaveSequenceAESEncryptedData()
+        {
+            var saveFile = new SaveFileDialog
+            {
+                Filter = aesEncryptedDataFilterExtension
+            };
+            if (saveFile.ShowDialog().Value)
+            {
+                eventAggregator.GetEvent<AESMessageSentEvent>().Publish(new AESMessage
+                {
+                    AESAction = AESAction.SaveEncryptedData,
+                    Path = saveFile.FileName
+                });
+            }
+        }
+
+        private void SaveSequenceMD5Checksum()
+        {
+            var saveFile = new SaveFileDialog
+            {
+                Filter = md5FileFilterExtension
+            };
+            if (saveFile.ShowDialog().Value)
+            {
+                eventAggregator.GetEvent<MD5MessageSentEvent>().Publish(new MD5Message
+                {
+                    ChecksumAction = ChecksumAction.Save,
+                    Path = saveFile.FileName
+                });
+            }
+        }
+
+        private void SaveSequenceSHA256Checksum()
+        {
+            var saveFile = new SaveFileDialog
+            {
+                Filter = sha256FileFilterExtension
+            };
+            if (saveFile.ShowDialog().Value)
+            {
+                eventAggregator.GetEvent<SHA256MessageSentEvent>().Publish(new SHA256Message
+                {
+                    ChecksumAction = ChecksumAction.Save,
+                    Path = saveFile.FileName
+                });
+            }
+        }
+
+        private void SaveSequenceSHA512Checksum()
+        {
+            var saveFile = new SaveFileDialog
+            {
+                Filter = sha512FileFilterExtension
+            };
+            if (saveFile.ShowDialog().Value)
+            {
+                eventAggregator.GetEvent<SHA512MessageSentEvent>().Publish(new SHA512Message
+                {
+                    ChecksumAction = ChecksumAction.Save,
+                    Path = saveFile.FileName
+                });
+            }
+        }
+
+        #endregion//Commons
 
         #endregion//Methods
     }

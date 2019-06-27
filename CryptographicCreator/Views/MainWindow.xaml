@@ -1,34 +1,26 @@
 ﻿<RibbonWindow x:Class="CryptographicCreator.Views.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:CryptographicCreator.Views"
-        xmlns:prism="http://prismlibrary.com/"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:behavior="clr-namespace:CryptographicCreator.Behaviors"
-        prism:ViewModelLocator.AutoWireViewModel="True"
-        mc:Ignorable="d"
-        Title="Cryptographic Creator" 
-        Height="450" 
-        Width="800"
-        MinHeight="200"
-        MinWidth="200"
-        WindowStartupLocation="CenterScreen">
-    <i:Interaction.Behaviors>
-        <behavior:ClosingMainWindowBehavior 
-            IsActiveRSAPrivateKey="{Binding IsActiveRSAPrivateKey, Mode=OneWay}"
-            IsActiveRSAPublicKey="{Binding IsActiveRSAPublicKey, Mode=OneWay}"
-            AreActiveRSAEncryptedData="{Binding AreActiveRSAEncryptedData, Mode=OneWay}"
-            AreSavedRSAEncryptedData="{Binding AreSavedRSAEncryptedData, Mode=OneWay}"
-            IsSavedRSAPrivateKey="{Binding IsSavedRSAPrivateKey, Mode=OneWay}"
-            IsSavedRSAPublicKey="{Binding IsSavedRSAPublicKey, Mode=OneWay}"
-            IsActiveAESKey="{Binding IsActiveAESKey, Mode=OneWay}"
-            IsSavedAESKey="{Binding IsSavedAESKey, Mode=OneWay}"
-            AreActiveAESEncryptedData="{Binding AreActiveAESEncryptedData, Mode=OneWay}"
-            IsActiveMD5Checksum="{Binding IsActiveMD5Checksum, Mode=OneWay}"
-            IsSavedMD5CheckSum="{Binding IsSavedMD5Checksum, Mode=OneWay}"/>
-    </i:Interaction.Behaviors>
+              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+              xmlns:local="clr-namespace:CryptographicCreator.Views"
+              xmlns:prism="http://prismlibrary.com/"
+              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+              xmlns:behavior="clr-namespace:CryptographicCreator.Behaviors"
+              prism:ViewModelLocator.AutoWireViewModel="True"
+              mc:Ignorable="d"
+              Title="Cryptographic Creator"
+              Height="450"
+              Width="800"
+              MinHeight="200"
+              MinWidth="200"
+              WindowStartupLocation="CenterScreen">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <prism:InvokeCommandAction Command="{Binding ClosingCommand, Mode=OneWay}" 
+                                       TriggerParameterPath=""/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -36,10 +28,16 @@
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Ribbon x:Name="ribbonMenu" Grid.Row="0">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <prism:InvokeCommandAction Command="{Binding RibbonMenuSelectionChangedCommand, Mode=OneWay}" 
+                                               TriggerParameterPath=""/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
             <Ribbon.ApplicationMenu>
                 <RibbonApplicationMenu>
                     <RibbonApplicationMenuItem Header="Exit"
-                                               Command="{Binding ExitCommand}"/>
+                                               Command="{Binding ExitCommand, Mode=OneWay}"/>
                 </RibbonApplicationMenu>
             </Ribbon.ApplicationMenu>
             <RibbonTab Header="RSA">
@@ -144,6 +142,60 @@
                                 IsSavedChecksum="{Binding IsSavedMD5Checksum, Mode=OneWay}"
                                 ChecksumAction="{Binding ChecksumAction, Mode=OneWayToSource}"
                                 AcceptEvent="{Binding AcceptMD5Event, Mode=OneWayToSource}" />
+                        </i:Interaction.Behaviors>
+                    </RibbonButton>
+                </RibbonGroup>
+            </RibbonTab>
+            <RibbonTab Header="SHA256">
+                <RibbonGroup Header="File">
+                    <RibbonButton Label="Open"
+                                  Command="{Binding OpenSHA256ChecksumCommand, Mode=OneWay}">
+                        <i:Interaction.Behaviors>
+                            <behavior:RibbonButtonOpenSaveSHA256HashsumBehavior 
+                                FileAction="Open"
+                                SelectedPath="{Binding SelectedSHA256Path, Mode=OneWayToSource}"
+                                IsActiveChecksum="{Binding IsActiveSHA256Checksum, Mode=OneWay}"
+                                ChecksumAction="{Binding ChecksumAction, Mode=OneWayToSource}"
+                                AcceptEvent="{Binding AcceptSHA256Event, Mode=OneWayToSource}" />
+                        </i:Interaction.Behaviors>
+                    </RibbonButton>
+                    <RibbonButton Label="Save"
+                                  Command="{Binding SaveSHA256ChecksumCommand, Mode=OneWay}">
+                        <i:Interaction.Behaviors>
+                            <behavior:RibbonButtonOpenSaveSHA256HashsumBehavior
+                                FileAction="Save"
+                                SelectedPath="{Binding SelectedSHA256Path, Mode=OneWayToSource}"
+                                IsActiveChecksum="{Binding IsActiveSHA256Checksum, Mode=OneWay}"
+                                IsSavedChecksum="{Binding IsSavedSHA256Checksum, Mode=OneWay}"
+                                ChecksumAction="{Binding ChecksumAction, Mode=OneWayToSource}"
+                                AcceptEvent="{Binding AcceptSHA256Event, Mode=OneWayToSource}" />
+                        </i:Interaction.Behaviors>                        
+                    </RibbonButton>
+                </RibbonGroup>
+            </RibbonTab>
+            <RibbonTab Header="SHA512">
+                <RibbonGroup Header="File">
+                    <RibbonButton Label="Open"
+                                  Command="{Binding OpenSHA512ChecksumCommand, Mode=OneWay}">
+                        <i:Interaction.Behaviors>
+                            <behavior:RibbonButtonOpenSaveSHA512HashsumBehavior 
+                                FileAction="Open"
+                                SelectedPath="{Binding SelectedSHA512Path, Mode=OneWayToSource}"
+                                IsActiveChecksum="{Binding IsActiveSHA512Checksum, Mode=OneWay}"
+                                ChecksumAction="{Binding ChecksumAction, Mode=OneWayToSource}"
+                                AcceptEvent="{Binding AcceptSHA512Event, Mode=OneWayToSource}" />
+                        </i:Interaction.Behaviors>
+                    </RibbonButton>
+                    <RibbonButton Label="Save"
+                                  Command="{Binding SaveSHA512ChecksumCommand, Mode=OneWay}">
+                        <i:Interaction.Behaviors>
+                            <behavior:RibbonButtonOpenSaveSHA512HashsumBehavior 
+                                FileAction="Save"
+                                SelectedPath="{Binding SelectedSHA512Path, Mode=OneWayToSource}"
+                                IsActiveChecksum="{Binding IsActiveSHA512Checksum, Mode=OneWay}"
+                                IsSavedChecksum="{Binding IsSavedSHA512Checksum, Mode=OneWay}"
+                                ChecksumAction="{Binding ChecksumAction, Mode=OneWayToSource}"
+                                AcceptEvent="{Binding AcceptSHA512Event, Mode=OneWayToSource}" />
                         </i:Interaction.Behaviors>
                     </RibbonButton>
                 </RibbonGroup>

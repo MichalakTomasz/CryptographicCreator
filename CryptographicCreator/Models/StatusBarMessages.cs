@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace CryptographicCreator.Models
 {
@@ -30,14 +26,18 @@ namespace CryptographicCreator.Models
                 [StatusBarMessage.AESEncryptedDataOpened] = "AES encrypted data opened successful",
                 [StatusBarMessage.AESEncryptedDataSaved] = "AES encrypted data saved successful",
                 [StatusBarMessage.AESDataEncrypted] = "AES data encrypted successful",
-                [StatusBarMessage.MD5ChecksumGenerated] = "MD5 hashsum generated successful",
-                [StatusBarMessage.MD5ChecksumOpened] = "MD5 hashsum opened successful",
-                [StatusBarMessage.MD5ChecksumhSaved] = "MD5 hashsum saved successful",
+                [StatusBarMessage.MD5ChecksumGenerated] = "MD5 checksum generated successful",
+                [StatusBarMessage.MD5ChecksumOpened] = "MD5 checksum opened successful",
+                [StatusBarMessage.MD5ChecksumhSaved] = "MD5 checksum saved successful",
+                [StatusBarMessage.SHA256ChecksumGenerated] = "SHA256 checksum generated successful",
+                [StatusBarMessage.SHA256ChecksumOpened] = "SHA256 checksum opened successful",
+                [StatusBarMessage.SHA256ChecksumhSaved] = "SHA256 checksum saved successful",
+                [StatusBarMessage.SHA512ChecksumGenerated] = "SHA512 checksum generated successful",
+                [StatusBarMessage.SHA512ChecksumOpened] = "SHA512 checksum opened successful",
+                [StatusBarMessage.SHA512ChecksumhSaved] = "SHA512 checksum saved successful",
             };
 
         public string this[StatusBarMessage message]
-        {
-            get => msg[message];
-        }
+            => msg[message];
     }
 }

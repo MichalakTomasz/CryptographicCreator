@@ -2,7 +2,6 @@
 using MD5Region.Views;
 using Prism.Ioc;
 using Prism.Modularity;
-using Prism.Regions;
 
 namespace MD5Region
 {
@@ -12,7 +11,7 @@ namespace MD5Region
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.Register<IHashService, MD5Service>();
+            containerRegistry.Register<IHashService, MD5Service>("MD5");
             containerRegistry.RegisterForNavigation<ViewMD5>();
         }
     }

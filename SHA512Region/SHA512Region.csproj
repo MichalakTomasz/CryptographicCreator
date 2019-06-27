@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{59F9F783-B25A-4351-94D2-0244A1EF8B41}</ProjectGuid>
+    <ProjectGuid>{CE8BEA55-4667-4605-96C9-F47A937C3ADF}</ProjectGuid>
     <OutputType>library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MD5Region</RootNamespace>
-    <AssemblyName>MD5Region</AssemblyName>
+    <RootNamespace>SHA512Region</RootNamespace>
+    <AssemblyName>SHA512Region</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -49,7 +49,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MD5RegionModule.cs" />
+    <Compile Include="SHA512RegionModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -63,9 +63,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="ViewModels\ViewMD5ViewModel.cs" />
-    <Compile Include="Views\ViewMD5.xaml.cs">
-      <DependentUpon>ViewMD5.xaml</DependentUpon>
+    <Compile Include="ViewModels\ViewSHA512ViewModel.cs" />
+    <Compile Include="Views\ViewSHA512.xaml.cs">
+      <DependentUpon>ViewSHA512.xaml</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -88,7 +88,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Views\ViewMD5.xaml">
+    <Page Include="Views\ViewSHA512.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
