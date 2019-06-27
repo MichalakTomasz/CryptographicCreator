@@ -31,6 +31,9 @@ namespace CryptographicCreator.Models
         MD5ChecksumOpened,
         MD5ChecksumhSaved,
         MD5ChecksumGenerated,
+        SHA256ChecksumOpened,
+        SHA256ChecksumhSaved,
+        SHA256ChecksumGenerated,
         SHA512ChecksumOpened,
         SHA512ChecksumhSaved,
         SHA512ChecksumGenerated

@@ -3,12 +3,9 @@ using EventAggregator;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
+using Unity.Attributes;
 
 namespace SHA512Region.ViewModels
 {
@@ -17,7 +14,7 @@ namespace SHA512Region.ViewModels
         #region Constructor
 
         public ViewSHA512ViewModel(
-            IHashService sha512HashService,
+            [Dependency("SHA512")]IHashService sha512HashService,
             IEventAggregator eventAggregator,
             ISerializationService serializationService)
         {
@@ -87,7 +84,7 @@ namespace SHA512Region.ViewModels
                     compareCommand = new DelegateCommand(CompareCommandExecute,
                         CompareCommandCanExecute)
                         .ObservesProperty(() => SHA512Checksum)
-                        .ObservesProperty(() => checksumBufferToCompare);
+                        .ObservesProperty(() => ChecksumToCompareText);
                 return compareCommand;
             }
         }
@@ -99,8 +96,8 @@ namespace SHA512Region.ViewModels
         private void GenerateSHA512ChecksumCommandExecute()
         {
             var buffer = Encoding.UTF8.GetBytes(Text);
-            checkSumBuffer = sha512HashService.GetHash(buffer);
-            SHA512Checksum = GetChecksum(checkSumBuffer);
+            checksumBuffer = sha512HashService.GetHash(buffer);
+            SHA512Checksum = GetChecksum(checksumBuffer);
             eventAggregator.GetEvent<SHA512MessageSentEvent>()
                 .Publish(new SHA512Message { ChecksumAction = ChecksumAction.Generate });
         }
@@ -114,13 +111,13 @@ namespace SHA512Region.ViewModels
         private void CompareCommandExecute()
         {
             bool areTheSameChecksum = false;
-            if (checkSumBuffer != null && checksumBufferToCompare != null &&
-                checkSumBuffer.Length == checksumBufferToCompare.Length)
+            if (checksumBuffer != null && checksumBufferToCompare != null &&
+                checksumBuffer.Length == checksumBufferToCompare.Length)
             {
                 var i = 0;
-                while (i < checkSumBuffer.Length && checkSumBuffer[i] != checksumBufferToCompare[i])
+                while (i < checksumBuffer.Length && checksumBuffer[i] != checksumBufferToCompare[i])
                     i++;
-                areTheSameChecksum = i < checkSumBuffer.Length;
+                areTheSameChecksum = i < checksumBuffer.Length;
             }
             ChecksumsCompareResultText = areTheSameChecksum ?
                 "Checksums are the same" :
@@ -136,7 +133,7 @@ namespace SHA512Region.ViewModels
                     ChecksumToCompareText = GetChecksum(checksumBufferToCompare);
                     break;
                 case ChecksumAction.Save:
-                    serializationService.Serialize(checkSumBuffer, message.Path);
+                    serializationService.Serialize(checksumBuffer, message.Path);
                     message.ChecksumAction = ChecksumAction.None;
                     break;
             }
@@ -158,7 +155,7 @@ namespace SHA512Region.ViewModels
         private readonly IEventAggregator eventAggregator;
         private readonly ISerializationService serializationService;
 
-        private byte[] checkSumBuffer;
+        private byte[] checksumBuffer;
         private byte[] checksumBufferToCompare;
 
         #endregion//Fields

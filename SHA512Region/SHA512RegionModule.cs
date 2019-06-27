@@ -11,7 +11,7 @@ namespace SHA512Region
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.Register<IHashService, SHA512Service>();
+            containerRegistry.Register<IHashService, SHA512Service>("SHA512");
             containerRegistry.RegisterForNavigation<ViewSHA512>();
         }
     }

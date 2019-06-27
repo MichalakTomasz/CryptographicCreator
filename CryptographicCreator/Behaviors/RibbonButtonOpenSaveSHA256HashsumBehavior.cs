@@ -7,12 +7,12 @@ using System.Windows.Interactivity;
 
 namespace CryptographicCreator.Behaviors
 {
-    class RibbonButtonOpenSaveSHA512HashsumBehavior : Behavior<RibbonButton>
+    class RibbonButtonOpenSaveSHA256HashsumBehavior : Behavior<RibbonButton>
     {
         #region Fields
 
         private const string fileFilterExtension =
-            "SHA512 hash (*.sha512)|*.sha512";
+            "SHA256 hash (*.sha256)|*.sha256";
 
         #endregion//Fields
 
@@ -28,7 +28,7 @@ namespace CryptographicCreator.Behaviors
             DependencyProperty.Register(
                 "SelectedPath",
                 typeof(string),
-                typeof(RibbonButtonOpenSaveSHA512HashsumBehavior),
+                typeof(RibbonButtonOpenSaveSHA256HashsumBehavior),
                 new PropertyMetadata(string.Empty));
 
         public FileAction FileAction
@@ -41,7 +41,7 @@ namespace CryptographicCreator.Behaviors
             DependencyProperty.Register(
                 "FileAction",
                 typeof(FileAction),
-                typeof(RibbonButtonOpenSaveSHA512HashsumBehavior));
+                typeof(RibbonButtonOpenSaveSHA256HashsumBehavior));
 
         public ChecksumAction ChecksumAction
         {
@@ -53,7 +53,7 @@ namespace CryptographicCreator.Behaviors
             DependencyProperty.Register(
                 "ChecksumAction",
                 typeof(ChecksumAction),
-                typeof(RibbonButtonOpenSaveSHA512HashsumBehavior),
+                typeof(RibbonButtonOpenSaveSHA256HashsumBehavior),
                 new PropertyMetadata(ChecksumAction.None));
 
         public bool IsActiveChecksum
@@ -66,7 +66,7 @@ namespace CryptographicCreator.Behaviors
             DependencyProperty.Register(
                 "IsActiveChecksum",
                 typeof(bool),
-                typeof(RibbonButtonOpenSaveSHA512HashsumBehavior),
+                typeof(RibbonButtonOpenSaveSHA256HashsumBehavior),
                 new PropertyMetadata(null));
 
         public bool IsSavedChecksum
@@ -79,7 +79,7 @@ namespace CryptographicCreator.Behaviors
             DependencyProperty.Register(
                 "IsSavedChecksum",
                 typeof(bool),
-                typeof(RibbonButtonOpenSaveSHA512HashsumBehavior),
+                typeof(RibbonButtonOpenSaveSHA256HashsumBehavior),
                 new PropertyMetadata(false));
 
         public bool AcceptEvent
@@ -92,7 +92,7 @@ namespace CryptographicCreator.Behaviors
             DependencyProperty.Register(
                 "AcceptEvent",
                 typeof(bool),
-                typeof(RibbonButtonOpenSaveSHA512HashsumBehavior),
+                typeof(RibbonButtonOpenSaveSHA256HashsumBehavior),
                 new PropertyMetadata(false));
 
         #endregion//Dependency Properties

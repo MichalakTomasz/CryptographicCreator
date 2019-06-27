@@ -52,6 +52,7 @@
     <Compile Include="Models\RSAAction.cs" />
     <Compile Include="Models\RSAMessage.cs" />
     <Compile Include="Models\RSAPairKeyParameters.cs" />
+    <Compile Include="Models\SHA256Message.cs" />
     <Compile Include="Models\SHA512Message.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AESCryptographicService.cs" />

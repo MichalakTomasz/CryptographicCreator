@@ -91,6 +91,7 @@
     <Compile Include="Behaviors\RibbonButtonOpenSaveAESKeyBehavior.cs" />
     <Compile Include="Behaviors\RibbonButtonOpenSaveMD5HashsumBehavior.cs" />
     <Compile Include="Behaviors\RibbonButtonOpenSaveRSAKeysBehavior.cs" />
+    <Compile Include="Behaviors\RibbonButtonOpenSaveSHA256HashsumBehavior.cs" />
     <Compile Include="Behaviors\RibbonButtonOpenSaveSHA512HashsumBehavior.cs" />
     <Compile Include="Models\FileAction.cs" />
     <Compile Include="Models\IStatusBarMessages.cs" />
@@ -149,6 +150,10 @@
     <ProjectReference Include="..\RSARegion\RSARegion.csproj">
       <Project>{0e387b4c-4a31-4257-a5cc-be139bb9a96c}</Project>
       <Name>RSARegion</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SHA256Region\SHA256Region.csproj">
+      <Project>{CC53BB41-43E6-44FD-BE35-E68F35BBE6EE}</Project>
+      <Name>SHA256Region</Name>
     </ProjectReference>
     <ProjectReference Include="..\SHA512Region\SHA512Region.csproj">
       <Project>{CE8BEA55-4667-4605-96C9-F47A937C3ADF}</Project>

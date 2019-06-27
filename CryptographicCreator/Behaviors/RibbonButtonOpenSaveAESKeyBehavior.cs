@@ -102,8 +102,7 @@ namespace CryptographicCreator.Behaviors
         protected override void OnAttached()
         {
             base.OnAttached();
-            var button = AssociatedObject as RibbonButton;
-            if (button != null)
+            if (AssociatedObject is RibbonButton button)
             {
                 button.Click += Button_Click;
             }
@@ -114,8 +113,10 @@ namespace CryptographicCreator.Behaviors
             switch (FileAction)
             {
                 case FileAction.Open:
-                    var openFileDialog = new OpenFileDialog();
-                    openFileDialog.Filter = fileFilterExtension;
+                    var openFileDialog = new OpenFileDialog
+                    {
+                        Filter = fileFilterExtension
+                    };
                     if (openFileDialog.ShowDialog().Value)
                     {
                         var selectedPath = openFileDialog.FileName;
@@ -135,8 +136,10 @@ namespace CryptographicCreator.Behaviors
                     if (IsActiveKey ||
                         AreActiveEncryptedData)
                     {
-                        var saveFileDialog = new SaveFileDialog();
-                        saveFileDialog.Filter = fileFilterExtension;
+                        var saveFileDialog = new SaveFileDialog
+                        {
+                            Filter = fileFilterExtension
+                        };
                         if (saveFileDialog.ShowDialog().Value)
                         {
                             var selectedPath = saveFileDialog.FileName;

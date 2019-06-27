@@ -11,7 +11,7 @@ namespace MD5Region
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.Register<IHashService, MD5Service>();
+            containerRegistry.Register<IHashService, MD5Service>("MD5");
             containerRegistry.RegisterForNavigation<ViewMD5>();
         }
     }
