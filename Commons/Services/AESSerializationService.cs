@@ -34,8 +34,8 @@
 
         public void Serialize(byte[] buffer, string path)
         {
-            var archiveFrame = compressionService.Compress(buffer);
-            serializationService.Serialize(archiveFrame, path);
+            var compressedBuffer = compressionService.Compress(buffer);
+            serializationService.Serialize(compressedBuffer, path);
         }
 
         public byte[] Deserialize(string path)
